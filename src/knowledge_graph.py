@@ -28,7 +28,44 @@ def _check_networkx():
         raise ImportError("networkx is required. Install it with: pip install networkx")
 
 
-def build_graph(triples: List[dict]):
+# Leading articles/determiners stripped during normalization
+_STRIP_ARTICLES = re.compile(
+    r'^(?:the|a|an|this|these|those|its|their|his|her)\s+',
+    re.IGNORECASE,
+)
+
+
+def _normalize_entity(text: str) -> str:
+    """
+    Lowercase and strip leading articles so that "the loss of engine power",
+    "a loss of engine power", and "loss of engine power" all map to the same node.
+    Applied iteratively to handle stacked articles ("the a ...").
+    """
+    text = text.strip().lower()
+    prev = None
+    while prev != text:
+        prev = text
+        text = _STRIP_ARTICLES.sub('', text)
+    return text.strip()
+
+
+# Artifact phrases that don't represent meaningful aviation concepts
+_NOISE_NODES: frozenset = frozenset({
+    "the accident", "this accident", "the incident", "this incident",
+    "an accident", "an incident", "the crash", "a crash",
+    "the event", "this event", "the occurrence",
+    "substantial damage", "the damage", "damage",
+    "the airplane", "the aircraft", "the helicopter",
+    "the flight", "the approach", "the landing", "the takeoff",
+    "the pilot", "the crew", "the captain",
+})
+
+
+def _is_noise(text: str) -> bool:
+    return text.lower().strip() in _NOISE_NODES or len(text.strip()) < 4
+
+
+def build_graph(triples: List[dict], noise_filter: bool = True, normalize: bool = True):
     """
     Build a NetworkX DiGraph from a list of causal triple dicts.
 
@@ -50,6 +87,11 @@ def build_graph(triples: List[dict]):
         relation = str(triple.get('relation', 'causes')).strip()
 
         if not cause or not effect:
+            continue
+        if normalize:
+            cause  = _normalize_entity(cause)
+            effect = _normalize_entity(effect)
+        if noise_filter and (_is_noise(cause) or _is_noise(effect)):
             continue
 
         if not G.has_node(cause):
@@ -127,7 +169,7 @@ def _sanitize_cypher_string(s: str) -> str:
     return s.strip()
 
 
-def to_neo4j_cypher(triples: List[dict], path: str):
+def to_neo4j_cypher(triples: List[dict], path: str, noise_filter: bool = True, normalize: bool = True):
     """
     Write Neo4j Cypher MERGE statements for all triples to the given file path.
 
@@ -153,8 +195,13 @@ def to_neo4j_cypher(triples: List[dict], path: str):
 
         if not cause or not effect:
             continue
+        if normalize:
+            cause  = _normalize_entity(cause)
+            effect = _normalize_entity(effect)
+        if noise_filter and (_is_noise(cause) or _is_noise(effect)):
+            continue
 
-        key = (cause.lower(), effect.lower(), relation.lower())
+        key = (cause, effect, relation.lower())
         if key in seen:
             continue
         seen.add(key)

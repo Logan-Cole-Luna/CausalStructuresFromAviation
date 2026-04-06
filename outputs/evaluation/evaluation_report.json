@@ -1,0 +1,60 @@
+{
+  "traditional_nlp": {
+    "rule_based": {
+      "total_triples": 4867,
+      "coverage": 0.4492,
+      "avg_density": 1.79,
+      "pattern_counts": {
+        "contributed to": 461,
+        "resulted in": 1889,
+        "caused": 421,
+        "due to": 1340,
+        "led to": 359,
+        "produced": 72,
+        "caused by": 108,
+        "because of": 84,
+        "as a result of": 82,
+        "attributed to": 21,
+        "resulting from": 16,
+        "triggered": 14
+      },
+      "direction_counts": {
+        "backward": 2112,
+        "forward": 2755
+      }
+    },
+    "dep_parsing": {
+      "sample_size": 500,
+      "total_triples": 505,
+      "coverage": 0.504
+    }
+  },
+  "transformer": {
+    "accuracy": 0.7118,
+    "classification_report_error": "Number of classes, 3, does not match size of target_names, 4. Try specifying the labels parameter"
+  },
+  "llm_extractor": {
+    "total_triples": 753,
+    "narratives_with_triple": 197
+  },
+  "knowledge_graph": {
+    "rule_graph": {
+      "num_nodes": 8346,
+      "num_edges": 4737,
+      "density": 6.8e-05,
+      "weakly_connected_components": 3611
+    },
+    "dep_graph": {
+      "num_nodes": 902,
+      "num_edges": 489,
+      "density": 0.000602,
+      "weakly_connected_components": 413
+    },
+    "combined_graph": {
+      "num_nodes": 9639,
+      "num_edges": 5564,
+      "density": 6e-05,
+      "weakly_connected_components": 4079
+    }
+  }
+}

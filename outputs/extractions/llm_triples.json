@@ -1,0 +1,6026 @@
+[
+  {
+    "ev_id": "20151023X90353",
+    "cause": "separation of No. 5 connecting rod from crankshaft",
+    "relation": "resulted",
+    "effect": "total loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151023X90353",
+    "cause": "engine had accumulated about 2,500 hours of operation",
+    "relation": "exceeded",
+    "effect": "time between overhaul",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191031X31506",
+    "cause": "bird strike on windshield",
+    "relation": "caused",
+    "effect": "pilot injury and loss of vision",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191031X31506",
+    "cause": "pilot injury",
+    "relation": "affected",
+    "effect": "unable to fly the airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151103X31422",
+    "cause": "Student pilot overcorrected rudder control",
+    "relation": "led to",
+    "effect": "Airplane veered to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151103X31422",
+    "cause": "Student pilot 'hammered' on brakes",
+    "relation": "resulted in",
+    "effect": "Airplane skid off runway to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151103X31422",
+    "cause": "Student pilot overcorrected rudder control (left)",
+    "relation": "followed by",
+    "effect": "Airplane veered to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151103X31422",
+    "cause": "Student pilot overcorrected rudder control (right)",
+    "relation": "followed by",
+    "effect": "Airplane veered to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151103X31422",
+    "cause": "Airplane skid off runway to the right",
+    "relation": "resulted in",
+    "effect": "Airplane impacted a ditch",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151103X31422",
+    "cause": "No pre-impact mechanical failures or malfunctions",
+    "relation": "did not",
+    "effect": "Prevent normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170130X42804",
+    "cause": "total electrical failure",
+    "relation": "resulted",
+    "effect": "collapsed left main landing gear and nose gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170130X42804",
+    "cause": "pilot's belief of a radio problem",
+    "relation": "led to",
+    "effect": "return to airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170130X42804",
+    "cause": "pilot's failure to confirm landing gear position",
+    "relation": "led to",
+    "effect": "landing with retracted landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170130X42804",
+    "cause": "pilot's failure to troubleshoot radio issue properly",
+    "relation": "led to",
+    "effect": "total electrical failure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190904X60022",
+    "cause": "Student pilot released yoke back pressure",
+    "relation": "resulted in",
+    "effect": "airplane began to climb with nose too high",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190904X60022",
+    "cause": "Flight instructor pushed forward on the control stick to correct nose high attitude",
+    "relation": "led to",
+    "effect": "plane started to pull to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190904X60022",
+    "cause": "Airplane flew over the right edge of the runway",
+    "relation": "resulted in",
+    "effect": "airplane descended and impacted the grass safety area on the right side of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190904X60022",
+    "cause": "Airplane impacted the grass safety area",
+    "relation": "led to",
+    "effect": "airplane sustained substantial damage to the lower fuselage composite structure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180630X83949",
+    "cause": "Pilot's decision to land on a runway with a nose-down attitude and increased indicated airspeed",
+    "relation": "led to",
+    "effect": "Nose landing gear (NLG) collapse upon second touchdown",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180630X83949",
+    "cause": "Incorrect wind direction information from the windsock",
+    "relation": "resulted in",
+    "effect": "Pilot's misjudgment of wind direction",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180630X83949",
+    "cause": "Misjudgment of wind direction",
+    "relation": "led to",
+    "effect": "Hard landing on nosewheel first",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180630X83949",
+    "cause": "Airport's AWOS reporting incorrect wind direction",
+    "relation": "resulted in",
+    "effect": "Pilot's misjudgment of wind direction",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X53947",
+    "cause": "Tailwheel touched down during landing roll",
+    "relation": "resulted in",
+    "effect": "right wing lifted and airplane veered to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X53947",
+    "cause": "Airplane veered to the left",
+    "relation": "led to",
+    "effect": "airplane exited the left side of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X53947",
+    "cause": "Airplane continued down sloping terrain",
+    "relation": "resulted in",
+    "effect": "airplane came to rest upright",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X53947",
+    "cause": "Airplane continued smoking",
+    "relation": "resulted in",
+    "effect": "airplane was destroyed by a postcrash fire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X53947",
+    "cause": "Wind was calm",
+    "relation": "did not",
+    "effect": "affect the accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X53947",
+    "cause": "No preaccident mechanical malfunctions or failures",
+    "relation": "did not",
+    "effect": "preclude normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150708X82242",
+    "cause": "Pilot misjudged the clearance from a fishing boat",
+    "relation": "led to",
+    "effect": "Right wing struck a trolling pole",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150708X82242",
+    "cause": "Right wing struck a trolling pole",
+    "relation": "resulted in",
+    "effect": "Right wing sustained substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170508X45139",
+    "cause": "Pilot could not see right edge of strip due to tail being low and contour of terrain descending away",
+    "relation": "resulted in",
+    "effect": "veered to the right during takeoff roll",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170508X45139",
+    "cause": "Pilot did not apply corrective measures",
+    "relation": "led to",
+    "effect": "airplane veered off the right side of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170508X45139",
+    "cause": "Airplane impacted small shrubs/trees and a large rock",
+    "relation": "resulted in",
+    "effect": "airplane came to rest inverted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170508X45139",
+    "cause": "Airplane sustained substantial damage to both wings and the empennage",
+    "relation": "due to",
+    "effect": "impacting small shrubs/trees and a large rock",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170526X21127",
+    "cause": "The glider's speed was recorded slowly decreasing",
+    "relation": "led to",
+    "effect": "the glider entered another gradual descent that continued until ground contact",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170526X21127",
+    "cause": "The glider reached a peak altitude of about 8,500 ft and then slowly descended to about 3,900 ft",
+    "relation": "resulted in",
+    "effect": "the glider's speed was recorded slowly decreasing from about 76 to 40 knots",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180930X31500",
+    "cause": "Pilot failed to maintain proper airspeed",
+    "relation": "resulted in",
+    "effect": "exceedance of the airplane's critical angle of attack and the airplane experienced an aerodynamic stall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180930X31500",
+    "cause": "Pilot requested return to the airport due to an engine problem",
+    "relation": "led to",
+    "effect": "initiation of a right turn",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180930X31500",
+    "cause": "Air traffic controller cleared the pilot to land on runway 8L",
+    "relation": "allowed",
+    "effect": "the pilot's subsequent right turn",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150407X12857",
+    "cause": "Rainy, gray, reduced-visibility conditions",
+    "relation": "resulted in",
+    "effect": "low altitude spatial disorientation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150407X12857",
+    "cause": "Low altitude spatial disorientation",
+    "relation": "led to",
+    "effect": "incorrect altitude judgment and subsequent crash",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161102X75459",
+    "cause": "Pilot applied left rudder during landing roll",
+    "relation": "led to",
+    "effect": "Airplane veered to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161102X75459",
+    "cause": "Airplane veered to the right",
+    "relation": "resulted in",
+    "effect": "Ground looped",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161102X75459",
+    "cause": "Airplane ground looped",
+    "relation": "resulted in",
+    "effect": "Left wing impacted the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161102X75459",
+    "cause": "Left wing impacted the runway",
+    "relation": "resulted in",
+    "effect": "Left aileron sustained substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160517X40205",
+    "cause": "Pilot not monitoring the proximity of a vehicle parked to his left",
+    "relation": "led to",
+    "effect": "Left wing struck the parked vehicle",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160517X40205",
+    "cause": "Left wing struck the parked vehicle",
+    "relation": "resulted in",
+    "effect": "Left wing spar was substantially damaged",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160517X40205",
+    "cause": "No mechanical malfunctions or failures with the airplane",
+    "relation": "did not",
+    "effect": "Preclude normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170503X23550",
+    "cause": "Pilot",
+    "relation": "failed to",
+    "effect": "respond to air traffic control (ATC) instructions",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170503X23550",
+    "cause": "Autopilot",
+    "relation": "allowed",
+    "effect": "aircraft to continue flying past the destination airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170503X23550",
+    "cause": "Autopilot",
+    "relation": "maintained",
+    "effect": "aircraft in straight-and-level flight at an altitude higher than instructed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170503X23550",
+    "cause": "Witness",
+    "relation": "observed",
+    "effect": "aircraft flying at a low altitude, hearing three 'pops' from the aircraft, and seeing it bank to the left and descend",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170503X23550",
+    "cause": "Aircraft",
+    "relation": "experienced",
+    "effect": "postcrash fire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170503X23550",
+    "cause": "Pilot (indirect)",
+    "relation": "followed",
+    "effect": "normal cruise procedures in the pilot's operating handbook, with fuel selector valves on the outboard tanks",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161004X34956",
+    "cause": "Flight instructor's lack of recent experience and familiarity with the accident airplane",
+    "relation": "led to",
+    "effect": "inability to properly execute aerodynamic stall maneuver and recover from the stall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161004X34956",
+    "cause": "Flight instructor's inadequate practice of aerodynamic stalls in the accident airplane",
+    "relation": "resulted in",
+    "effect": "incorrect initiation of aerodynamic stall maneuver at low altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161004X34956",
+    "cause": "Flight instructor's poor decision to initiate aerodynamic stall maneuver at low altitude",
+    "relation": "led to",
+    "effect": "aircraft entering a fully-developed right spin",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150729X84008",
+    "cause": "Pilot",
+    "relation": "made",
+    "effect": "two low passes over the intended landing site",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150729X84008",
+    "cause": "Pilot",
+    "relation": "landed",
+    "effect": "left wing struck willow bushes",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150729X84008",
+    "cause": "Left wing striking willow bushes",
+    "relation": "caused",
+    "effect": "airplane veered off the strip",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150729X84008",
+    "cause": "Airplane veering off the strip",
+    "relation": "led to",
+    "effect": "nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150729X84008",
+    "cause": "Airplane nosing over",
+    "relation": "resulted in",
+    "effect": "substantial damage to the fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150729X84008",
+    "cause": "No preaccident mechanical anomalies",
+    "relation": "precluded",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X94556",
+    "cause": "Pilot continued approach despite airplane being fast and high",
+    "relation": "resulted in",
+    "effect": "airplane overran the runway and nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X94556",
+    "cause": "Pilot did not apply sufficient brakes",
+    "relation": "led to",
+    "effect": "airplane overran the runway and nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X94556",
+    "cause": "No preimpact mechanical failures or malfunctions with the airplane",
+    "relation": "precluded",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X94556",
+    "cause": "Airplane was fast and high during approach",
+    "relation": "resulted in",
+    "effect": "substantial damage to the left-wing lift strut",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150501X25643",
+    "cause": "Pilot's unfamiliarity with aircraft and engine controls",
+    "relation": "led to",
+    "effect": "Loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150501X25643",
+    "cause": "Gust of wind",
+    "relation": "caused",
+    "effect": "Aircraft veered off the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161031X33238",
+    "cause": "Fuel transmitter with improperly welded float pin guide",
+    "relation": "led to",
+    "effect": "incorrect fuel level display on the gauge",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161031X33238",
+    "cause": "Incorrect fuel level display on the gauge",
+    "relation": "resulted in",
+    "effect": "pilot not being aware of actual fuel level",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161031X33238",
+    "cause": "Low fuel level",
+    "relation": "caused",
+    "effect": "engine loss of power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161031X33238",
+    "cause": "Engine loss of power",
+    "relation": "resulted in",
+    "effect": "hard landing causing damage to tailboom and main rotor assembly",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X41202",
+    "cause": "Pilot's shoe being caught between the rudder pedal and the sheet metal fairing on the floorboard",
+    "relation": "prevented",
+    "effect": "applying differential braking",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X41202",
+    "cause": "Inability to apply differential braking",
+    "relation": "led to",
+    "effect": "airplane exiting the runway to the left and ground looping",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X41202",
+    "cause": "Airplane exiting the runway to the left and ground looping",
+    "relation": "resulted in",
+    "effect": "right main landing gear collapsing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X41202",
+    "cause": "Right main landing gear collapsing",
+    "relation": "caused",
+    "effect": "right wing striking the ground",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X41202",
+    "cause": "Right wing striking the ground",
+    "relation": "resulted in",
+    "effect": "substantial damage to the right-wing spar and right aileron",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181005X25343",
+    "cause": "cockpit lights turning off",
+    "relation": "resulted in",
+    "effect": "pilot's inability to see the panel and runway lights",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181005X25343",
+    "cause": "PAPI lights being off",
+    "relation": "contributed to",
+    "effect": "pilot's difficulty in landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181005X25343",
+    "cause": "runway lights not turning on",
+    "relation": "contributed to",
+    "effect": "pilot's difficulty in landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181005X25343",
+    "cause": "inability to correct panel lights",
+    "relation": "led to",
+    "effect": "pilot's use of a flashlight during approach",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181005X25343",
+    "cause": "hard landing",
+    "relation": "caused",
+    "effect": "substantial damage to the right horizontal stabilator",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181005X25343",
+    "cause": "broken runway lights",
+    "relation": "indicated",
+    "effect": "RWY 31 PAPI UNUSABLE (archived NOTAM)",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191126X21659",
+    "cause": "Pilot",
+    "relation": "lost control",
+    "effect": "of the accident airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191126X21659",
+    "cause": "Reduced visibility",
+    "relation": "encountered",
+    "effect": "while flying in dark night conditions in mountainous terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191126X21659",
+    "cause": "High wind",
+    "relation": "encountered",
+    "effect": "while flying in dark night conditions in mountainous terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191126X21659",
+    "cause": "Turbulence",
+    "relation": "encountered",
+    "effect": "while flying in dark night conditions in mountainous terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191126X21659",
+    "cause": "Mountain wave conditions",
+    "relation": "encountered",
+    "effect": "while flying in dark night conditions in mountainous terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191126X21659",
+    "cause": "No weather briefing received",
+    "relation": "by the accident pilot before the accident flight",
+    "effect": "lack of information about weather conditions",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160315X02010",
+    "cause": "Pilot's airspeed was too fast during final approach",
+    "relation": "resulted in",
+    "effect": "airplane bounced",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160315X02010",
+    "cause": "Pilot decided to extend the landing flare in ground effect",
+    "relation": "led to",
+    "effect": "airplane bounced",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160315X02010",
+    "cause": "Airplane bounced upon main landing gear touching down on the runway",
+    "relation": "resulted in",
+    "effect": "nose gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160315X02010",
+    "cause": "Nose gear collapsed",
+    "relation": "led to",
+    "effect": "airplane exited the runway to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160315X02010",
+    "cause": "Airplane exited the runway to the left",
+    "relation": "resulted in",
+    "effect": "substantial damage to the firewall and the composite fuselage floorboard",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160213X75718",
+    "cause": "Pilot allowed main rotor rpm to decay to a point from which he was unable to recover",
+    "relation": "likely led to",
+    "effect": "unable to recover helicopter during landing attempt",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160213X75718",
+    "cause": "Pilot attempted to increase main rotor rpm by adding power",
+    "relation": "resulted in",
+    "effect": "helicopter did not respond",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160213X75718",
+    "cause": "Helicopter did not respond",
+    "relation": "resulted in",
+    "effect": "settling onto the taxiway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160213X75718",
+    "cause": "Pilot continued to try and add power",
+    "relation": "resulted in",
+    "effect": "helicopter drifted right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160213X75718",
+    "cause": "Right skid contacted the ground off the side of the taxiway",
+    "relation": "resulted in",
+    "effect": "dynamic rollover",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160213X75718",
+    "cause": "Dynamic rollover",
+    "relation": "resulted in",
+    "effect": "substantial damage to the airframe and rotor blades",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "crosswind during landing",
+    "relation": "caused",
+    "effect": "airplane veered left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "insufficient correction applied",
+    "relation": "resulted in",
+    "effect": "airplane continued to veer left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "improper landing technique",
+    "relation": "led to",
+    "effect": "airplane exited runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "improper landing technique",
+    "relation": "resulted in",
+    "effect": "impact with precision approach path indicator lights",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "improper landing technique",
+    "relation": "led to",
+    "effect": "airplane came to rest in grass",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "improper landing technique",
+    "relation": "resulted in",
+    "effect": "substantial damage to the left wing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "wind direction",
+    "relation": "affected",
+    "effect": "airplane veered left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190905X84147",
+    "cause": "wind speed",
+    "relation": "affected",
+    "effect": "airplane veered left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160107X93631",
+    "cause": "The front spark plug was burnt white, indicating high temperatures or an excessively lean carburetor calibration",
+    "relation": "resulted in",
+    "effect": "a leaner fuel/air mixture in the front cylinder",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160107X93631",
+    "cause": "The front cylinder adaptor exhibited significantly more damage and cracking compared to that of the aft cylinder",
+    "relation": "led to",
+    "effect": "additional air being ingested by the front carburetor",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160107X93631",
+    "cause": "The pilot was servicing the engine with a fuel/oil ratio of 40:1, rather than the manufacturer-recommended ratio of 50:1",
+    "relation": "likely caused",
+    "effect": "detonation/preignition in the front cylinder",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180301X70512",
+    "cause": "Helicopter pilot landing on what he believed was packed snow",
+    "relation": "resulted in",
+    "effect": "helicopter beginning to tip to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180301X70512",
+    "cause": "Helicopter pilot's attempt to recover",
+    "relation": "failed to",
+    "effect": "helicopter sustaining substantial damage to the windshield and horizontal stabilizer",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160724X22649",
+    "cause": "Pilot's lack of experience in the airplane",
+    "relation": "likely led to",
+    "effect": "failure to maintain airplane control during the initial climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160724X22649",
+    "cause": "No entries in the pilot's logbook associated with the accident airplane make and model",
+    "relation": "contributed to",
+    "effect": "pilot's lack of experience in the airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160724X22649",
+    "cause": "Another pilot completed most of the accident airplane's initial test flights",
+    "relation": "contributed to",
+    "effect": "pilot's lack of experience in the airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180101X94108",
+    "cause": "Pilots",
+    "relation": "failed to",
+    "effect": "deviate from runway heading and enter a left turn, descending into terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180101X94108",
+    "cause": "Pilots",
+    "relation": "maintained",
+    "effect": "maximum bank angle of about 75\u00b0 and an airspeed below the airplane's published aerodynamic stall speed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180101X94108",
+    "cause": "Airplane",
+    "relation": "did not have",
+    "effect": "defects consistent with a preimpact failure or malfunction",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180101X94108",
+    "cause": "Pilots (Captain)",
+    "relation": "did not",
+    "effect": "respond appropriately to the situation, resulting in the accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170604X12618",
+    "cause": "scarring from previous heart attacks and severe hypertrophy of the left ventricular wall",
+    "relation": "caused",
+    "effect": "arrhythmia",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170604X12618",
+    "cause": "arrhythmia",
+    "relation": "resulted in",
+    "effect": "incapacitation and a loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170604X12618",
+    "cause": "incapacitation and loss of control",
+    "relation": "led to",
+    "effect": "accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170530X84515",
+    "cause": "wind gust",
+    "relation": "caused",
+    "effect": "airplane veered left off runway centerline",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170530X84515",
+    "cause": "insufficient reaction time",
+    "relation": "resulted in",
+    "effect": "airplane impacted parked helicopter",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170530X84515",
+    "cause": "pilot's inability to avoid helicopter",
+    "relation": "led to",
+    "effect": "left wing impacted helicopter",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170530X84515",
+    "cause": "wind gust",
+    "relation": "contributed to",
+    "effect": "airplane becoming airborne but not having enough time to avoid helicopter",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170530X84515",
+    "cause": "wind gust",
+    "relation": "contributed to",
+    "effect": "airplane sustaining substantial damage to the left wing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190828X20449",
+    "cause": "pilot attempting an approach into an airport with a short and narrow runway bordered by tall trees",
+    "relation": "led",
+    "effect": "airplane contacting treetops during the climbout",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190828X20449",
+    "cause": "witness statements indicating the airplane was developing power when it began the climb",
+    "relation": "resulted in",
+    "effect": "airplane impacting the ground and coming to rest inverted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170719X12704",
+    "cause": "pilot error",
+    "relation": "caused",
+    "effect": "aircraft nosed over and sustained substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170719X12704",
+    "cause": "pilot fixation on the beginning of the grass",
+    "relation": "led to",
+    "effect": "obliviousness to the height of the corn",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170719X12704",
+    "cause": "pilot oblivious to the height of the corn",
+    "relation": "resulted in",
+    "effect": "striking corn stalks with main landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170719X12704",
+    "cause": "striking corn stalks with main landing gear",
+    "relation": "caused",
+    "effect": "aircraft landed short and struck road",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170719X12704",
+    "cause": "aircraft landed short",
+    "relation": "resulted in",
+    "effect": "right main landing gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170719X12704",
+    "cause": "right main landing gear collapsed",
+    "relation": "led to",
+    "effect": "aircraft slid across road and onto grass airstrip",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170719X12704",
+    "cause": "aircraft nosed over",
+    "relation": "resulted in",
+    "effect": "aircraft sustained substantial damage to right-wing strut and rudder",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180831X94736",
+    "cause": "Fatigue crack in the bore on the piston end of the connecting rod",
+    "relation": "led to",
+    "effect": "connecting rod fracture",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180831X94736",
+    "cause": "Connecting rod fracture",
+    "relation": "resulted in",
+    "effect": "catastrophic engine failure and a complete seizure of the engine",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180831X94736",
+    "cause": "Material defect, such as a pore, inclusion, or corrosion pit that may have occurred when the connecting rod was rebushed",
+    "relation": "could have been the result of",
+    "effect": "concentrated stress in the internal corner of the pin bore",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170104X40138",
+    "cause": "Airplane taxied over ice and drifted to the right",
+    "relation": "led to",
+    "effect": "airplane veered to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170104X40138",
+    "cause": "Pilot reduced throttle power",
+    "relation": "resulted in",
+    "effect": "airplane taxied onto packed snow",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170104X40138",
+    "cause": "Pilot attempted to correct with right rudder",
+    "relation": "led to",
+    "effect": "airplane continued to veer to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170104X40138",
+    "cause": "Airplane exited the runway",
+    "relation": "resulted in",
+    "effect": "airplane came to rest inverted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170104X40138",
+    "cause": "Airplane sustained substantial damage to the left wing and left wing lift struts",
+    "relation": "resulted from",
+    "effect": "airplane exited the runway and came to rest inverted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150630X34507",
+    "cause": "Hard landing",
+    "relation": "resulted in",
+    "effect": "landing gear failure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150630X34507",
+    "cause": "Landing gear failure",
+    "relation": "led to",
+    "effect": "intentionally guiding the plane off the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150630X34507",
+    "cause": "Intentionally guiding the plane off the runway",
+    "relation": "resulted in",
+    "effect": "runway excursion",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150630X34507",
+    "cause": "Runway excursion",
+    "relation": "resulted in",
+    "effect": "airplane impacting a ditch",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150630X34507",
+    "cause": "Airplane impacting a ditch",
+    "relation": "led to",
+    "effect": "left wing separating from the fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150630X34507",
+    "cause": "No mechanical malfunctions or failures with the airplane",
+    "relation": "precluded",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160813X90947",
+    "cause": "Pilot exceeded the airplane's critical angle of attack",
+    "relation": "resulted in",
+    "effect": "aerodynamic stall and a loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160813X90947",
+    "cause": "Pilot failed to maintain proper airspeed during a steep turn at low altitude",
+    "relation": "led to",
+    "effect": "exceeding the airplane's critical angle of attack",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160813X90947",
+    "cause": "Engine lost power",
+    "relation": "caused",
+    "effect": "the pilot to attempt a steep turn at low altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160813X90947",
+    "cause": "Engine misfired",
+    "relation": "resulted in",
+    "effect": "engine losing power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160813X90947",
+    "cause": "Postaccident examination did not reveal any mechanical malfunctions that would have precluded normal operation",
+    "relation": "did not provide insight into",
+    "effect": "the reason for the loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190924X05114",
+    "cause": "Right main fuel tank was selected",
+    "relation": "resulted in",
+    "effect": "fuel starvation and a total loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190924X05114",
+    "cause": "Right main fuel tank was empty",
+    "relation": "led to",
+    "effect": "fuel starvation and a total loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160915X31240",
+    "cause": "Pilot's decision to continue to the airport despite higher terrain",
+    "relation": "led to",
+    "effect": "off-airport landing into trees",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160915X31240",
+    "cause": "High density altitude",
+    "relation": "contributed to",
+    "effect": "glider's inability to climb normally",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180322X42204",
+    "cause": "flight crew not enforcing seatbelt use",
+    "relation": "led to",
+    "effect": "passenger injuries",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180322X42204",
+    "cause": "encountering moderate turbulence and heavy rain",
+    "relation": "caused",
+    "effect": "airplane dropping about 500 to 1,000 ft",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151217X50308",
+    "cause": "Pilot failed to gain sufficient airspeed during takeoff",
+    "relation": "resulted in",
+    "effect": "airplane's main wheels sunk into the soft tundra-covered terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151217X50308",
+    "cause": "Airplane's main wheels sank into the soft tundra-covered terrain",
+    "relation": "led to",
+    "effect": "airplane subsequently nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151217X50308",
+    "cause": "Airplane subsequently nosed over",
+    "relation": "sustained",
+    "effect": "substantial damage to the wings",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151217X50308",
+    "cause": "No preaccident mechanical anomalies with the airplane",
+    "relation": "precluded",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X43457",
+    "cause": "Gusting crosswind conditions",
+    "relation": "resulted in",
+    "effect": "airplane violently yawed to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X43457",
+    "cause": "Pilot's attempt to correct the yaw",
+    "relation": "led to",
+    "effect": "airplane ground looping to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X43457",
+    "cause": "Right wing contacting the ground during ground loop",
+    "relation": "resulted in",
+    "effect": "substantial damage to the right wing, right horizontal stabilizer, and elevator",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X43457",
+    "cause": "Wind conditions (150\u00b0 at 11 knots, gusting to 14 knots)",
+    "relation": "contributed to",
+    "effect": "difficult landing conditions",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X43457",
+    "cause": "Pilot landing on runway 22",
+    "relation": "occurred during",
+    "effect": "accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170803X23252",
+    "cause": "Canopy not latched correctly",
+    "relation": "led to",
+    "effect": "obstructed pilot's view",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170803X23252",
+    "cause": "Canopy not seated correctly",
+    "relation": "resulted in",
+    "effect": "canopy opening during flight",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170803X23252",
+    "cause": "Approach slightly above stall airspeed",
+    "relation": "caused",
+    "effect": "hard landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161213X70014",
+    "cause": "Pilot's correction with right rudder during wheel landing",
+    "relation": "led to",
+    "effect": "Airplane yawed to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161213X70014",
+    "cause": "Airplane veered to the right",
+    "relation": "resulted in",
+    "effect": "Main landing gear collapsed during the swerve",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161213X70014",
+    "cause": "Pilot's application of brakes and left rudder",
+    "relation": "contributed to",
+    "effect": "Airplane skidded to a stop on the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161213X70014",
+    "cause": "Disconnection of left tailwheel connector cable after the accident",
+    "relation": "did not prevent",
+    "effect": "Left wing sustained substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161213X70014",
+    "cause": "Pilot's failure to notice disconnection of left tailwheel connector cable during preflight inspection",
+    "relation": "allowed",
+    "effect": "Left tailwheel connector cable to be disconnected after the accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160531X05951",
+    "cause": "The engine hesitated when full throttle was applied",
+    "relation": "caused",
+    "effect": "The airplane did not climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160531X05951",
+    "cause": "The pilot lowered the nose",
+    "relation": "led to",
+    "effect": "The airspeed increased",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160531X05951",
+    "cause": "The airplane did not climb",
+    "relation": "resulted in",
+    "effect": "The airplane continued to descend into a cornfield",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160531X05951",
+    "cause": "The left main landing gear wheel became stuck in the mud",
+    "relation": "resulted in",
+    "effect": "The airplane nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160531X05951",
+    "cause": "The pilot did not maintain the heading of 180 degrees until adequate airspeed was attained before turning crosswind",
+    "relation": "led to",
+    "effect": "The airplane continued to descend",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170913X72254",
+    "cause": "B767 tail protruding beyond white lines",
+    "relation": "resulted",
+    "effect": "insufficient clearance between B767 and B737",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170913X72254",
+    "cause": "Captain maneuvering left of centerline for more clearance",
+    "relation": "led to",
+    "effect": "reduced distance between B767 and B737",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170913X72254",
+    "cause": "First officer's misjudgment of clearance",
+    "relation": "allowed",
+    "effect": "collision between B767 and B737",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170913X72254",
+    "cause": "Marshallers not indicating close proximity of airplanes",
+    "relation": "failed to",
+    "effect": "prevent collision between B767 and B737",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190429X04325",
+    "cause": "Bird strike",
+    "relation": "resulted in",
+    "effect": "a breach of the canopy/windscreen",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190429X04325",
+    "cause": "Distraction due to bird strike",
+    "relation": "led to",
+    "effect": "exceeding the airplane's critical angle of attack",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190429X04325",
+    "cause": "Exceeding the airplane's critical angle of attack",
+    "relation": "resulted in",
+    "effect": "an aerodynamic stall/spin",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190429X04325",
+    "cause": "Aerodynamic stall/spin",
+    "relation": "led to",
+    "effect": "loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160505X32117",
+    "cause": "Pilot pulled the starter cord after turning on the ignition",
+    "relation": "caused",
+    "effect": "the engine to start and the trike to accelerate forward",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160505X32117",
+    "cause": "Trike rolled over chalks in front of the wheels",
+    "relation": "led to",
+    "effect": "trike becoming airborne",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160505X32117",
+    "cause": "Pilot did not place the hand throttle to idle before pulling the cord",
+    "relation": "resulted in",
+    "effect": "trike being airborne for several seconds before impacting the rooftop of a hangar",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150824X02325",
+    "cause": "Jet blast from Southwest Airlines (SWA) flight 1999",
+    "relation": "struck",
+    "effect": "roof of the golf cart",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150824X02325",
+    "cause": "Jet blast from Southwest Airlines (SWA) flight 1999",
+    "relation": "hit",
+    "effect": "ground operations specialist",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150824X02325",
+    "cause": "Golf cart roof being separated by jet blast",
+    "relation": "caused",
+    "effect": "injury to ground operations specialist",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150824X02325",
+    "cause": "Ground operations specialist being in the path of the separated golf cart",
+    "relation": "led to",
+    "effect": "ground operations specialist being hit by the separated golf cart",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150824X02325",
+    "cause": "Ground operations specialist being hit by the separated golf cart",
+    "relation": "resulted in",
+    "effect": "broken knee cap",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190719X64033",
+    "cause": "Student pilot applied more back pressure",
+    "relation": "led to",
+    "effect": "Airplane 'popped up', banked left, and struck the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190719X64033",
+    "cause": "Student pilot did not feel the airplane 'come up'",
+    "relation": "resulted in",
+    "effect": "Student applied more back pressure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180531X14518",
+    "cause": "Student pilot's slow airspeed and right turn",
+    "relation": "led to",
+    "effect": "airplane stall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180531X14518",
+    "cause": "Airplane stall",
+    "relation": "resulted in",
+    "effect": "descent towards terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180531X14518",
+    "cause": "Lack of pilot logbooks or records",
+    "relation": "prevented",
+    "effect": "determination of student's flight experience",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180531X14518",
+    "cause": "Atmospheric conditions",
+    "relation": "resulted in",
+    "effect": "density altitude of 6,660 ft msl",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180531X14518",
+    "cause": "Density altitude of 6,660 ft msl",
+    "relation": "may have contributed to",
+    "effect": "airplane's performance issues",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191216X53550",
+    "cause": "Hard landing",
+    "relation": "resulted in",
+    "effect": "failure of the landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191216X53550",
+    "cause": "Corrective control inputs",
+    "relation": "had no effect",
+    "effect": "airplane continued past its touchdown point and came to rest facing off centerline",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191109X41322",
+    "cause": "Distraction while adjusting the radio",
+    "relation": "led to",
+    "effect": "momentary loss of attention and deviation from taxiway centerline",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191109X41322",
+    "cause": "Exiting runway at a speed faster than normal",
+    "relation": "resulted in",
+    "effect": "landing about 10 knots faster than normal",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191109X41322",
+    "cause": "Deviation from taxiway centerline",
+    "relation": "resulted in",
+    "effect": "striking a taxiway light",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191109X41322",
+    "cause": "Striking a taxiway light",
+    "relation": "caused",
+    "effect": "damage to the pressurized cabin and the right propeller",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191109X41322",
+    "cause": "Striking the cabin with the propeller blade tip",
+    "relation": "caused",
+    "effect": "substantial damage to the cabin",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170126X12752",
+    "cause": "gusting crosswind conditions",
+    "relation": "caused",
+    "effect": "airplane veered off the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170126X12752",
+    "cause": "pilot's inability to handle gusting crosswind conditions",
+    "relation": "led to",
+    "effect": "airplane veered off the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170126X12752",
+    "cause": "impact with airport sign",
+    "relation": "resulted in",
+    "effect": "substantial damage to right wing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180720X31859",
+    "cause": "passenger interference with tail rotor pedals",
+    "relation": "resulted in",
+    "effect": "loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180720X31859",
+    "cause": "incorrect seating arrangement",
+    "relation": "allowed",
+    "effect": "passenger interference with tail rotor pedals",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180715X13651",
+    "cause": "Pilot did not maintain sufficient airspeed while maneuvering during the approach for landing",
+    "relation": "likely resulted in",
+    "effect": "airplane exceeded its critical angle of attack and entered an aerodynamic stall at an altitude too low for recovery",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180715X13651",
+    "cause": "Pilot's logbook was not located during the investigation",
+    "relation": "did not determine",
+    "effect": "pilot's experience level in experimental and light-sport airplanes",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180715X13651",
+    "cause": "Pilot's experience level in experimental and light-sport airplanes was not determined",
+    "relation": "did not determine",
+    "effect": "if the pilot had obtained transition training in the accident airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180715X13651",
+    "cause": "The accident airplane was classified as a low-inertia/high-drag airplane",
+    "relation": "was",
+    "effect": "particularly susceptible to unintentional aerodynamic stalls due to its margin between low cruise speed and stall speed and its tendency to experience aerodynamic stalls",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191225X20233",
+    "cause": "intermittent problems with the left brake for about 2 years",
+    "relation": "led to",
+    "effect": "left brake pedal went to the floor with little or no resistance",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191225X20233",
+    "cause": "left brake exhibited the same symptoms as it did on the day of the accident",
+    "relation": "resulted in",
+    "effect": "airplane veered to the right, struck trees, and sustained substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191225X20233",
+    "cause": "previous maintenance of the left brake system components was not effective",
+    "relation": "contributed to",
+    "effect": "left brake was not operating or operating at reduced effectiveness during a portion of the landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170526X85142",
+    "cause": "fuel gauge was stuck in the middle",
+    "relation": "led to",
+    "effect": "exhaustion of fuel supply",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170526X85142",
+    "cause": "pilot did not visually check fuel quantity before flight",
+    "relation": "resulted in",
+    "effect": "exhaustion of fuel supply",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150507X30300",
+    "cause": "Helicopter settled during transition to forward motion",
+    "relation": "led to",
+    "effect": "helicopter continued to descend",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150507X30300",
+    "cause": "Flight instructor attempted to return to the departure point",
+    "relation": "unable to",
+    "effect": "helicopter impacted trees and terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150507X30300",
+    "cause": "No mechanical anomalies found in postaccident examination",
+    "relation": "did not",
+    "effect": "preclude normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181121X94223",
+    "cause": "student pilot exited runway onto occupied taxiway",
+    "relation": "led to",
+    "effect": "airplane-to-airplane collision",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181121X94223",
+    "cause": "student pilot attempted to pass high-wing airplane on left",
+    "relation": "resulted in",
+    "effect": "airplane's right wing striking high-wing airplane's left wing lift strut",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181121X94223",
+    "cause": "airplane's right wing struck high-wing airplane's left wing lift strut",
+    "relation": "caused",
+    "effect": "airplane turned right about 180\u00b0",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181121X94223",
+    "cause": "airplane turned right about 180\u00b0",
+    "relation": "resulted in",
+    "effect": "right wing striking high-wing airplane's propeller and right wing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181121X94223",
+    "cause": "no mechanical malfunctions or failures with the airplane",
+    "relation": "did not prevent",
+    "effect": "normal operation but led to accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170313X80726",
+    "cause": "Pilot failed to notice the 'X' marks indicating the runway was closed",
+    "relation": "did not notice",
+    "effect": "Landing on a closed runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170313X80726",
+    "cause": "Faded and non-distinct 'X' markings on the closed runway",
+    "relation": "led to",
+    "effect": "Pilot not noticing the 'X' marks",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170313X80726",
+    "cause": "Airport's FAA chart supplement not up-to-date",
+    "relation": "resulted in",
+    "effect": "Runway depicted as open",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170313X80726",
+    "cause": "Visual flight rules sectional chart not showing the closed runway",
+    "relation": "resulted in",
+    "effect": "Pilot not aware of the closed runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170313X80726",
+    "cause": "FAA Pilot's Handbook of Aeronautical Knowledge not followed",
+    "relation": "led to",
+    "effect": "Pilot landing on a closed runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150317X41847",
+    "cause": "LIRL lights not operational",
+    "relation": "resulted",
+    "effect": "pilot unable to identify runway paint markings",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150317X41847",
+    "cause": "pilot's decision to conduct low approach",
+    "relation": "led",
+    "effect": "airplane collided with a structure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150317X41847",
+    "cause": "airport facility directory not updated",
+    "relation": "allowed",
+    "effect": "pilot unaware of LIRL inoperative status",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X14628",
+    "cause": "Compromised induction system (vacuum takeoff port cap on the carburetor and rudder seal on the left induction manifold adapter)",
+    "relation": "resulted in",
+    "effect": "partial loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X14628",
+    "cause": "Partial loss of engine power",
+    "relation": "caused",
+    "effect": "hard landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X14628",
+    "cause": "Hard landing",
+    "relation": "led to",
+    "effect": "collapsed landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170601X14628",
+    "cause": "Collapsed landing gear",
+    "relation": "resulted in",
+    "effect": "airplane nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150111X02134",
+    "cause": "Pilot's decision to fly the airplane into the ground",
+    "relation": "resulted in",
+    "effect": "airplane impacting terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150111X02134",
+    "cause": "Pilot's emotional state influenced by his wife's decision to leave him and purchase another home",
+    "relation": "led to",
+    "effect": "pilot's suicide",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150111X02134",
+    "cause": "Lack of preimpact mechanical malfunctions or failures of the airframe or engine",
+    "relation": "precluded",
+    "effect": "normal operation of the airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150111X02134",
+    "cause": "Medical examiner's determination",
+    "relation": "indicated",
+    "effect": "pilot's manner of death as suicide",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190726X34250",
+    "cause": "No. 3 cylinder deformed due to exposure to excessive temperatures",
+    "relation": "caused",
+    "effect": "loss of power from the No. 3 cylinder",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190726X34250",
+    "cause": "Pilot having difficulty locating the airport during the approach",
+    "relation": "resulted in",
+    "effect": "airplane being high in altitude and airspeed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190726X34250",
+    "cause": "Engine losing additional power during go-around",
+    "relation": "resulted in",
+    "effect": "forced landing to an open field",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190726X34250",
+    "cause": "Airplane nosing over during landing roll due to uneven terrain",
+    "relation": "resulted in",
+    "effect": "airplane coming to rest inverted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160927X81225",
+    "cause": "Hydraulic leak originated from a cracked flare in a hydraulic line fitting",
+    "relation": "caused",
+    "effect": "hydraulic pressure decreased to 0",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160927X81225",
+    "cause": "Hydraulic pressure decreased to 0",
+    "relation": "prevented",
+    "effect": "landing gear system from fully extending or retracting",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160927X81225",
+    "cause": "Landing gear system could not fully extend or retract",
+    "relation": "resulted in",
+    "effect": "airplane landed with landing gear partially retracted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160927X81225",
+    "cause": "Airplane landed with landing gear partially retracted",
+    "relation": "led to",
+    "effect": "airplane veered off the runway surface",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190603X43739",
+    "cause": "lack of ground instruction for simulated engine failure",
+    "relation": "led to",
+    "effect": "unsuccessful simulated emergency landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190603X43739",
+    "cause": "denial of requested runway for emergency landing",
+    "relation": "resulted in",
+    "effect": "attempted landing on unapproved runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190603X43739",
+    "cause": "pilot's failure to respond to instructor's turn command",
+    "relation": "resulted in",
+    "effect": "aircraft touching down off-center on runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190603X43739",
+    "cause": "pilot's belief it was too late to turn",
+    "relation": "led to",
+    "effect": "aircraft failing to align with runway heading",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190603X43739",
+    "cause": "instructor's late intervention after overshooting turn point",
+    "relation": "resulted in",
+    "effect": "aircraft impacting runway lights",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191228X62945",
+    "cause": "Pilot's inability to maintain a straight takeoff roll",
+    "relation": "led to",
+    "effect": "Airplane ground looped and departed the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191228X62945",
+    "cause": "Pilot's delayed or ineffective corrective control inputs",
+    "relation": "resulted in",
+    "effect": "Airplane ground looped and departed the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191228X62945",
+    "cause": "Instructor's inability to correct the diversion quickly enough",
+    "relation": "led to",
+    "effect": "Airplane ground looped and departed the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190718X15123",
+    "cause": "Pilot's attention was drawn to the bears and away from terrain",
+    "relation": "led to",
+    "effect": "distraction during flight",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190718X15123",
+    "cause": "Pilot regained focus late during the turn",
+    "relation": "resulted in",
+    "effect": "delayed response in flight maneuver",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190718X15123",
+    "cause": "Pilot turned the airplane right, away from rising terrain",
+    "relation": "caused",
+    "effect": "airplane descending and impacting terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190718X15123",
+    "cause": "Postcrash fire ensued",
+    "relation": "resulted in",
+    "effect": "substantial damage to the wings and fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190718X15123",
+    "cause": "Pilot did not let the observer observe the bears during the low passes",
+    "relation": "contributed to",
+    "effect": "distraction during flight",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160805X44633",
+    "cause": "The tug was pushing the aircraft at approximately 6 knots",
+    "relation": "resulted in",
+    "effect": "the failure of the nose landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160805X44633",
+    "cause": "The tug was pushing the aircraft at approximately 6 knots in second gear or higher",
+    "relation": "violated",
+    "effect": "the airline general operating manual specification that pushback must be conducted in low or first gear, and at a walking speed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170622X84339",
+    "cause": "Airplane drifted left of the runway center",
+    "relation": "led to",
+    "effect": "encountered tall grass",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170622X84339",
+    "cause": "Airplane encountered tall grass",
+    "relation": "resulted in",
+    "effect": "airplane spun about 270\u00b0",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170622X84339",
+    "cause": "Airplane spun about 270\u00b0",
+    "relation": "caused",
+    "effect": "airplane sustained substantial damage to both wings and the fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170622X84339",
+    "cause": "No preaccident mechanical failures or malfunctions",
+    "relation": "precluded",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170622X84339",
+    "cause": "Tall grass next to the runway",
+    "relation": "allowed",
+    "effect": "airplane drifted left of the runway center",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170622X84339",
+    "cause": "Operator/Owner",
+    "relation": "reported",
+    "effect": "tall grass next to the runway 'will be maintained shorter'",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150209X81643",
+    "cause": "Incorrectly adjusted valve clearances",
+    "relation": "resulted in",
+    "effect": "Loss of engine power and engine roughness",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150209X81643",
+    "cause": "Failure to check valve clearances every 100 hours of operation",
+    "relation": "led to",
+    "effect": "Incorrectly adjusted valve clearances",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150209X81643",
+    "cause": "Maintenance personnel not addressing the engine issues",
+    "relation": "resulted in",
+    "effect": "Failure to check valve clearances every 100 hours of operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150209X81643",
+    "cause": "Mechanic's incorrect diagnosis of the engine problem",
+    "relation": "led to",
+    "effect": "Incorrect repair of the ignition system",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190720X64224",
+    "cause": "pilot's incorrect action",
+    "relation": "led to",
+    "effect": "airplane landed hard, struck runway lights, nosed over, sustained substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190720X64224",
+    "cause": "wind gust",
+    "relation": "contributed",
+    "effect": "airplane veered left during touch-and-go landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170327X44109",
+    "cause": "Downdraft encountered in mountainous terrain",
+    "relation": "Caused",
+    "effect": "Airplane unable to climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170327X44109",
+    "cause": "High-density altitude conditions",
+    "relation": "Likely contributed to",
+    "effect": "Airplane's inability to establish a climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170704X05501",
+    "cause": "Operational overtemperature conditions during previous flights",
+    "relation": "resulted in",
+    "effect": "significant creep in the microstructure of the compressor turbine blades",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170704X05501",
+    "cause": "Undetected crack in a compressor turbine blade",
+    "relation": "led to",
+    "effect": "compressor turbine blade failure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170704X05501",
+    "cause": "Non-original equipment manufacturer part with different cooling air ducts",
+    "relation": "likely contributed to",
+    "effect": "potential compromise in cooling air performance",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170704X05501",
+    "cause": "Staggered CT vane axial positioning",
+    "relation": "likely increased",
+    "effect": "vibrational loads on the compressor turbine blades",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170704X05501",
+    "cause": "Technician's failure to observe a crack in a CT blade during the last borescope inspection",
+    "relation": "resulted in",
+    "effect": "undetected crack in the CT blade",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190421X71224",
+    "cause": "fuel pressure gauge indicated 0",
+    "relation": "led to",
+    "effect": "loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190421X71224",
+    "cause": "failure of electric fuel boost pump",
+    "relation": "resulted in",
+    "effect": "inability to restore engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190421X71224",
+    "cause": "unidentified fuel restriction",
+    "relation": "prevented",
+    "effect": "fuel from getting to the engine-driven fuel pump",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190421X71224",
+    "cause": "pilot's decision to divert and continue switching fuel tanks",
+    "relation": "resulted in",
+    "effect": "departure from runway surface and nose landing gear collapse",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X45442",
+    "cause": "Uneven section of the runway",
+    "relation": "caused",
+    "effect": "Porpoise during landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X45442",
+    "cause": "Pilot's application of back pressure",
+    "relation": "remedied",
+    "effect": "Porpoise during landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X45442",
+    "cause": "Pilot's action",
+    "relation": "resulted in",
+    "effect": "Taxiing the airplane to the ramp without further incident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X45442",
+    "cause": "Uneven section of the runway",
+    "relation": "led to",
+    "effect": "Substantial damage to the fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180710X03854",
+    "cause": "Pilot's lack of experience with the newly purchased aircraft",
+    "relation": "resulted in",
+    "effect": "loss of control during an aborted landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180710X03854",
+    "cause": "Pilot's unintended takeoff",
+    "relation": "led to",
+    "effect": "abrupt touch down, bounce, and subsequent loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180710X03854",
+    "cause": "Pilot's decision to taxi on a runway mowed into tall grass",
+    "relation": "contributed to",
+    "effect": "difficulty in landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180710X03854",
+    "cause": "Wife's lack of awareness about the flight",
+    "relation": "contributed to",
+    "effect": "unintended takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180820X35801",
+    "cause": "Pilot pulling up to reverse course after the second application pass",
+    "relation": "resulted in",
+    "effect": "airplane not flying as expected",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180820X35801",
+    "cause": "Low altitude",
+    "relation": "led to",
+    "effect": "forced landing in the cornfield",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180820X35801",
+    "cause": "One of the cylinders had low compression",
+    "relation": "resulted in",
+    "effect": "partial loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180820X35801",
+    "cause": "Airplane was at a low energy state during the pull-up maneuver to reverse direction and partial engine power loss",
+    "relation": "made",
+    "effect": "sustained flight difficult",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180820X35801",
+    "cause": "Airplane's high gross weight",
+    "relation": "contributed to",
+    "effect": "sustained flight being difficult",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181222X83505",
+    "cause": "The pilot did not mitigate the airplane's rapidly increasing angle of attack and climb rate",
+    "relation": "led to",
+    "effect": "an exceedance of the critical angle of attack, causing an aerodynamic stall at low altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181222X83505",
+    "cause": "The airplane's increased angle of attack and high rate of climb",
+    "relation": "likely led to",
+    "effect": "an aerodynamic stall at low altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181222X83505",
+    "cause": "The air traffic controller instructed the pilot to fly a right closed traffic pattern",
+    "relation": "resulted in",
+    "effect": "the pilot performing a touch-and-go landing with a different traffic pattern than the two previous ones",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150929X20812",
+    "cause": "Grease contamination in fuel tanks",
+    "relation": "led to",
+    "effect": "Fuel delivery restriction to engine",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150929X20812",
+    "cause": "Fuel delivery restriction to engine",
+    "relation": "resulted in",
+    "effect": "Loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150929X20812",
+    "cause": "Loss of engine power",
+    "relation": "caused",
+    "effect": "Forced landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150929X20812",
+    "cause": "Incorrect airspeed and angle-of-attack management during forced landing",
+    "relation": "caused",
+    "effect": "Aerodynamic stall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180112X51351",
+    "cause": "encountering turbulent conditions",
+    "relation": "led to",
+    "effect": "loss of communication and radar contact",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180112X51351",
+    "cause": "flying too close to mountain peaks",
+    "relation": "resulted in",
+    "effect": "airplane crossing less than 900 ft above the ridgeline of a high mountain peak",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180112X51351",
+    "cause": "mountain wave conditions with downdrafts as strong as 1,200 ft per minute",
+    "relation": "caused",
+    "effect": "airplane descending and speed decaying",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180112X51351",
+    "cause": "icing conditions at the accident site",
+    "relation": "contributed to",
+    "effect": "airplane's inability to climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150120X02856",
+    "cause": "engine entered aerodynamic stall",
+    "relation": "led to",
+    "effect": "loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150120X02856",
+    "cause": "engine operating erratically",
+    "relation": "initiated",
+    "effect": "engine operating erratically",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150120X02856",
+    "cause": "ice obstruction in induction air filter",
+    "relation": "caused",
+    "effect": "engine failure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150120X02856",
+    "cause": "alternate air lever in 'off' position",
+    "relation": "resulted in",
+    "effect": "inability to select a second induction air intake in case of primary air intake restriction",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190331X91146",
+    "cause": "Pilot's decision to divert to a nearby airport",
+    "relation": "led to",
+    "effect": "precautionary landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190331X91146",
+    "cause": "Wind conditions during landing",
+    "relation": "resulted in",
+    "effect": "airplane veering left and sliding off the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190331X91146",
+    "cause": "Wind conditions during landing",
+    "relation": "caused",
+    "effect": "nose landing gear collapse",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190331X91146",
+    "cause": "Wind conditions during landing",
+    "relation": "resulted in",
+    "effect": "airplane sustaining substantial damage to the upper engine mount",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190331X91146",
+    "cause": "Wind conditions reported by the airport's automated weather observation station",
+    "relation": "affected",
+    "effect": "airplane's landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190331X91146",
+    "cause": "Pilot's choice of runway (runway 32)",
+    "relation": "contributed to",
+    "effect": "airplane veering left during landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170224X81432",
+    "cause": "unexpected loss of visibility during initial climb",
+    "relation": "led to",
+    "effect": "loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170224X81432",
+    "cause": "pilot's failure to see low clouds during preflight inspection",
+    "relation": "contributed to",
+    "effect": "unexpected loss of visibility during initial climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160524X81845",
+    "cause": "sport pilot's inadvertent spin entry during stall practice",
+    "relation": "caused",
+    "effect": "partial inflation of parachute and nose-down descent resulting in impact with terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160524X81845",
+    "cause": "yawing right and into a spin during stall practice",
+    "relation": "contributed",
+    "effect": "difficulty in controlling the airplane during stall practice",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160524X81845",
+    "cause": "parachute handle location on the left side of the instrument panel",
+    "relation": "contributed",
+    "effect": "inadvertent activation of the parachute during spin entry",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160524X81845",
+    "cause": "separation of the front anchor from the airframe",
+    "relation": "caused",
+    "effect": "detachment of two front risers from the airframe",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160524X81845",
+    "cause": "overstress of the two rear risers",
+    "relation": "caused",
+    "effect": "detachment of the two rear risers from the airframe",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170703X54557",
+    "cause": "Pilot exceeded the airplane's critical angle of attack during a turn",
+    "relation": "resulted in",
+    "effect": "aerodynamic stall and impact with terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170703X54557",
+    "cause": "Condition of the field was inadequate for takeoff",
+    "relation": "resulted in",
+    "effect": "inadequate airspeed to climb out and clear the trees at the end of the field",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170703X54557",
+    "cause": "Pilot initiated a turn",
+    "relation": "led to",
+    "effect": "exceeding the airplane's critical angle of attack",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170703X54557",
+    "cause": "Pilot performed a precautionary landing in a field with high vegetation",
+    "relation": "led to",
+    "effect": "difficulty in taking off",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170703X54557",
+    "cause": "Possible fuel flow issue",
+    "relation": "led to",
+    "effect": "precautionary landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X44300",
+    "cause": "engine timing off by 3\u00b0, excessively-rich mixture setting at lower power settings, fuel leaking from the fuel pump",
+    "relation": "caused",
+    "effect": "loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X44300",
+    "cause": "loss of engine power",
+    "relation": "resulted in",
+    "effect": "pilot losing control of the airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X44300",
+    "cause": "pilot losing control of the airplane",
+    "relation": "led to",
+    "effect": "airplane descending, bouncing onto, and subsequently departing the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171117X44300",
+    "cause": "airplane colliding with a ditch",
+    "relation": "resulted in",
+    "effect": "fuselage being substantially damaged",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150615X54151",
+    "cause": "insufficient runway",
+    "relation": "led",
+    "effect": "airplane settled into the corn field",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150615X54151",
+    "cause": "tailwind",
+    "relation": "resulted in",
+    "effect": "insufficient runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150615X54151",
+    "cause": "high temperature",
+    "relation": "decreased",
+    "effect": "airplane's climb performance",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160601X13049",
+    "cause": "Pilot",
+    "relation": "failed to maintain",
+    "effect": "directional control during the landing roll",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160601X13049",
+    "cause": "20\u00b0 right crosswind at 8 knots",
+    "relation": "contributed",
+    "effect": "pilot failing to maintain directional control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171002X95603",
+    "cause": "Glider was fast and too high during the base leg in the traffic pattern",
+    "relation": "resulted in",
+    "effect": "landing long",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171002X95603",
+    "cause": "Landing long",
+    "relation": "led to",
+    "effect": "glider running off the end of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171002X95603",
+    "cause": "Glider running off the end of the runway",
+    "relation": "resulted in",
+    "effect": "left wing striking a storage trailer parked on the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171002X95603",
+    "cause": "Left wing striking a storage trailer parked on the left",
+    "relation": "resulted in",
+    "effect": "substantial damage to the left wing and fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170815X75032",
+    "cause": "maintenance personnel failing to ensure that the throttle linkage was properly adjusted",
+    "relation": "prevented",
+    "effect": "engine being unable to produce full static power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170815X75032",
+    "cause": "engine being unable to produce full static power",
+    "relation": "resulted in",
+    "effect": "airspeed decreasing while climbing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170815X75032",
+    "cause": "airspeed decreasing while climbing",
+    "relation": "led to",
+    "effect": "emergency landing resulting in substantial damage to the wings and fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180822X74921",
+    "cause": "Student pilot's inability to maintain a normal climb pitch attitude without a decrease in airspeed",
+    "relation": "led to",
+    "effect": "conclusion that there was an engine issue",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180822X74921",
+    "cause": "Student pilot's decision to reduce engine power to idle and attempt to glide to the runway",
+    "relation": "resulted in",
+    "effect": "airplane landing in a grassy area past the end of the runway and bouncing three times before the nose gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180822X74921",
+    "cause": "No evidence of a wingtip vortex encounter from another airplane",
+    "relation": "did not",
+    "effect": "contribute to the accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180822X74921",
+    "cause": "Postaccident examination of the airplane's flight controls and engine did not reveal any evidence of a mechanical malfunction or fail",
+    "relation": "did not",
+    "effect": "indicate a mechanical cause for the accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160822X43925",
+    "cause": "Helicopter slid backwards on the aft end of the transport dolly",
+    "relation": "led to",
+    "effect": "substantial damage to the tailboom and the vertical stabilizer",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160822X43925",
+    "cause": "Helicopter slid back off the dolly and hit the tail stinger",
+    "relation": "resulted in",
+    "effect": "scrape marks on the bottom of the skids",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160601X01308",
+    "cause": "Preexisting crack condition in No. 4 cylinder",
+    "relation": "resulted in",
+    "effect": "engine fire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160601X01308",
+    "cause": "Activation of auxiliary fuel pump",
+    "relation": "temporarily resolved",
+    "effect": "roughness in left engine",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160601X01308",
+    "cause": "Noticing flames emitting from the left engine cowling",
+    "relation": "led to",
+    "effect": "declaration of emergency",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160601X01308",
+    "cause": "Securing the left engine",
+    "relation": "allowed",
+    "effect": "uneventful landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160601X01308",
+    "cause": "Damage to wing structure",
+    "relation": "was caused by",
+    "effect": "engine fire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170501X02753",
+    "cause": "Wooden throttle cable support block came loose in flight",
+    "relation": "resulted in",
+    "effect": "pilot's inability to control the engine throttle and subsequent stall while maneuvering for an emergency landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180503X02040",
+    "cause": "loose hinges connecting the right flaperon hanger rib",
+    "relation": "caused",
+    "effect": "airplane violently rolled to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180503X02040",
+    "cause": "dry rotted wooden material of the flaperon",
+    "relation": "allowed",
+    "effect": "loose hinges connecting the right flaperon hanger rib",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180503X02040",
+    "cause": "airplane kit manufacturer did not install aluminum reinforcement on each flaperon hanger rib end",
+    "relation": "failed to prevent",
+    "effect": "loose hinges connecting the right flaperon hanger rib",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160309X85445",
+    "cause": "Pilot inadvertently starved the engine of fuel while attempting to select the right fuel tank",
+    "relation": "led to",
+    "effect": "engine lost power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160309X85445",
+    "cause": "Pilot used improper procedures while attempting to change the fuel selector",
+    "relation": "resulted in",
+    "effect": "engine lost power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151203X15425",
+    "cause": "Rivets that secured the drag attachment fitting to the airframe were sheared in overload",
+    "relation": "resulted in",
+    "effect": "nose landing gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151203X15425",
+    "cause": "The drag attachment fitting was separated from the airframe",
+    "relation": "led to",
+    "effect": "nose landing gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151203X15425",
+    "cause": "The operator was not aware of any recent damage to the airplane",
+    "relation": "resulted in",
+    "effect": "nose landing gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151203X15425",
+    "cause": "The airplane had been recently rented for an extended period of time",
+    "relation": "led to",
+    "effect": "nose landing gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170905X31824",
+    "cause": "Airplane did not have enough airspeed to maintain flight",
+    "relation": "led to",
+    "effect": "airplane settled into the brush",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170905X31824",
+    "cause": "Wind from 320\u00b0 at 12 knots, gusting to 15 knots",
+    "relation": "resulted in",
+    "effect": "72% decrease in the normal climb rate",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170905X31824",
+    "cause": "72% decrease in the normal climb rate",
+    "relation": "led to",
+    "effect": "airplane not being able to recover from veering to the left during touchdown",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180614X24115",
+    "cause": "Deer",
+    "relation": "struck",
+    "effect": "substantial damage to the right wing spar",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180614X24115",
+    "cause": "Pilot's decision to continue flight with extended landing gear",
+    "relation": "led to",
+    "effect": "assessment of damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X52417",
+    "cause": "Airplane's gross weight exceeding maximum allowable gross weight and center of gravity being at or beyond the forward limit",
+    "relation": "resulted in",
+    "effect": "airplane's performance being significantly degraded",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X52417",
+    "cause": "Pilot's loading of the airplane placing it outside of its operating envelope",
+    "relation": "resulted in",
+    "effect": "airplane's performance being significantly degraded",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X52417",
+    "cause": "One exhaust valve stuck in the 'open' position",
+    "relation": "if it had been stuck during all or a portion of either takeoff",
+    "effect": "airplane's acceleration and climb performance would have been significantly degraded",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X52417",
+    "cause": "Airplane being unable to attain a positive climb rate due to a combination of the stuck exhaust valve and the pilot's operation of the airplane over its weight limit",
+    "relation": "led to",
+    "effect": "airplane descending and impacting shallow water",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X90405",
+    "cause": "Flight attendant tripped over a bag",
+    "relation": "resulted in",
+    "effect": "injury of the ankle",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X90405",
+    "cause": "Main cabin door was closed",
+    "relation": "occurred before",
+    "effect": "injury incident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X90405",
+    "cause": "Airplane had not been pushed back",
+    "relation": "occurred before",
+    "effect": "injury incident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X90405",
+    "cause": "Jet bridge was not repositioned",
+    "relation": "allowed",
+    "effect": "assistance for the injured flight attendant",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X90405",
+    "cause": "Injured flight attendant was unable to walk",
+    "relation": "led to",
+    "effect": "assistance with leaving the airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190305X64637",
+    "cause": "Failure of the overrunning clutch subassembly outer race",
+    "relation": "resulted in",
+    "effect": "a loss of power to the main rotor system",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190305X64637",
+    "cause": "Low altitude and airspeed at the time of the loss of power",
+    "relation": "likely prevented",
+    "effect": "the pilot from successfully initiating and performing an autorotative landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190305X64637",
+    "cause": "Anomalous bending load, such as an angular misalignment of the drivetrain",
+    "relation": "driven fatigue crack init",
+    "effect": "cracks on a third engine mount",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190305X64637",
+    "cause": "Installation of a repaired overrunning clutch subassembly with a potentially flawed outer race",
+    "relation": "led to",
+    "effect": "the fracture of the overrunning clutch outer race",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190305X64637",
+    "cause": "Cracks on three of the engine mounts (two from impact forces, one potentially present prior to the accident)",
+    "relation": "contributed to",
+    "effect": "the helicopter impacting trees and terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X24035",
+    "cause": "wind gust",
+    "relation": "caused",
+    "effect": "airplane veered to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X24035",
+    "cause": "pilot's unsuccessful control inputs",
+    "relation": "resulted in",
+    "effect": "airplane continued to veer to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171012X24035",
+    "cause": "crosswind conditions",
+    "relation": "contributed to",
+    "effect": "airplane veered to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160922X00530",
+    "cause": "Student pilot lost control of the aircraft during takeoff",
+    "relation": "resulted in",
+    "effect": "aircraft veered off the runway to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160922X00530",
+    "cause": "Student pilot released the throttle upon instructor's instruction",
+    "relation": "led to",
+    "effect": "aircraft losing directional control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160922X00530",
+    "cause": "Student pilot stopped controlling the aircraft to allow the instructor to correct",
+    "relation": "resulted in",
+    "effect": "aircraft spinning 180 degrees",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160922X00530",
+    "cause": "Instructor was unable to regain control of the aircraft",
+    "relation": "resulted in",
+    "effect": "aircraft sustaining substantial damage to the right lift strut",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160303X81148",
+    "cause": "Pilot's landing attempt with a spongy brake",
+    "relation": "resulted in",
+    "effect": "airplane veered off the right side of the runway and impacted a fence",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160303X81148",
+    "cause": "Pilot landing beyond the midpoint of the runway",
+    "relation": "led to",
+    "effect": "airplane veered off the right side of the runway and impacted a fence",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160303X81148",
+    "cause": "No anomalies with the brakes reported during prerental checkout",
+    "relation": "did not prevent",
+    "effect": "airplane landing beyond the midpoint of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160303X81148",
+    "cause": "No evidence of any anomalies that would have precluded normal operation in postaccident examination of the brakes",
+    "relation": "did not prevent",
+    "effect": "pilot's landing attempt with a spongy brake",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190221X00100",
+    "cause": "Engine bleed valve was found in the incorrect, closed position",
+    "relation": "caused",
+    "effect": "Engine power surge and TOT rise",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190221X00100",
+    "cause": "Bushing in which the bleed valve stem resides was manufactured undersized",
+    "relation": "led to",
+    "effect": "Reduced clearance between the valve and the bushing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190221X00100",
+    "cause": "Bushing had reduced clearance",
+    "relation": "resulted in",
+    "effect": "Bleed valve held closed during engine power reduction",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190221X00100",
+    "cause": "Bleed valve held closed during engine power reduction",
+    "relation": "caused",
+    "effect": "Engine surge and TOT increase",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170425X32611",
+    "cause": "Engine experienced a power problem",
+    "relation": "resulted in",
+    "effect": "attempted landing at a nearby airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170425X32611",
+    "cause": "Airplane had insufficient fuel in the left fuel tank",
+    "relation": "led to",
+    "effect": "airplane touched down about 180 ft short of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170425X32611",
+    "cause": "Pilot was detained and incarcerated, preventing him from being interviewed",
+    "relation": "prevented",
+    "effect": "exact nature of the engine power loss, the location and altitude of the airplane when the power loss occurred, and the pilot's actions subsequent to the power loss were unable to be determined",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170911X34051",
+    "cause": "Airplane encountered turbulence",
+    "relation": "resulted in",
+    "effect": "flight attendant hitting her head on the overhead bin",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170911X34051",
+    "cause": "Flight attendant was performing final safety checks and walking to her jumpseat",
+    "relation": "occurred during",
+    "effect": "airplane encountering turbulence",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170911X34051",
+    "cause": "Flight crew did not take immediate action to secure the cabin",
+    "relation": "led to",
+    "effect": "flight attendant continuing to her seat for the remainder of the approach and landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170911X34051",
+    "cause": "Flight crew was notified of the event during taxi",
+    "relation": "resulted in",
+    "effect": "request for paramedics to meet the flight at the gate",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170911X34051",
+    "cause": "Flight attendant was transported to the hospital",
+    "relation": "resulted in",
+    "effect": "diagnosis of head injuries and admission for observation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160801X32530",
+    "cause": "Gusty crosswind conditions",
+    "relation": "resulted in",
+    "effect": "airplane touched down side loaded",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160801X32530",
+    "cause": "Airplane touched down side loaded",
+    "relation": "led to",
+    "effect": "airplane veered off the runway to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160801X32530",
+    "cause": "Airplane veered off the runway",
+    "relation": "encountered",
+    "effect": "steep ravine",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160801X32530",
+    "cause": "Landing gear encountered steep ravine",
+    "relation": "resulted in",
+    "effect": "landing gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160801X32530",
+    "cause": "Airplane landed on runway aligned with 170 degrees magnetic",
+    "relation": "in combination with",
+    "effect": "gusty crosswind conditions (250 degrees true at 10 knots, gusting to 14 knots)",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170918X90931",
+    "cause": "approaching with extra speed",
+    "relation": "led to",
+    "effect": "ballooned in the landing flare",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170918X90931",
+    "cause": "training took over",
+    "relation": "caused",
+    "effect": "applied power to go-around",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170918X90931",
+    "cause": "remembered he could not go around when landing in this direction, at this airport",
+    "relation": "prevented",
+    "effect": "successful go-around",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170918X90931",
+    "cause": "terrain and obstacles",
+    "relation": "prevented",
+    "effect": "successful go-around",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170918X90931",
+    "cause": "reduced power to idle",
+    "relation": "resulted in",
+    "effect": "stalled the airplane to the ground",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170918X90931",
+    "cause": "knowledge of airport conditions",
+    "relation": "led to",
+    "effect": "attempting to land despite knowing go-around was not possible in that direction at that airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170522X80616",
+    "cause": "Student pilot's incorrect use of dive brakes",
+    "relation": "resulted in",
+    "effect": "glider continuing in a 'higher than normal' descent rate",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170522X80616",
+    "cause": "Student pilot's failure to maintain normal descent rate after returning to glidepath",
+    "relation": "led to",
+    "effect": "glider descending short of the intended runway and landing in trees",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170522X80616",
+    "cause": "Student pilot's failure to submit a written statement after multiple requests",
+    "relation": "resulted in",
+    "effect": "lack of information about the accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180712X45233",
+    "cause": "Weather conditions deteriorated",
+    "relation": "led to",
+    "effect": "choose to land the glider at an alternate airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180712X45233",
+    "cause": "Weather conditions",
+    "relation": "resulted in",
+    "effect": "continuous sinking air",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180712X45233",
+    "cause": "Continuous sinking air",
+    "relation": "prevented",
+    "effect": "the glider to reach the alternate airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180712X45233",
+    "cause": "Realization that the glider would not reach the alternate airport",
+    "relation": "led to",
+    "effect": "choose to land on a nearby road",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180712X45233",
+    "cause": "Impact with a berm that paralleled the road",
+    "relation": "resulted in",
+    "effect": "glider cartwheeled and then came to rest inverted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180712X45233",
+    "cause": "Atmospheric lift conditions",
+    "relation": "were not sufficient to",
+    "effect": "maintain flight",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170112X04240",
+    "cause": "Pilot lost control of the airplane",
+    "relation": "led to",
+    "effect": "airplane stalled and collided with trees and terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170112X04240",
+    "cause": "Airplane was flying low and slow",
+    "relation": "resulted in",
+    "effect": "airplane stalled",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170112X04240",
+    "cause": "Trees at the approach end of the runway were present",
+    "relation": "caused",
+    "effect": "airplane collided with trees",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181201X45922",
+    "cause": "Damaged pistons in the left engine",
+    "relation": "allowed",
+    "effect": "the crankcase to become pressurized",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181201X45922",
+    "cause": "Missing rod-oil gauge and cap assembly",
+    "relation": "allowed",
+    "effect": "oil to exit the engine",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181201X45922",
+    "cause": "Oil exiting the engine",
+    "relation": "contacted",
+    "effect": "either the e",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181201X45922",
+    "cause": "Contact between oil and e (implied from previous cause)",
+    "relation": "led to",
+    "effect": "postimpact fire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181201X45922",
+    "cause": "White smoke trailing the left engine",
+    "relation": "indicated",
+    "effect": "a fire in the left engine compartment",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181201X45922",
+    "cause": "Fire in the left engine",
+    "relation": "resulted in",
+    "effect": "the airplane clipping the roof of a building, impacting the ground, and coming to rest after impacting another building",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150210X74239",
+    "cause": "Wind gust",
+    "relation": "resulted in",
+    "effect": "airplane veered off the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150210X74239",
+    "cause": "Wind gust",
+    "relation": "subsequently led to",
+    "effect": "landing gear collapsed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150210X74239",
+    "cause": "Wind gust",
+    "relation": "resulted in",
+    "effect": "substantial damage to the airframe",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150210X74239",
+    "cause": "Lack of available weather information at the accident airport",
+    "relation": "led to",
+    "effect": "no evidence of any preimpact mechanical malfunctions or failures being found",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150210X74239",
+    "cause": "Wind at the time of the accident (20-knot right crosswind)",
+    "relation": "would have resulted in",
+    "effect": "a direct crosswind that exceeded the airplane's maximum-demonstrated crosswind component (15 knots)",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180925X10105",
+    "cause": "pilot descended below minimum descent altitude (MDA) for the approach",
+    "relation": "resulted",
+    "effect": "aircraft impacted terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180925X10105",
+    "cause": "weather conditions (400 ft overcast with 4 miles visibility in drizzle)",
+    "relation": "influenced",
+    "effect": "pilot's decision to descend below MDA",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X51714",
+    "cause": "Pilot's attention wandering",
+    "relation": "led to",
+    "effect": "not correcting for wind gusts quick enough",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X51714",
+    "cause": "Not correcting for wind gusts quick enough",
+    "relation": "resulted in",
+    "effect": "airplane weather vaned into the wind",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X51714",
+    "cause": "Airplane weather vaning into the wind",
+    "relation": "led to",
+    "effect": "ground loop",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161115X51714",
+    "cause": "Wind gusts",
+    "relation": "caused",
+    "effect": "airplane weather vaning into the wind",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171128X93434",
+    "cause": "ATC directed Egypt Air airplane to pass the stopped Virgin Atlantic airplane",
+    "relation": "led to",
+    "effect": "impact between the right wing of the Egypt Air airplane and the left wing of Virgin Atlantic airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171128X93434",
+    "cause": "FAA JFK air traffic control tower supplemental hot clipboard notice stipulated that, on taxiway K in the areas of K1 and K2, two heavy airplanes are not permitted to pass",
+    "relation": "resulted in",
+    "effect": "ATC should not have directed the Egypt Air airplane to pass the Virgin Atlantic airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171128X93434",
+    "cause": "The Virgin Atlantic crew requested to hold",
+    "relation": "resulted in",
+    "effect": "ATC instructed the Egypt Air airplane to line up",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X10935",
+    "cause": "Significant headwinds",
+    "relation": "reduced",
+    "effect": "ground speed to about half of its typical cruise speed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X10935",
+    "cause": "Rapid climbs and descents",
+    "relation": "led to",
+    "effect": "deviation left and right of flight track",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X10935",
+    "cause": "High terrain of the Sierra Nevada mountain range",
+    "relation": "combined with",
+    "effect": "airplane descending from 10,800 ft to 9,700 ft",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161019X10935",
+    "cause": "High-speed, right-wing-low impact",
+    "relation": "resulted in",
+    "effect": "debris field and airframe damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150914X90257",
+    "cause": "Weather conditions conducive to carburetor icing",
+    "relation": "led to",
+    "effect": "accumulation of serious carburetor icing at all power settings",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150914X90257",
+    "cause": "Accumulation of serious carburetor icing at all power settings",
+    "relation": "resulted in",
+    "effect": "engine suddenly began to lose power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150914X90257",
+    "cause": "Engine lost power",
+    "relation": "resulted in",
+    "effect": "airspeed slowed and the airplane descended",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150914X90257",
+    "cause": "Airplane descended",
+    "relation": "resulted in",
+    "effect": "airplane impacted the concrete median barrier on the highway in a narrow mountain pass",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150914X90257",
+    "cause": "Use of 4-point inertial reel shoulder harness system",
+    "relation": "likely prevented",
+    "effect": "pilot from sustaining a more serious injury",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150811X15940",
+    "cause": "Helicopter collided with power lines",
+    "relation": "resulted in",
+    "effect": "helicopter nosed over and impacted terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150811X15940",
+    "cause": "Power lines were only 13 feet off the ground",
+    "relation": "led to",
+    "effect": "helicopter collided with power lines",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150811X15940",
+    "cause": "Power lines were green in color that blended in with the background crops",
+    "relation": "contributed to",
+    "effect": "helicopter collided with power lines",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170603X01738",
+    "cause": "Pilot aerodynamically stalled the airplane during landing",
+    "relation": "resulted in",
+    "effect": "airplane touched down and bounced, drifted left, bounced again while exiting the airstrip",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170603X01738",
+    "cause": "Airplane bounced and drifted left",
+    "relation": "led to",
+    "effect": "left wing hit a tree",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170603X01738",
+    "cause": "Left wing hit a tree",
+    "relation": "resulted in",
+    "effect": "airplane came to rest nose down",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170603X01738",
+    "cause": "Airplane came to rest nose down",
+    "relation": "resulted in",
+    "effect": "substantial damage to the fuselage and left wing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170603X01738",
+    "cause": "There were no preaccident mechanical failures or malfunctions with the airplane",
+    "relation": "did not lead to",
+    "effect": "any condition that would have precluded normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150715X91005",
+    "cause": "pilot being slow to get the nose up",
+    "relation": "caused",
+    "effect": "airplane veered to the right, departed the runway, came to rest in the grass next to the runway, airplane sustained substantial damage to the fuselage and both wings",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X64357",
+    "cause": "Pilot mistook right yaw for a loss of tail rotor effectiveness",
+    "relation": "led to",
+    "effect": "Helicopter continued to yaw right, descended, and landed hard",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X64357",
+    "cause": "Pilot did not apply pedal corrections",
+    "relation": "resulted in",
+    "effect": "Helicopter yawed right during descent",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X64357",
+    "cause": "No preaccident mechanical failures or malfunctions with the helicopter",
+    "relation": "precluded",
+    "effect": "Normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190730X64357",
+    "cause": "Helicopter yawed right and landed hard",
+    "relation": "resulted in",
+    "effect": "Substantial damage to the cabin assembly",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180109X22437",
+    "cause": "The provisioning vans platform/box assembly malfunctioned",
+    "relation": "resulted in",
+    "effect": "the platform to lower about 2-3 feet",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180109X22437",
+    "cause": "The platform lowered about 2-3 feet",
+    "relation": "led to",
+    "effect": "the provisioning agent losing situational awareness",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180109X22437",
+    "cause": "The provisioning agent lost situational awareness",
+    "relation": "resulted in",
+    "effect": "the provisioning agent falling onto the lowered platform",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180109X22437",
+    "cause": "The left side tape switch was found to have dislodged from its track",
+    "relation": "resulted in",
+    "effect": "the uncommanded lowering of the platform",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151123X43413",
+    "cause": "Pilot lost sight of Cessna during 'S' turn",
+    "relation": "led to",
+    "effect": "impact of Piper's left wing on Cessna's rudder",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151123X43413",
+    "cause": "Pilot abruptly applied right brake to avoid collision",
+    "relation": "resulted in",
+    "effect": "impact of Piper's left wing on Cessna's rudder",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151123X43413",
+    "cause": "Cessna moved forward while Piper was in 'S' turn",
+    "relation": "led to",
+    "effect": "loss of sight of Cessna by Piper",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150504X54010",
+    "cause": "Pilot's fuel mismanagement",
+    "relation": "resulted in",
+    "effect": "engine being starved of available fuel",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150504X54010",
+    "cause": "Pilot's fuel mismanagement",
+    "relation": "led to",
+    "effect": "total loss of power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150504X54010",
+    "cause": "Total loss of power",
+    "relation": "caused",
+    "effect": "forced landing to a two-lane highway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150504X54010",
+    "cause": "Forced landing",
+    "relation": "resulted in",
+    "effect": "airplane colliding with the rear of a truck",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150504X54010",
+    "cause": "Airplane colliding with the rear of a truck",
+    "relation": "led to",
+    "effect": "right wing separating",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150504X54010",
+    "cause": "Airplane coming to rest inverted in a ditch",
+    "relation": "resulted in",
+    "effect": "airplane coming to rest inverted in a ditch about 250 ft from the initial impact point",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161028X93712",
+    "cause": "Landing with a fractured left main landing gear cylinder",
+    "relation": "led to",
+    "effect": "Left main landing gear collapse",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161028X93712",
+    "cause": "Broken fuel supply tube in the left engine pylon",
+    "relation": "resulted in",
+    "effect": "Left wing catching fire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161028X93712",
+    "cause": "Exterior surfaces of the nearly empty left main fuel tank being heated by burning fuel",
+    "relation": "caused",
+    "effect": "Left main fuel tank explosion",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190703X54910",
+    "cause": "Black vulture",
+    "relation": "struck",
+    "effect": "substantial damage to the windscreen",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190703X54910",
+    "cause": "Vulture strike",
+    "relation": "led to",
+    "effect": "landing at the airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170914X44755",
+    "cause": "Landing gear system not disassembled/inspected every 10 years/5,000 landings",
+    "relation": "did not prevent",
+    "effect": "landing gear collapse",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170914X44755",
+    "cause": "Landing gear bell crank pivot bolt not inspected for wear every 3 years (or 500 landings)",
+    "relation": "did not prevent",
+    "effect": "landing gear collapse",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170914X44755",
+    "cause": "Crack in landing gear pivot bolt",
+    "relation": "led to",
+    "effect": "landing gear collapse",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170914X44755",
+    "cause": "No entry in airplane maintenance records for landing gear inspections",
+    "relation": "did not ensure",
+    "effect": "timely inspection and maintenance of landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180312X54701",
+    "cause": "fuel starvation",
+    "relation": "seemed to",
+    "effect": "engine lost power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180312X54701",
+    "cause": "water in gascolator",
+    "relation": "led to",
+    "effect": "engine lost power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150706X41332",
+    "cause": "insufficient engine power",
+    "relation": "resulted",
+    "effect": "aircraft struck power lines and crashed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150706X41332",
+    "cause": "carburetor icing",
+    "relation": "could have caused",
+    "effect": "insufficient engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150624X35258",
+    "cause": "Instructor's inadequate monitoring of the approach",
+    "relation": "led to",
+    "effect": "his failure to see that the airplane was lined up with a taxiway instead",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150624X35258",
+    "cause": "Instructor's failure to verify that the engine was operating",
+    "relation": "led to",
+    "effect": "impacting a cornfield adjacent to the airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160506X61121",
+    "cause": "Water present in the fuel system",
+    "relation": "Resulted in",
+    "effect": "Total loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160506X61121",
+    "cause": "Engine experienced total loss of power",
+    "relation": "Led to",
+    "effect": "Unsuccessful engine restart",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160506X61121",
+    "cause": "Unable to reach the runway",
+    "relation": "Resulted in",
+    "effect": "Forced landing to a small field",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160506X61121",
+    "cause": "Airplane contacted a power line during landing approach",
+    "relation": "Led to",
+    "effect": "Nosed over and came to rest inverted, causing substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160506X61121",
+    "cause": "Fine fuel filter was not drained or checked during the most recent inspection",
+    "relation": "Resulted in",
+    "effect": "Water present in the fine fuel filter",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160506X61121",
+    "cause": "Fine fuel filter is not easily accessible and not able to be drained during a preflight inspection",
+    "relation": "Contributed to",
+    "effect": "Water present in the fuel system",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160224X14935",
+    "cause": "Pilot landed the airplane well beyond the runway threshold",
+    "relation": "resulted in",
+    "effect": "airplane overran the departure end of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160224X14935",
+    "cause": "Pilot did not apply adequate braking effort",
+    "relation": "led to",
+    "effect": "airplane overran the departure end of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160224X14935",
+    "cause": "Thrust reversers were not deployed during the landing roll",
+    "relation": "contributed to",
+    "effect": "airplane overran the departure end of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180222X31345",
+    "cause": "Trim issue",
+    "relation": "caused",
+    "effect": "difficulty controlling the airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180222X31345",
+    "cause": "Trim issue",
+    "relation": "led to",
+    "effect": "deviation from course and altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180222X31345",
+    "cause": "Trim issue",
+    "relation": "resulted in",
+    "effect": "erratic flight behavior for the last 2 minutes of radar data; loss of radar and radio communication",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180222X31345",
+    "cause": "Trim issue",
+    "relation": "contributed to",
+    "effect": "aircraft impacting a field in a relatively level attitude at high speed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180810X65643",
+    "cause": "Pilot made a precautionary landing due to low fuel",
+    "relation": "resulted in",
+    "effect": "airplane nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180810X65643",
+    "cause": "Airplane had low fuel",
+    "relation": "led to",
+    "effect": "pilot made a precautionary landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150827X40535",
+    "cause": "atmospheric conditions conducive to carburetor icing",
+    "relation": "caused",
+    "effect": "engine would not respond",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150827X40535",
+    "cause": "no use of carburetor heat",
+    "relation": "contributed",
+    "effect": "engine would not respond",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180521X42345",
+    "cause": "Student pilot's attempt to correct the landing",
+    "relation": "led to",
+    "effect": "Airplane's nose pitched up and turned left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180521X42345",
+    "cause": "Student pilot's application of power after aborted landing",
+    "relation": "resulted in",
+    "effect": "Airplane impacted the grass safety area on the left side of the runway in a nose-down attitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180521X42345",
+    "cause": "Airplane's impact with the grass safety area",
+    "relation": "caused",
+    "effect": "Airplane came to rest inverted after striking a drainage culvert and sustaining substantial damage to the right-wing lift strut and aileron",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170724X61747",
+    "cause": "strong downdraft, heavy rain, turbulence, and pilot's decision to land in thunderstorm",
+    "relation": "led",
+    "effect": "airplane overran the end of the runway and struck a berm",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170724X61747",
+    "cause": "pilot's decision to land in dark night conditions with scattered thunderstorms ahead",
+    "relation": "resulted",
+    "effect": "pilot encountered a strong downdraft, heavy rain, turbulence, and saw several lightning strikes ahead",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191203X02852",
+    "cause": "Pilot did not walk or inspect the area where the takeoff attempt was conducted",
+    "relation": "led to",
+    "effect": "Dirt and mud collected on the main landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191203X02852",
+    "cause": "Dirt and mud collected on the main landing gear",
+    "relation": "caused",
+    "effect": "Wheel to lock up as if the brakes had been applied",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191203X02852",
+    "cause": "Wheel locked up",
+    "relation": "resulted in",
+    "effect": "Airplane slowly nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191203X02852",
+    "cause": "Airplane slowly nosed over",
+    "relation": "resulted in",
+    "effect": "Substantial damage to the wings, fuselage, and vertical tail",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191203X02852",
+    "cause": "No preaccident mechanical failures or malfunctions of the braking system",
+    "relation": "and",
+    "effect": "Tires stopped rotating due to the dirt and mud between the MLG leg and the tire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190311X35306",
+    "cause": "CRJ-900 pushed back about 30 feet",
+    "relation": "collided with",
+    "effect": "CRJ-700",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190311X35306",
+    "cause": "Initial instruction from north ramp controller to '10 and hold'",
+    "relation": "led to",
+    "effect": "CRJ-900 pushing back from gate E31",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190311X35306",
+    "cause": "Approval of push back about 2 minutes later",
+    "relation": "resulted in",
+    "effect": "CRJ-900 moving 30 feet",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190311X35306",
+    "cause": "CRJ-900 crew not coordinating properly with ground crew",
+    "relation": "resulted in",
+    "effect": "CRJ-900 impacting the tail of the CRJ-700",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190311X35306",
+    "cause": "Damage reports from ATC and neighboring airplanes",
+    "relation": "led to",
+    "effect": "CRJ-700 crew starting their auxiliary power unit and shutting down both engines",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150213X13657",
+    "cause": "Right cabin door opened during takeoff",
+    "relation": "resulted in",
+    "effect": "slow, lingering left turn, wings level, left roll, descent, impact with trees",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150213X13657",
+    "cause": "Pitch trim would not respond to nose-down pitch trim",
+    "relation": "led to",
+    "effect": "pitch up violent on takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150213X13657",
+    "cause": "Pitch trim was found in a nearly full nose-up setting",
+    "relation": "contributed to",
+    "effect": "pitch up violent on takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170828X12105",
+    "cause": "Wind gust",
+    "relation": "struck",
+    "effect": "airplane's left side",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170828X12105",
+    "cause": "Wind gust",
+    "relation": "caused",
+    "effect": "airplane ground looped to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170828X12105",
+    "cause": "Airplane ground looping to the left",
+    "relation": "collided with",
+    "effect": "right-wing strut with the 7,000-ft runway distance marker",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170828X12105",
+    "cause": "Wind direction (020\u00b0)",
+    "relation": "struck",
+    "effect": "airplane's left side",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190803X22956",
+    "cause": "crankshaft failure due to fatigue",
+    "relation": "caused",
+    "effect": "engine lost power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190803X22956",
+    "cause": "lack of crankshaft inspection as per mandatory service bulletin (MSB) and Federal Aviation Administration airworthiness directive (AD)",
+    "relation": "failed to prevent",
+    "effect": "crankshaft failure due to fatigue",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190803X22956",
+    "cause": "misalignment during a previous reassembly of the engine",
+    "relation": "led to",
+    "effect": "crack initiation in crankshaft",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190803X22956",
+    "cause": "stray or excessive wear to the forward journal to web radius",
+    "relation": "contributed to",
+    "effect": "crack initiation in crankshaft",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190803X22956",
+    "cause": "forced landing on a road and impact with power pole and electrical wires",
+    "relation": "resulted in",
+    "effect": "airplane incurred substantial damage to the fuselage and wings",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180708X00804",
+    "cause": "twist grip caution indication on the left engine (No. 1) and second unspecified caution message",
+    "relation": "caused",
+    "effect": "engine malfunction in No. 1 and No. 2 engines",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180708X00804",
+    "cause": "pilot's failure to correctly interpret engine indications",
+    "relation": "led to",
+    "effect": "inability to maintain proper engine performance",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180708X00804",
+    "cause": "pilot's decision to divert to a nearby airport",
+    "relation": "resulted in",
+    "effect": "delay in addressing engine malfunction",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180708X00804",
+    "cause": "pilot's inability to maintain proper engine performance",
+    "relation": "led to",
+    "effect": "helicopter oscillation and loss of control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180708X00804",
+    "cause": "pilot's misjudgment of landing location",
+    "relation": "resulted in",
+    "effect": "landing short of intended location",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180708X00804",
+    "cause": "helicopter impact with terrain",
+    "relation": "resulted in",
+    "effect": "helicopter crash and subsequent 180\u00b0 rotation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190825X90137",
+    "cause": "Unknown",
+    "relation": "Could not be determined",
+    "effect": "Pilot and passenger could not recall the events of the accident flight",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190825X90137",
+    "cause": "Impact with trees",
+    "relation": "Resulted in",
+    "effect": "Glider found substantially damaged among trees east of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190825X90137",
+    "cause": "Pilot's inability to retract landing gear and airbrakes",
+    "relation": "Led to",
+    "effect": "Landing gear and airbrakes found in the extended positions",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190825X90137",
+    "cause": "Pilot's inability to operate engine and propeller",
+    "relation": "Led to",
+    "effect": "Engine and propeller found stowed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190825X90137",
+    "cause": "Lack of evidence of mechanical malfunction or anomaly",
+    "relation": "Did not preclude",
+    "effect": "Normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X50042",
+    "cause": "faster than normal descent rate",
+    "relation": "led to",
+    "effect": "hard landing with subsequent damage to the fuselage and vertical stabilizer",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X50042",
+    "cause": "initiating a 180\u00ba left turn during westward approach",
+    "relation": "resulted in",
+    "effect": "hard landing with subsequent damage to the fuselage and vertical stabilizer",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X50042",
+    "cause": "raising the collective to reduce the descent rate",
+    "relation": "caused",
+    "effect": "main rotor speed decay",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181001X50042",
+    "cause": "spotting an elevated steel barrier cable below the helicopter",
+    "relation": "prompted",
+    "effect": "90\u00ba left turn to avoid a tail rotor strike",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151208X01729",
+    "cause": "Helicopter pitched nose down",
+    "relation": "led to",
+    "effect": "Helicopter entered a spin",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151208X01729",
+    "cause": "Pilot applied left cyclic",
+    "relation": "attempted to",
+    "effect": "Helicopter rolled to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151208X01729",
+    "cause": "Helicopter 'snap turned' to the right",
+    "relation": "resulted in",
+    "effect": "Helicopter entered a spin",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151208X01729",
+    "cause": "Pilot attempted to land the helicopter",
+    "relation": "resulted in",
+    "effect": "Helicopter impacted terrain and rolled onto its left side",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190823X45219",
+    "cause": "pilot's modifications to the airplane's engine",
+    "relation": "resulted in",
+    "effect": "engine running excessively rich",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190823X45219",
+    "cause": "engine running excessively rich",
+    "relation": "caused",
+    "effect": "partial loss of power and engine roughness",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170207X82120",
+    "cause": "pilot not being diligent in observing the touchdown point on the runway",
+    "relation": "could have prevented",
+    "effect": "aircraft nosed over and sustained substantial damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170207X82120",
+    "cause": "pilot chose to land on the turf safety area parallel to the runway",
+    "relation": "led to",
+    "effect": "aircraft nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150827X11718",
+    "cause": "Airplane was not equipped with a mandatory fuel return line",
+    "relation": "did not have",
+    "effect": "formation of vapor lock",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150827X11718",
+    "cause": "Pilot did not follow engine manufacturer's installation instructions",
+    "relation": "was not equipped with",
+    "effect": "mandatory fuel return line",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150827X11718",
+    "cause": "Engine experienced vapor lock",
+    "relation": "led to",
+    "effect": "partial loss of power during climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150827X11718",
+    "cause": "Pilot pitched the airplane down into a nose-low configuration",
+    "relation": "resulted in",
+    "effect": "crash into a field",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180502X24152",
+    "cause": "Helicopter struck a tree with the tail rotor",
+    "relation": "led to",
+    "effect": "developed a huge vibration suddenly and [he] had no heading control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180502X24152",
+    "cause": "Helicopter developed a huge vibration suddenly and [he] had no heading control",
+    "relation": "resulted in",
+    "effect": "impacted the ground",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180502X24152",
+    "cause": "No preaccident mechanical failures or malfunctions with the helicopter",
+    "relation": "did not",
+    "effect": "preclude normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180502X24152",
+    "cause": "Did not take more dual instruction",
+    "relation": "contributed to",
+    "effect": "accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180502X24152",
+    "cause": "Chose a more open area for hover practice",
+    "relation": "would have",
+    "effect": "prevented accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170715X94908",
+    "cause": "Passenger failed to release maneuvering handles",
+    "relation": "led to",
+    "effect": "Passenger was carried into the air and sustained serious injuries",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170715X94908",
+    "cause": "Pilot did not ensure all passengers released maneuvering handles",
+    "relation": "resulted in",
+    "effect": "One passenger was carried into the air and sustained serious injuries",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171003X44053",
+    "cause": "Pilot kept the power at a higher, time restricted setting",
+    "relation": "resulted in",
+    "effect": "coolant temperature rising above the 180\u00b0F maximum operating temperature",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171003X44053",
+    "cause": "Pilot became concerned that the airplane could lose engine power due to overheating",
+    "relation": "led to",
+    "effect": "precautionary landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171003X44053",
+    "cause": "Airplane bounced during landing",
+    "relation": "led to",
+    "effect": "go around",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20171003X44053",
+    "cause": "Airplane struck a hangar roof",
+    "relation": "resulted in",
+    "effect": "substantial damage to both wings and the fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150924X80717",
+    "cause": "Pilot's use of a 'standard crosswind technique'",
+    "relation": "resulted in",
+    "effect": "nose of the airplane shifting 25 degrees to the left of the runway centerline",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150924X80717",
+    "cause": "Pilot's attempt to correct with rudder and ailerons",
+    "relation": "led to",
+    "effect": "airplane veering to the left and exiting the runway surface",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150924X80717",
+    "cause": "Airplane veering off the runway",
+    "relation": "resulted in",
+    "effect": "right main landing gear collapsing and right wing impacting the terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150924X80717",
+    "cause": "Wind shifting to a quartering tailwind during touchdown",
+    "relation": "resulted in",
+    "effect": "airplane veering off the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150924X80717",
+    "cause": "Automated weather observing system reporting wind at 020 degrees true at 5 knots",
+    "relation": "resulted in",
+    "effect": "quartering tailwind during the touchdown",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180323X80643",
+    "cause": "airplane's speed decreased below stall speed",
+    "relation": "resulted",
+    "effect": "aircraft impacted terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180323X80643",
+    "cause": "lack of stall warning system",
+    "relation": "contributed",
+    "effect": "aircraft impacted terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180323X80643",
+    "cause": "no markings on airspeed instruments indicating stall speed",
+    "relation": "contributed",
+    "effect": "aircraft impacted terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180323X80643",
+    "cause": "low-speed, low-altitude approach with low engine power due to runway conditions",
+    "relation": "contributed",
+    "effect": "aircraft impacted terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180323X80643",
+    "cause": "1 hour elapsed after fueling with 16.5 gallons of 100 low-lead fuel",
+    "relation": "contributed",
+    "effect": "airplane's speed decreased below stall speed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180319X41043",
+    "cause": "gusty crosswind conditions",
+    "relation": "caused",
+    "effect": "airplane veered to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180319X41043",
+    "cause": "airplane bounced during landing",
+    "relation": "led to",
+    "effect": "airplane touched down a second time left of the runway centerline",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180319X41043",
+    "cause": "flight crew attempted go-around with almost idle engines",
+    "relation": "resulted in",
+    "effect": "time taken for engines to spool back up",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180319X41043",
+    "cause": "inadequate airspeed during go-around",
+    "relation": "resulted in",
+    "effect": "airplane continued to veer to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180319X41043",
+    "cause": "gust under the right wing",
+    "relation": "drove",
+    "effect": "left wing into the ground",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180319X41043",
+    "cause": "nose landing gear collapsed",
+    "relation": "resulted in",
+    "effect": "airplane slid to a stop",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180319X41043",
+    "cause": "wind conditions exceeding max demonstrated crosswind limit",
+    "relation": "contributed to",
+    "effect": "airplane veering to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151006X15935",
+    "cause": "Pilot did not receive IFR clearance",
+    "relation": "did not result in",
+    "effect": "airplane remaining under VFR and responsible for maintaining terrain, obstacle, and cloud clearance",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151006X15935",
+    "cause": "Pilot remained under VFR",
+    "relation": "led to",
+    "effect": "airplane encountering rising terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151006X15935",
+    "cause": "Rising terrain",
+    "relation": "resulted in",
+    "effect": "airplane impacting treetops and a ridgeline",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151006X15935",
+    "cause": "Weather conditions (light precipitation, mist, fog, and low clouds)",
+    "relation": "obscured",
+    "effect": "surrounding ridgelines",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151006X15935",
+    "cause": "Obscured ridgelines",
+    "relation": "likely caused",
+    "effect": "airplane colliding with the r",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150407X11506",
+    "cause": "Severe turbulence",
+    "relation": "caused",
+    "effect": "glider's airspeed to increase beyond its structural limitations and led to its in-flight breakup",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150407X11506",
+    "cause": "Clouds and wind",
+    "relation": "likely led to",
+    "effect": "encountering severe turbulence",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150407X11506",
+    "cause": "Pilot's attempt to navigate through a gap in the clouds",
+    "relation": "resulted in",
+    "effect": "glider quickly filling in and engulfing the glider",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191015X44008",
+    "cause": "Multiple compressor stalls followed by a partial loss of power",
+    "relation": "resulted in",
+    "effect": "substantial damage to main rotor system, fuselage, and the tail boom",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191015X44008",
+    "cause": "Damage to the stage 1, 2, and 3 turbine wheels",
+    "relation": "caused",
+    "effect": "partial loss of power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191015X44008",
+    "cause": "Cracks consistent with multiple over-temperature operations and a hot start event",
+    "relation": "led to",
+    "effect": "damage to the stage 1, 2, and 3 turbine wheels",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191015X44008",
+    "cause": "Errors in turbine outlet temperature gauge",
+    "relation": "most likely not causal to",
+    "effect": "over temperature and hot start events",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20191015X44008",
+    "cause": "No indication of any previous hot start events or over temperature operations in maintenance documents",
+    "relation": "indicated",
+    "effect": "no causal link to the over temperature and hot start events",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181223X92508",
+    "cause": "Pilot's inability to maintain proper alignment during landing",
+    "relation": "resulted in",
+    "effect": "airplane touching down left of centerline, veering left, exiting the runway to the left, and then nosing over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181223X92508",
+    "cause": "Wind conditions",
+    "relation": "led to",
+    "effect": "challenges in maintaining proper alignment during landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181223X92508",
+    "cause": "Substantial damage to the lower left-wing lift strut",
+    "relation": "was caused by",
+    "effect": "nosing over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180711X04255",
+    "cause": "Pilot became momentarily disoriented",
+    "relation": "led to",
+    "effect": "Leveling the wings",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180711X04255",
+    "cause": "Leveling the wings",
+    "relation": "resulted in",
+    "effect": "Approaching an area of snow-covered mountainous terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180711X04255",
+    "cause": "Pilot's realization that the airplane was approaching snow-covered mountainous terrain",
+    "relation": "led to",
+    "effect": "Applying full power and initiating a steep climb",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180711X04255",
+    "cause": "Steep climb with decaying airspeed",
+    "relation": "resulted in",
+    "effect": "Collision with an area of rocky, rising terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180711X04255",
+    "cause": "Weather conditions (scattered clouds, overcast clouds, clouds layered above, isolated broken clouds with light rain, AIRMET advisory SIERRA for 'mountains obscured in clouds/precipitation')",
+    "relation": "contributed to",
+    "effect": "Pilot's disorientation and inability to maintain VFR conditions",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180827X53423",
+    "cause": "Carburetor icing and pilot's failure to apply carburetor heat",
+    "relation": "likely occurred",
+    "effect": "loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180827X53423",
+    "cause": "Pilot's failure to maneuver the airplane",
+    "relation": "resulted in",
+    "effect": "striking power lines and impacting a field",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180827X53423",
+    "cause": "Weather conditions conducive to serious carburetor icing",
+    "relation": "contributed to",
+    "effect": "loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160627X91259",
+    "cause": "Water remained in the fuel system",
+    "relation": "resulted in",
+    "effect": "loss of engine power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160627X91259",
+    "cause": "The right wing fuel cap was missing",
+    "relation": "led to",
+    "effect": "fuel leakage or contamination",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160627X91259",
+    "cause": "The pilot did not perform a complete preflight inspection",
+    "relation": "led to",
+    "effect": "water remaining in the fuel system",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181120X12524",
+    "cause": "Pilot of low-wing airplane",
+    "relation": "failed to",
+    "effect": "properly maintain runway clearance",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181120X12524",
+    "cause": "Pilot of low-wing airplane",
+    "relation": "did not",
+    "effect": "observe the other aircraft in the traffic pattern",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181120X12524",
+    "cause": "Pilot of high-wing airplane",
+    "relation": "did not",
+    "effect": "hear radio transmissions from the low-wing airplane",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181120X12524",
+    "cause": "Pilot of high-wing airplane",
+    "relation": "did not",
+    "effect": "properly maintain runway clearance",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181120X12524",
+    "cause": "Possible miscommunication or lack of coordination",
+    "relation": "led to",
+    "effect": "mid-air collision on the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151119X93456",
+    "cause": "Towel from an unsecured storage container near the landing site",
+    "relation": "was ingested",
+    "effect": "Fenestron tail rotor blades, fenestron housing body, tailboom, tail rotor drive shaft flex couplings were damaged",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20151119X93456",
+    "cause": "Fenestron hub fairing detaching from the hub body",
+    "relation": "was ingested",
+    "effect": "Main rotor blades received foreign object damage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150614X60334",
+    "cause": "Pilot did not maintain adequate airspeed following the loss of engine power",
+    "relation": "resulted in",
+    "effect": "airplane exceeding its critical angle of attack and experiencing an aerodynamic stall at a low altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150614X60334",
+    "cause": "Water and particulate contamination within the fuel distribution system",
+    "relation": "likely caused",
+    "effect": "engine loss of power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170619X92534",
+    "cause": "Pilot set throttle at high engine power setting",
+    "relation": "allowed",
+    "effect": "airplane's movement",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170619X92534",
+    "cause": "Airplane moved forward, breaking the rope",
+    "relation": "resulted in",
+    "effect": "broken nylon rope",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170619X92534",
+    "cause": "Broken nylon rope",
+    "relation": "allowed",
+    "effect": "airplane continued to taxi in circles",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170619X92534",
+    "cause": "Propeller struck the pilot",
+    "relation": "resulted in",
+    "effect": "fatal injuries",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181228X64015",
+    "cause": "Preexisting intergranular crack and the origin of the fatigue crack on low pressure turbine stage 3 blade No. 52",
+    "relation": "led to",
+    "effect": "elevated level of zirconium in EDS",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181228X64015",
+    "cause": "Elevated level of zirconium in EDS",
+    "relation": "could be",
+    "effect": "from the zirconia crucible in which the nickel alloy was melted",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181228X64015",
+    "cause": "Preexisting intergranular crack and the origin of the fatigue crack on low pressure turbine stage 3 blade No. 52",
+    "relation": "resulted in",
+    "effect": "commanded inflight shutdown of the left engine",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181228X64015",
+    "cause": "Commanded inflight shutdown of the left engine",
+    "relation": "led to",
+    "effect": "return to Busan, Korea without further incident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190320X13153",
+    "cause": "Improper repair of the clutch actuator fuse holder",
+    "relation": "likely caused",
+    "effect": "loose condition of the V-belts",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190320X13153",
+    "cause": "Loose condition of the V-belts",
+    "relation": "resulted in",
+    "effect": "V-belt failure",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190320X13153",
+    "cause": "V-belt failure",
+    "relation": "led to",
+    "effect": "loss of power to the helicopter's rotor system",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190320X13153",
+    "cause": "Loss of power to the helicopter's rotor system",
+    "relation": "resulted in",
+    "effect": "autorotation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190320X13153",
+    "cause": "Autorotation",
+    "relation": "led to",
+    "effect": "forced landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190320X13153",
+    "cause": "Forced landing",
+    "relation": "resulted in",
+    "effect": "substantial damage to the tail boom, main rotor, and fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160914X15836",
+    "cause": "Pilot holding the nose landing gear up during landing roll",
+    "relation": "led to",
+    "effect": "airplane began to drift to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160914X15836",
+    "cause": "Airplane drifting to the left",
+    "relation": "caused",
+    "effect": "airplane exited the runway to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160914X15836",
+    "cause": "More brake pressure applied",
+    "relation": "further caused",
+    "effect": "airplane drifted further to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160914X15836",
+    "cause": "Airplane striking a drainage culvert",
+    "relation": "resulted in",
+    "effect": "substantial damage to the firewall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160914X15836",
+    "cause": "Pilot unsure about a mechanical anomaly during landing",
+    "relation": "led to",
+    "effect": "inspection of the airplane's brake system",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160914X15836",
+    "cause": "No mechanical malfunctions or anomalies found in the brake system",
+    "relation": "indicated",
+    "effect": "no mechanical issue contributing to the accident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180910X84852",
+    "cause": "Pilot inadvertently released the emergency canopy release during the flight",
+    "relation": "led to",
+    "effect": "canopy separation from the airframe",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180910X84852",
+    "cause": "Canopy continued to open after being activated",
+    "relation": "resulted in",
+    "effect": "canopy striking the empennage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180910X84852",
+    "cause": "Canopy striking the empennage",
+    "relation": "caused",
+    "effect": "substantial damage to the empennage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180910X84852",
+    "cause": "Pilot activating the canopy motor to open the canopy about 2 inches upon landing",
+    "relation": "resulted in",
+    "effect": "canopy continuing to open",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180910X84852",
+    "cause": "Standard procedure upon landing to open the canopy slightly to aid in slowing the airplane and egress in a runway excursion event",
+    "relation": "led to",
+    "effect": "canopy continuing to open",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150615X10136",
+    "cause": "Stabilator trim was found in the full nose-up position",
+    "relation": "resulted in",
+    "effect": "airplane's extreme nose-up attitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150615X10136",
+    "cause": "Airplane's extreme nose-up attitude",
+    "relation": "led to",
+    "effect": "an exceedance of the airplane's critical angle of attack during the initial climb and an aerodynamic stall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170510X54257",
+    "cause": "Airspeed decreased during landing",
+    "relation": "resulted in",
+    "effect": "aerodynamic stall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170510X54257",
+    "cause": "Airplane aerodynamically stalled",
+    "relation": "led to",
+    "effect": "hard landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170510X54257",
+    "cause": "Hard landing",
+    "relation": "resulted in",
+    "effect": "airplane veered off the runway to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170510X54257",
+    "cause": "Airplane veered off the runway to the right",
+    "relation": "led to",
+    "effect": "airplane came to rest with the nose down",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170510X54257",
+    "cause": "Airplane came to rest with the nose down",
+    "relation": "resulted in",
+    "effect": "substantial damage to the fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170510X54257",
+    "cause": "No preaccident mechanical failures or malfunctions with the airplane",
+    "relation": "did not prevent",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181126X13908",
+    "cause": "student pilot relaxed back pressure",
+    "relation": "caused",
+    "effect": "nose landing gear struck runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181126X13908",
+    "cause": "nose landing gear struck runway",
+    "relation": "led to",
+    "effect": "airplane bounced",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181126X13908",
+    "cause": "airplane bounced",
+    "relation": "resulted in",
+    "effect": "instructor took flight controls and settled airplane back onto runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181126X13908",
+    "cause": "airplane continued to be used without inspection",
+    "relation": "resulted in",
+    "effect": "substantial damage to the fuselage discovered during 100-hour inspection",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160623X74849",
+    "cause": "Student pilot",
+    "relation": "landed",
+    "effect": "airplane impacted the runway asphalt edge with the nose landing gear",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160623X74849",
+    "cause": "Student pilot",
+    "relation": "failed to",
+    "effect": "airplane landed short of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160623X74849",
+    "cause": "Airplane",
+    "relation": "sustained",
+    "effect": "substantial damage to the firewall",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160913X50908",
+    "cause": "Pilot encountered sink",
+    "relation": "led to",
+    "effect": "descended below the glide path to the airport",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160913X50908",
+    "cause": "Pilot turned to avoid powerlines",
+    "relation": "resulted in",
+    "effect": "encountered more sink",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160913X50908",
+    "cause": "Pilot landed hard",
+    "relation": "resulted in",
+    "effect": "substantial damage to the tailboom",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180924X40449",
+    "cause": "Center tank was empty",
+    "relation": "resulted in",
+    "effect": "Engine lost power",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180924X40449",
+    "cause": "Engine lost power",
+    "relation": "led to",
+    "effect": "Airplane descended and struck trees",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180924X40449",
+    "cause": "Airplane struck trees",
+    "relation": "resulted in",
+    "effect": "Right wing impacted terrain",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180924X40449",
+    "cause": "Pilot did not follow checklists",
+    "relation": "led to",
+    "effect": "Center tank was not selected before takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150707X13004",
+    "cause": "fuel bladder had become unsnapped from the wing",
+    "relation": "allowed",
+    "effect": "fuel quantity transmitter indicated a false reading",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150707X13004",
+    "cause": "pilot did not conduct adequate preflight fuel planning",
+    "relation": "resulted in",
+    "effect": "insufficient fuel on board",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161116X11042",
+    "cause": "Helicopter pilot's distraction due to sighting a person",
+    "relation": "led to",
+    "effect": "Helicopter drifting to the left",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161116X11042",
+    "cause": "Helicopter pilot's distraction and subsequent loss of control",
+    "relation": "resulted in",
+    "effect": "Main rotor blade impacting a tree",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20161116X11042",
+    "cause": "Impact with tree",
+    "relation": "caused",
+    "effect": "Substantial damage to the fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180611X35827",
+    "cause": "Left rudder spring disconnected from the arm of the steerable tailwheel and safety wire was missing",
+    "relation": "led to",
+    "effect": "Loss of control during landing roll",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180611X35827",
+    "cause": "Pilot was unable to correct with rudder input",
+    "relation": "resulted in",
+    "effect": "Airplane continued off the left side of the runway and nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180611X35827",
+    "cause": "Airplane aggressively weathercocked into the wind on short final approach",
+    "relation": "resulted in",
+    "effect": "Tailwheel first touch down",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180611X35827",
+    "cause": "Unusual mechanical sensation during touch-and-go landing",
+    "relation": "led to",
+    "effect": "Continued the takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180611X35827",
+    "cause": "Recorded weather conditions including a left quartering tailwind at 6 knots with gusts to 13 knots",
+    "relation": "contributed to",
+    "effect": "Airplane aggressively weathercocked into the wind on short final approach",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170514X12152",
+    "cause": "Wind gust from the left",
+    "relation": "pushed",
+    "effect": "motorized glider to the right",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170514X12152",
+    "cause": "Pilot pulling back on the control stick",
+    "relation": "attempted to climb",
+    "effect": "motorized glider became airborne",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170514X12152",
+    "cause": "Insufficient airspeed",
+    "relation": "resulted in",
+    "effect": "motorized glider entering an aerodynamic stall/spin",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20170514X12152",
+    "cause": "Pilot failing to obtain adequate airspeed at takeoff",
+    "relation": "resulted in",
+    "effect": "motorized glider entering an aerodynamic stall/spin immediately after takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160926X03410",
+    "cause": "wet runway, insufficient tire tread",
+    "relation": "led",
+    "effect": "hydroplaning, left main landing gear collapse, structural damage to left main gear well",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160926X03410",
+    "cause": "intensifying rain",
+    "relation": "contributed",
+    "effect": "wet runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150514X71721",
+    "cause": "Pilot's inability to regain control of the airplane after it began veering to the right during taxiing",
+    "relation": "resulted in",
+    "effect": "airplane nosed over and came to rest inverted, causing substantial damage to the wings and fuselage",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150514X71721",
+    "cause": "Pilot's application of brakes in an effort to regain control",
+    "relation": "led to",
+    "effect": "airplane nosing over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150514X71721",
+    "cause": "Airplane veering to the right during taxiing",
+    "relation": "caused",
+    "effect": "pilot's inability to regain control",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150514X71721",
+    "cause": "No preaccident mechanical malfunctions or anomalies",
+    "relation": "precluded",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150514X71721",
+    "cause": "Pilot's actions during landing and taxiing",
+    "relation": "resulted in",
+    "effect": "airplane sustaining minor injuries to the pilot",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150311X53257",
+    "cause": "Pilot lost control of the airplane",
+    "relation": "led to",
+    "effect": "ground looped",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150311X53257",
+    "cause": "Pilot lost control of the airplane",
+    "relation": "resulted in",
+    "effect": "sustained substantial damage to the left wing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150311X53257",
+    "cause": "No preaccident mechanical anomalies with the airplane",
+    "relation": "precluded",
+    "effect": "normal operation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190821X63931",
+    "cause": "Pilot stopped the airplane short of the runway without verbalizing the parking brake or rudder bias actions",
+    "relation": "led to",
+    "effect": "Airplane was not lined up properly on the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190821X63931",
+    "cause": "Flight crew discussed and corrected a NO TAKEOFF annunciation for an unsafe trim setting",
+    "relation": "resulted in",
+    "effect": "Delay in takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190821X63931",
+    "cause": "Pilot pulled the yoke back twice but the airplane did not lift off",
+    "relation": "led to",
+    "effect": "Unsuccessful takeoff",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190821X63931",
+    "cause": "Pilot applied full thrust reversers and maximum braking",
+    "relation": "resulted in",
+    "effect": "Airplane exited the departure end of the runway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190821X63931",
+    "cause": "Airplane impacted a ditch",
+    "relation": "led to",
+    "effect": "Airplane was destroyed by a postcrash fire",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150608X10557",
+    "cause": "Torsion shaft failed due to torsional overload",
+    "relation": "led to",
+    "effect": "sudden stoppage of the engine at impact",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150608X10557",
+    "cause": "Airplane was likely operating at or near its maximum gross weight",
+    "relation": "combined with",
+    "effect": "the effects of the elevated density altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150608X10557",
+    "cause": "Light tailwind existed at the time of the accident",
+    "relation": "combined with",
+    "effect": "the effects of the elevated density altitude",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150608X10557",
+    "cause": "Pilot became aware of the extended ground run after passing the predetermined takeoff 'commitment' point",
+    "relation": "resulted in",
+    "effect": "airplane becoming airborne but not climbing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150608X10557",
+    "cause": "Airplane had a longer than usual takeoff ground run",
+    "relation": "resulted in",
+    "effect": "airplane becoming airborne but not climbing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160104X82221",
+    "cause": "Ice accumulation on wings",
+    "relation": "caused",
+    "effect": "aerodynamic stall at a higher airspeed than normal",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160104X82221",
+    "cause": "Unstabilized approach below 1000 ft AGL in IMC or 500 ft AGL in VMC",
+    "relation": "led to",
+    "effect": "hard landing",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20160104X82221",
+    "cause": "Icing conditions along the airplane's route of flight",
+    "relation": "contributed",
+    "effect": "aerodynamic stall at a higher airspeed than normal",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181010X51009",
+    "cause": "Pilot's foot slipping",
+    "relation": "led to",
+    "effect": "airplane nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20181010X51009",
+    "cause": "Pilot inadvertently applying the brake",
+    "relation": "resulted in",
+    "effect": "airplane nosed over",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150116X52840",
+    "cause": "The airplane experienced 'several jolts' of turbulence",
+    "relation": "caused",
+    "effect": "twisted left foot of the 'B' flight attendant",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150116X52840",
+    "cause": "The 'B' flight attendant did not inform the flight crew or other FAs of her injury",
+    "relation": "led to",
+    "effect": "a week of continued pain and swelling",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150116X52840",
+    "cause": "A week of continued pain and swelling",
+    "relation": "resulted in",
+    "effect": "a visit to a podiatrist",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20150116X52840",
+    "cause": "The podiatrist's diagnosis",
+    "relation": "revealed",
+    "effect": "two fractured metatarsals in the 'B' flight attendant's left foot",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180507X82203",
+    "cause": "Airplane exceeded its critical angle of attack",
+    "relation": "resulted in",
+    "effect": "an aerodynamic stall from which the pilot was unable to recover",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180507X82203",
+    "cause": "Witness marks on the engine's crankcase nose seal area",
+    "relation": "were consistent with",
+    "effect": "a directly aft impact by the propeller mounting bolt nuts and showed no indications of scraping or rotation",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180507X82203",
+    "cause": "Lack of any chordwise scratching and relatively little leading edge damage to the propeller blades",
+    "relation": "is suggestive of",
+    "effect": "slow or no rotation of the propeller as descended through the trees",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180507X82203",
+    "cause": "The bolt securing the rear seat shoulder harness anchor was not installed in accordance",
+    "relation": "led to",
+    "effect": "the anchor separating from its attachment point to the fuselage tubing during the accident sequence",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180409X43710",
+    "cause": "lack of visibility due to airplane configuration",
+    "relation": "limited",
+    "effect": "failure to see another airplane on the taxiway",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180409X43710",
+    "cause": "expedited taxi speed",
+    "relation": "led to",
+    "effect": "failure to perform 'S'-turn maneuvers for enhanced visibility",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20180409X43710",
+    "cause": "controller not issuing instructions to expedite taxi",
+    "relation": "resulted in",
+    "effect": "expedited taxi speed",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190724X23036",
+    "cause": "Pilot maneuvered the airplane to avoid a bird",
+    "relation": "led to",
+    "effect": "Second bird went through the propeller and struck the horizontal stabilizer",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190724X23036",
+    "cause": "Pilot rolled wings level",
+    "relation": "resulted in",
+    "effect": "Airplane landed without further incident",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190724X23036",
+    "cause": "Second bird went through the propeller and struck the horizontal stabilizer",
+    "relation": "resulted in",
+    "effect": "Airplane sustained substantial damage to the left horizontal stabilizer",
+    "direction": "forward",
+    "source": "llm"
+  },
+  {
+    "ev_id": "20190724X23036",
+    "cause": "No preaccident mechanical failures or malfunctions with the airplane",
+    "relation": "precluded",
+    "effect": "Normal operation",
+    "direction": "forward",
+    "source": "llm"
+  }
+]
