@@ -161,10 +161,20 @@ def eval_distilbert(training_dir: Path, output_dir: Path, plots_dir: Path, df: p
         sample_df,
         text_col='narr_clean',
         label_col='top_category',
+        id_col='ev_id',
         test_size=test_size,
         val_size=val_size,
         max_samples=None,
     )
+    # clf.test_ev_ids is now populated; update test_split.json with ev_ids
+    try:
+        existing_split = _load_json(training_dir / 'test_split.json')
+        if isinstance(existing_split, dict):
+            existing_split['test_ev_ids']  = clf.test_ev_ids
+            existing_split['train_ev_ids'] = clf.train_ev_ids
+            _save_json(existing_split, training_dir / 'test_split.json')
+    except Exception:
+        pass
 
     # Load best weights
     clf.load(str(model_dir))
@@ -206,8 +216,51 @@ def eval_distilbert(training_dir: Path, output_dir: Path, plots_dir: Path, df: p
         5, random_state=99).tolist()
     for i, text in enumerate(sample_texts):
         label, conf = clf.predict(text)
-        print(f'  [{i+1}] {label} ({conf:.1%}) | {text[:80].replace(chr(10), " ")}…')
+        print(f'  [{i+1}] {label} ({conf:.1%}) | {text[:80].replace(chr(10), " ")}')
 
+    # Run inference on ALL narratives with a finding so we can compare against
+    # the extraction models on the same ground-truth denominator.
+    full_df = df[df['top_category'].isin(LABEL_COLS) & df['ev_id'].notna()].copy()
+    print(f'\n  Running full-dataset inference for finding alignment ({len(full_df)} narratives)...')
+    predictions: dict = {}
+    loader_full = torch.utils.data.DataLoader(
+        NarrativeDataset(
+            full_df['narr_clean'].astype(str).tolist(),
+            [0] * len(full_df),   # dummy labels
+            clf.tokenizer,
+        ),
+        batch_size=64,
+        shuffle=False,
+        **clf.loader_kwargs,
+    )
+    clf.model.eval()
+    all_pred_ids = []
+    with torch.no_grad():
+        for batch in loader_full:
+            batch = clf._to_device(batch)
+            with clf._autocast_context():
+                outputs = clf.model(**{k: v for k, v in batch.items() if k != 'labels'})
+            all_pred_ids.extend(outputs.logits.argmax(dim=-1).cpu().tolist())
+
+    ev_ids = full_df['ev_id'].astype(str).tolist()
+    for ev_id, pred_idx in zip(ev_ids, all_pred_ids):
+        predictions[ev_id] = inv_map.get(pred_idx, str(pred_idx))
+
+    pred_path = output_dir / 'evaluation' / 'distilbert_predictions.json'
+    pred_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(pred_path, 'w') as f:
+        json.dump(predictions, f)
+    print(f'  Saved {len(predictions)} predictions -> {pred_path}')
+
+    # Also save test-set-only predictions for unified cross-model evaluation.
+    test_set = set(clf.test_ev_ids)
+    test_predictions = {eid: cat for eid, cat in predictions.items() if eid in test_set}
+    test_pred_path = output_dir / 'evaluation' / 'distilbert_test_predictions.json'
+    with open(test_pred_path, 'w') as f:
+        json.dump(test_predictions, f)
+    print(f'  Saved {len(test_predictions)} test-set predictions -> {test_pred_path}')
+
+    results['full_predictions'] = predictions
     return results
 
 
@@ -302,6 +355,127 @@ def eval_knowledge_graph(rule_triples: list, dep_triples: list, llm_triples: lis
 
 
 # ---------------------------------------------------------------------------
+# LLM few-shot extraction on test set
+# ---------------------------------------------------------------------------
+
+def eval_llm_fewshot_testset(
+    df: pd.DataFrame,
+    training_dir: Path,
+    extractions_dir: Path,
+    cfg,
+) -> list:
+    """
+    Run LLM extraction on the held-out test set using few-shot examples built
+    from the training split.  Uses a separate cache so results are independent
+    of the zero-shot full-dataset run.
+
+    Returns a list of triples (same format as extract_batch).
+    """
+    section('LLM Few-Shot Extraction on Test Set')
+
+    # Load test split to get ev_id splits
+    test_split_path = training_dir / 'test_split.json'
+    if not test_split_path.exists():
+        print('  test_split.json not found — run train.py first.')
+        return []
+    import json as _json
+    with open(test_split_path) as f:
+        test_split = _json.load(f)
+    test_ev_ids  = test_split.get('test_ev_ids', [])
+    train_ev_ids = test_split.get('train_ev_ids', [])
+    if not test_ev_ids:
+        print('  test_ev_ids missing from test_split.json — run train.py first.')
+        return []
+    print(f'  Test set: {len(test_ev_ids)} narratives  |  '
+          f'Training pool for examples: {len(train_ev_ids)} narratives')
+
+    # Load the zero-shot cache to source few-shot examples from training responses
+    zero_shot_cache_path = Path(cfg.get('llm_extractor', 'cache_path',
+                                        fallback='outputs/extractions/llm_response_cache.json'))
+    from src.llm_extractor import (
+        LLMCausalExtractor, build_few_shot_examples,
+        _load_cache,
+    )
+    zero_shot_cache = _load_cache(zero_shot_cache_path) if zero_shot_cache_path.exists() else {}
+
+    # Try to load findings for category-stratified example selection
+    data_path = cfg.get('paths', 'data_path',
+                        fallback='data/clean/cleaned_narritives_and_findings.csv')
+    findings_df = None
+    if Path(data_path).exists():
+        try:
+            from src.finding_evaluator import load_findings
+            findings_df = load_findings(data_path)
+        except Exception:
+            pass
+
+    # Build few-shot example block from training set
+    print('  Building few-shot examples from training set...')
+    few_shot_block = build_few_shot_examples(
+        train_ev_ids=train_ev_ids,
+        df=df,
+        cache=zero_shot_cache,
+        findings_df=findings_df,
+        n_per_category=1,
+    )
+    n_examples = few_shot_block.count('Example ')
+    print(f'  Built {n_examples} few-shot examples.')
+    if n_examples == 0:
+        print('  WARNING: no examples built — falling back to zero-shot for test set.')
+
+    # Few-shot cache is separate from zero-shot cache
+    fewshot_cache_path = extractions_dir / 'llm_response_cache_fewshot.json'
+    fewshot_triples_path = extractions_dir / 'llm_triples_fewshot.json'
+
+    # Try to load any already-computed few-shot triples without loading the GPU model
+    if fewshot_triples_path.exists() and _load_cache(fewshot_cache_path):
+        fewshot_cache = _load_cache(fewshot_cache_path)
+        already_done = set(fewshot_cache.keys()) & set(str(e) for e in test_ev_ids)
+        if len(already_done) == len(test_ev_ids):
+            print(f'  All {len(test_ev_ids)} test narratives already in few-shot cache.')
+            from src.llm_extractor import _parse_triples
+            triples = []
+            for eid in test_ev_ids:
+                raw = fewshot_cache.get(str(eid), '')
+                triples.extend(_parse_triples(raw, str(eid)))
+            ev_with = len({t['ev_id'] for t in triples})
+            print(f'  Few-shot triples: {len(triples)} from {ev_with} narratives')
+            return triples
+
+    # Load GPU model for inference
+    llm_cfg = cfg['llm_extractor'] if 'llm_extractor' in cfg else {}
+    model_name    = llm_cfg.get('model_name',     'mistralai/Mistral-7B-Instruct-v0.3')
+    load_in_4bit  = llm_cfg.get('load_in_4bit',   'true').lower() == 'true'
+    max_new_tokens = int(llm_cfg.get('max_new_tokens', 350))
+    batch_size     = int(llm_cfg.get('batch_size',     4))
+
+    extractor = LLMCausalExtractor(
+        model_name=model_name,
+        load_in_4bit=load_in_4bit,
+        max_new_tokens=max_new_tokens,
+    )
+
+    triples = extractor.extract_batch(
+        df=df,
+        text_col='narr_clean',
+        id_col='ev_id',
+        sample_n=None,
+        batch_size=batch_size,
+        restrict_ev_ids=test_ev_ids,
+        few_shot_block=few_shot_block,
+        cache_path=fewshot_cache_path,
+    )
+
+    # Persist triples
+    fewshot_triples_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(fewshot_triples_path, 'w', encoding='utf-8') as f:
+        _json.dump(triples, f, indent=2, ensure_ascii=False)
+    ev_with = len({t['ev_id'] for t in triples})
+    print(f'  Saved {len(triples)} few-shot triples ({ev_with} narratives) -> {fewshot_triples_path}')
+    return triples
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -310,7 +484,8 @@ def main():
     parser.add_argument('--sample', type=int,  default=None,
                         help='Sample size (must match what was used in train.py)')
     parser.add_argument('--config', type=str,  default='CONFIG.conf')
-    parser.add_argument('--no-llm', action='store_true', help='Skip LLM evaluation')
+    parser.add_argument('--no-llm',     action='store_true', help='Skip LLM evaluation')
+    parser.add_argument('--no-fewshot', action='store_true', help='Skip few-shot LLM test-set extraction')
     args = parser.parse_args()
 
     cfg = _load_cfg(args.config)
@@ -359,6 +534,11 @@ def main():
     # Model 4
     llm_triples = [] if args.no_llm else eval_llm(extractions_dir, sample_n, plots_dir)
 
+    # LLM few-shot on test set (independent of full-dataset zero-shot run)
+    fewshot_triples = []
+    if not args.no_fewshot and not args.no_llm:
+        fewshot_triples = eval_llm_fewshot_testset(df, training_dir, extractions_dir, cfg)
+
     # Model 3 (KG)
     kg_results = eval_knowledge_graph(
         trad_results.get('all_rule_triples', []),
@@ -389,6 +569,10 @@ def main():
         'llm_extractor': {
             'total_triples':          len(llm_triples),
             'narratives_with_triple': len({t['ev_id'] for t in llm_triples}),
+        },
+        'llm_fewshot_testset': {
+            'total_triples':          len(fewshot_triples),
+            'narratives_with_triple': len({t['ev_id'] for t in fewshot_triples}),
         },
         'knowledge_graph': {k: v for k, v in kg_results.items() if k != '_stats'},
     }

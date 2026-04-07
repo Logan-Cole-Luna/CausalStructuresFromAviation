@@ -1,0 +1,164 @@
+(.venv) C:\VSCode\CasualStructuresFromAviation> [main | e254484 | Up-to-date]python .\src\eval.py
+======================================================================
+  NTSB Causal Chain Extraction -- Evaluation
+  Team: Madeline Gorman, Katherine Hoffsetz, Logan Luna, Stephanie Ramsey
+======================================================================
+
+  Sample size (all models): 6059
+
+Loading and preprocessing data...
+  Records: 6059
+
+======================================================================
+  MODEL 1: Traditional NLP -- Causal Extraction (Evaluation)
+======================================================================
+
+  Rule-based  -- narratives with >=1 triple: 2722/6059 (44.9%)
+  Rule-based  -- total triples: 4867  avg: 1.79
+  Dep-parse   -- narratives with >=1 triple: 2755/6059 (45.5%)
+  Dep-parse   -- total triples: 5880
+  Direction breakdown: {'forward': 2755, 'backward': 2112}
+  Pattern hit counts:
+    'resulted in': 1889
+    'due to': 1340
+    'contributed to': 461
+    'caused': 421
+    'led to': 359
+    'caused by': 108
+    'because of': 84
+    'as a result of': 82
+    'produced': 72
+    'attributed to': 21
+    'resulting from': 16
+    'triggered': 14
+  Plot saved -> outputs\plots\eval_traditional_nlp.png
+
+======================================================================
+  MODEL 2: DistilBERT Transformer Classifier (Evaluation)
+======================================================================
+[Classifier] Using device: cuda
+Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 13467.02it/s]
+DistilBertForSequenceClassification LOAD REPORT from: distilbert-base-uncased
+Key                     | Status     | Details
+------------------------+------------+--------
+vocab_layer_norm.weight | UNEXPECTED |        
+vocab_projector.bias    | UNEXPECTED |        
+vocab_layer_norm.bias   | UNEXPECTED |        
+vocab_transform.bias    | UNEXPECTED |        
+vocab_transform.weight  | UNEXPECTED |        
+classifier.bias         | MISSING    |        
+pre_classifier.weight   | MISSING    |        
+pre_classifier.bias     | MISSING    |        
+classifier.weight       | MISSING    |        
+
+Notes:
+- UNEXPECTED:   can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:      those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+[Classifier] CUDA config — amp: True, amp_dtype: torch.bfloat16, num_workers: 8, pin_memory: True
+[Classifier] Data split — train: 4237, val: 908, test: 909
+Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 104/104 [00:00<00:00, 14285.96it/s]
+[Classifier] Model loaded from outputs\model
+  Loaded model from outputs\model
+
+  Test Accuracy: 0.6722 (67.2%)
+
+  Class                      Precision   Recall       F1   Support
+  -----------------------------------------------------------------
+  Personnel issues               0.674    0.680    0.677       431
+  Aircraft                       0.725    0.664    0.693       420
+  Environmental issues           0.438    0.672    0.531        58
+  macro avg                      0.612    0.672    0.633
+  weighted avg                   0.682    0.672    0.675
+  Plot saved -> outputs\plots\eval_transformer_confusion.png
+  Plot saved -> outputs\plots\eval_transformer_training_curves.png
+  Plot saved -> outputs\plots\eval_transformer_per_class.png
+
+  Sample predictions:
+  [1] Aircraft (62.9%) | The pilot of the tailwheel-equipped bi-plane reported that during the landing ro
+  [2] Aircraft (87.1%) | The pilot of the helicopter was performing an aerial application flight in dark 
+  [3] Personnel issues (72.3%) | The 80 year old pilot usually flew with his son and not by himself. On the day o
+  [4] Aircraft (78.5%) | The pilot reported that, just before touchdown, a wind gust lifted the left wing
+  [5] Aircraft (43.5%) | The commercial pilot and the nonpilot-rated passenger/spotter were conducting an
+
+  Running full-dataset inference for finding alignment (6054 narratives)...
+  Saved 5954 predictions -> outputs\evaluation\distilbert_predictions.json
+  Saved 909 test-set predictions -> outputs\evaluation\distilbert_test_predictions.json
+
+======================================================================
+  MODEL 4: LLM Prompt-Based Causal Extraction (Evaluation)
+======================================================================
+
+  Coverage:          5908/6059 (97.5%)
+  Total triples:     22189
+  Avg per narrative: 3.76
+  Top relation phrases:
+    'resulted in': 7952
+    'led to': 6198
+    'caused': 2044
+    'contributed to': 933
+    'resulted': 305
+    'allowed': 266
+    'contributed': 261
+    'precluded': 257
+    'prevented': 211
+    'did not prevent': 181
+  Plot saved -> outputs\plots\eval_llm_extraction.png
+
+======================================================================
+  LLM Few-Shot Extraction on Test Set
+======================================================================
+  Test set: 909 narratives  |  Training pool for examples: 4237 narratives
+W0407 13:33:57.640000 26132 .venv\Lib\site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+  Building few-shot examples from training set...
+  Built 3 few-shot examples.
+[LLM] Loading mistralai/Mistral-7B-Instruct-v0.3
+[LLM] 4-bit quantization: True  |  dtype: torch.bfloat16  |  device: cuda
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 291/291 [00:03<00:00, 77.11it/s]
+[LLM] VRAM after load: 4.1 / 17.1 GB
+[LLM] Cache (few-shot): 4/933 narratives cached → 929 need inference
+[LLM] Extracting: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 117/117 [1:13:53<00:00, 37.89s/it]
+[LLM] Cache updated — 929 new entries written to outputs\extractions\llm_response_cache_fewshot.json
+[LLM] Processed 933 narratives  |  with >=1 triple: 859 (92.1%)  |  total triples: 3451  |  parse errors: 50
+  Saved 3451 few-shot triples (859 narratives) -> outputs\extractions\llm_triples_fewshot.json
+
+======================================================================
+  MODEL 3: Knowledge Graph -- Structural Evaluation
+======================================================================
+
+  [Rule-based graph]
+    Nodes: 8346  Edges: 4737  Density: 0.000068  WCC: 3611
+    Top-5 causes:  (156) accident, (40) fuel starvation, (39) fuel exhaustion, (22) spatial disorientation, (19) accident could not be determin
+    Top-5 effects: (61) loss of engine power, (38) total loss of engine power, (28) aerodynamic stall, (27) partial loss of engine power, (23) substantial damage to the left
+
+  [Dep-parse graph]
+    Nodes: 9835  Edges: 5694  Density: 0.000059  WCC: 4147
+    Top-5 causes:  (159) accident, (40) fuel starvation, (39) fuel exhaustion, (23) spatial disorientation, (19) accident could not be determin
+    Top-5 effects: (120) to the accident, (64) loss of engine power, (39) total loss of engine power, (28) aerodynamic stall, (27) partial loss of engine power
+
+  [Combined graph]
+    Nodes: 39398  Edges: 27038  Density: 0.000017  WCC: 13176
+    Top-5 causes:  (162) accident, (114) pilot, (107) wind gust, (82) loss of engine power, (74) hard landing
+    Top-5 effects: (275) loss of engine power, (169) total loss of engine power, (160) airplane nosed over, (137) accident, (123) to the accident
+
+  Node overlap (rule intersect dep): 8346/9835 (84.9%)
+[KG] Wrote 27171 Cypher statements to outputs\extractions\neo4j_import_full.cypher
+[KG] Saved knowledge graph visualization to outputs\plots\eval_knowledge_graph_full.png
+  KG visualization saved -> outputs\plots\eval_knowledge_graph_full.png
+  Plot saved -> outputs\plots\eval_kg_stats.png
+  Plot saved -> outputs\plots\eval_cross_model_comparison.png
+
+======================================================================
+  Evaluation Complete -- Output Files
+======================================================================
+  Evaluation report:          outputs\evaluation\evaluation_report.json
+  Traditional NLP plot:       outputs\plots\eval_traditional_nlp.png
+  Transformer confusion:      outputs\plots\eval_transformer_confusion.png
+  Transformer training curves:outputs\plots\eval_transformer_training_curves.png
+  Transformer per-class:      outputs\plots\eval_transformer_per_class.png
+  LLM extraction plot:        outputs\plots\eval_llm_extraction.png
+  KG visualization:           outputs\plots\eval_knowledge_graph_full.png
+  KG stats plot:              outputs\plots\eval_kg_stats.png
+  Cross-model comparison:     outputs\plots\eval_cross_model_comparison.png
+  Neo4j Cypher:               outputs\extractions\neo4j_import_full.cypher
+======================================================================
+(.venv) C:\VSCode\CasualStructuresFromAviation> [main | e254484 | Up-to-date]

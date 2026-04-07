@@ -20,6 +20,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+import src
 from src.data_loader import load_data, preprocess_data
 from src.traditional_nlp import batch_extract, load_nlp
 from src.transformer_classifier import NTSBClassifier, LABEL_COLS
@@ -167,12 +168,14 @@ def run_distilbert_training(df: pd.DataFrame, sample_n: int, cfg, output_dir: Pa
     # Save training artifacts for eval.py
     _save_json(train_history, training_dir / 'train_history.json')
 
-    # Save test split so eval.py can reproduce the exact held-out set
-    inv_map = {v: k for k, v in label_map.items()}
+    # Save test split so eval.py can reproduce the exact held-out set.
+    # ev_ids are stored on clf after prepare_data for unified cross-model evaluation.
     test_split = {
-        'texts':     [test_ds.encodings['input_ids'][i].tolist() for i in range(len(test_ds))],
-        'labels':    [test_ds.labels[i] for i in range(len(test_ds))],
-        'label_map': label_map,
+        'texts':       [test_ds.encodings['input_ids'][i].tolist() for i in range(len(test_ds))],
+        'labels':      [test_ds.labels[i] for i in range(len(test_ds))],
+        'label_map':   label_map,
+        'test_ev_ids': clf.test_ev_ids,
+        'train_ev_ids': clf.train_ev_ids,
     }
     _save_json(test_split, training_dir / 'test_split.json')
     print(f'  Training artifacts saved → {training_dir}')

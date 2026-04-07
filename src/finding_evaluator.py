@@ -264,6 +264,78 @@ def evaluate_finding_alignment(
     }
 
 
+def evaluate_classifier_alignment(
+    predictions: Dict[str, str],
+    findings_df: pd.DataFrame,
+    label: str = 'DistilBERT',
+) -> Dict:
+    """
+    Evaluate a classifier (DistilBERT) against finding_description ground truth.
+
+    Parameters
+    ----------
+    predictions : {ev_id: predicted_category_str}  — one prediction per narrative
+    findings_df : output of load_findings()
+    label       : display name for the model
+
+    Returns a dict with the same keys as evaluate_finding_alignment so it can
+    be included in the same table and plots.  finding_keyword_recall is None
+    because a classifier has no free-text output to match against.
+    """
+    findings_by_ev: Dict[str, List] = defaultdict(list)
+    for _, row in findings_df.iterrows():
+        findings_by_ev[row['ev_id']].append(row)
+
+    cause_finding_ev_ids = set(
+        row['ev_id'] for _, row in findings_df.iterrows() if row['is_cause']
+    )
+
+    alignment_correct = 0
+    alignment_total   = 0
+    per_category_correct: Dict[str, int] = defaultdict(int)
+    per_category_total:   Dict[str, int] = defaultdict(int)
+
+    for ev_id, predicted_cat in predictions.items():
+        if ev_id not in findings_by_ev:
+            continue
+        cause_findings = [r for r in findings_by_ev[ev_id] if r['is_cause']]
+        official_cat   = (cause_findings or findings_by_ev[ev_id])[0]['category']
+
+        per_category_total[official_cat] += 1
+        if predicted_cat == official_cat:
+            alignment_correct += 1
+            per_category_correct[official_cat] += 1
+        alignment_total += 1
+
+    cat_alignment_score = alignment_correct / alignment_total if alignment_total > 0 else 0.0
+
+    eligible  = cause_finding_ev_ids & set(findings_by_ev.keys())
+    covered   = eligible & set(predictions.keys())
+
+    per_cat_alignment = {
+        cat: {
+            'correct': per_category_correct[cat],
+            'total':   per_category_total[cat],
+            'score':   round(per_category_correct[cat] / max(1, per_category_total[cat]), 4),
+        }
+        for cat in per_category_total
+    }
+
+    return {
+        'label':                     label,
+        'total_triples':             None,          # N/A — classifier, not extractor
+        'ev_ids_extracted':          len(predictions),
+        'category_alignment_score':  round(cat_alignment_score, 4),
+        'category_alignment_n':      alignment_total,
+        'cause_confirmed_coverage':  round(len(covered) / max(1, len(eligible)), 4),
+        'cause_confirmed_n':         len(covered),
+        'cause_confirmed_denom':     len(eligible),
+        'finding_keyword_recall':    None,          # N/A — no free-text output
+        'keyword_recall_n':          0,
+        'per_category_alignment':    per_cat_alignment,
+    }
+
+
 def print_finding_report(results: List[Dict]) -> None:
     """Pretty-print finding-alignment metrics for multiple models."""
     w = 26
@@ -277,8 +349,8 @@ def print_finding_report(results: List[Dict]) -> None:
         ('  (n ev_ids evaluated)',  lambda r: f'{r["category_alignment_n"]:>18,}'),
         ('Cause-confirmed cov.',    lambda r: f'{r["cause_confirmed_coverage"]:>17.1%}'),
         ('  (n covered / denom)',   lambda r: f'{r["cause_confirmed_n"]}/{r["cause_confirmed_denom"]:>14,}'),
-        ('Finding keyword recall',  lambda r: f'{r["finding_keyword_recall"]:>17.1%}'),
-        ('  (n ev_ids scored)',     lambda r: f'{r["keyword_recall_n"]:>18,}'),
+        ('Finding keyword recall',  lambda r: f'{"N/A":>18}' if r["finding_keyword_recall"] is None else f'{r["finding_keyword_recall"]:>17.1%}'),
+        ('  (n ev_ids scored)',     lambda r: f'{"N/A":>18}' if r["finding_keyword_recall"] is None else f'{r["keyword_recall_n"]:>18,}'),
     ]
 
     for label, fmt in rows:

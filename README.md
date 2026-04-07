@@ -3,46 +3,9 @@
 **Team:** Madeline Gorman, Katherine Hoffsetz, Logan Luna, Stephanie Ramsey
 
 Automatically extract and model causal chains from NTSB aviation accident narratives
-using three complementary approaches: traditional NLP, a transformer classifier, and a
-prompt-based LLM extractor — all feeding into a Neo4j knowledge graph.
-
----
-
-## Results at a Glance
-
-Full dataset run — all 6,059 NTSB narratives.
-
-### Extraction Models
-
-| Metric | Rule-based NLP | spaCy Dep-parse | Mistral-7B LLM |
-|---|---|---|---|
-| Narrative coverage | 44.9% | 45.5% | **97.5%** |
-| **Cause-confirmed coverage** | 43.3% | 43.9% | **99.2%** |
-| Total triples | 4,867 | 5,880 | **22,189** |
-| Avg triples / narrative | 1.79 | 2.13 | **3.76** |
-| Category alignment (vs NTSB) | 50.0% | 50.0% | 48.6% |
-| Finding keyword recall | 14.5% | 14.6% | **16.7%** |
-| Parse errors | 0% | 0% | 0.86% |
-
-### DistilBERT Classifier (ground truth = NTSB finding category)
-
-| Class | Precision | Recall | F1 | Test support |
-|---|---|---|---|---|
-| Personnel issues | 0.639 | **0.726** | 0.680 | 431 |
-| Aircraft | **0.718** | 0.612 | 0.661 | 420 |
-| Environmental issues | 0.541 | 0.569 | 0.555 | 58 |
-| Not determined | 0.000 | 0.000 | 0.000 | 0 |
-| **Weighted avg** | **0.669** | **0.663** | **0.663** | 909 |
-| **Overall accuracy** | | | **66.3%** | |
-
-### Knowledge Graph
-
-| Source | Nodes | Edges | WCC | Density |
-|---|---|---|---|---|
-| Rule-based | 8,346 | 4,737 | 3,611 | 6.8×10⁻⁵ |
-| Dep-parse | 9,835 | 5,694 | 4,147 | 5.9×10⁻⁵ |
-| LLM | 30,509 | 21,358 | 12,074 | 2.3×10⁻⁵ |
-| **Combined** | **39,398** | **27,038** | **13,176** | **1.7×10⁻⁵** |
+using three extraction approaches — traditional NLP, a fine-tuned transformer classifier,
+and a prompt-based LLM extractor — organized into a queryable knowledge graph built from
+the extracted triples.
 
 ---
 
@@ -55,8 +18,71 @@ builds an automated pipeline that extracts cause-effect triples, classifies acci
 categories, and organizes the results into a queryable knowledge graph.
 
 The central research question is: **how does extraction quality, coverage, and causal
-richness compare between rule-based NLP, a fine-tuned transformer encoder, and a
-generative LLM — and how well does each align with the NTSB's official causal findings?**
+richness compare between rule-based NLP, a fine-tuned transformer classifier, and a
+generative LLM — and how well does each align with the NTSB's official causal findings
+when evaluated on the same ground truth?**
+
+---
+
+## Results
+
+Full dataset run — all 6,059 NTSB narratives.
+
+### Extraction Models (Full Dataset)
+
+| Metric | Rule-based NLP | spaCy Dep-parse | LLM (zero-shot) |
+|---|---|---|---|
+| Narrative coverage | 44.9% | 45.5% | **97.5%** |
+| **Cause-confirmed coverage** | 43.3% | 43.9% | **99.2%** |
+| Total triples | 4,867 | 5,880 | **22,189** |
+| Avg triples / narrative | 1.79 | 2.13 | **3.76** |
+| Category alignment (vs NTSB) | 50.0% | 50.0% | 48.6% |
+| Finding keyword recall | 14.5% | 14.6% | **16.7%** |
+| Parse errors | 0% | 0% | 0.86% |
+
+### DistilBERT Classifier — Test Set (3-class)
+
+| Class | Precision | Recall | F1 | Support |
+|---|---|---|---|---|
+| Personnel issues | 0.674 | 0.680 | 0.677 | 431 |
+| Aircraft | **0.725** | 0.664 | **0.693** | 420 |
+| Environmental issues | 0.438 | **0.672** | 0.531 | 58 |
+| **Weighted avg** | **0.682** | **0.672** | **0.675** | 909 |
+| **Overall accuracy** | | | **67.2%** | |
+
+### Unified Ground Truth — All Models on Same Test Set
+
+All models are evaluated on the identical held-out 909 narratives from the DistilBERT
+training split. Extraction models use cause/effect text; DistilBERT uses its predicted
+category. This is the apples-to-apples comparison.
+
+> Note: Cause-confirmed coverage denominates against all 5,321 NTSB C-finding accidents,
+> so the test set's ~15% share of those (~800 accidents) sets the effective ceiling.
+
+| Model | Narratives evaluated | Cause-confirmed coverage | Category alignment | Finding keyword recall |
+|---|---|---|---|---|
+| Rule-based NLP | 402 / 909 covered | 6.3% (338/5321) | 50.5% | 15.2% |
+| spaCy Dep-parse | 409 / 909 covered | 6.5% (343/5321) | 49.4% | 15.1% |
+| LLM (zero-shot) | 900 / 909 covered | 15.0% (799/5321) | 48.7% | 17.0% |
+| LLM (few-shot) | 859 / 909 covered | 14.4% (765/5321) | 48.0% | **17.4%** |
+| **DistilBERT** | **909 / 909** | **15.2% (807/5321)** | **67.2%** | N/A |
+
+**Category alignment by NTSB finding type (unified test set):**
+
+| NTSB Category | Rule-based | Dep-parse | LLM (zero-shot) | LLM (few-shot) | DistilBERT |
+|---|---|---|---|---|---|
+| Aircraft | 66.1% | 65.0% | 61.3% | 62.1% | **66.4%** |
+| Personnel issues | 39.2% | 37.8% | 38.7% | 36.6% | **68.0%** |
+| Environmental issues | 18.5% | 18.5% | 31.0% | **33.3%** | **67.2%** |
+
+### Knowledge Graph (Output Artifact)
+
+| Source | Nodes | Edges | WCC | Density |
+|---|---|---|---|---|
+| Rule-based | 8,346 | 4,737 | 3,611 | 6.8×10⁻⁵ |
+| Dep-parse | 9,835 | 5,694 | 4,147 | 5.9×10⁻⁵ |
+| LLM | 30,509 | 21,358 | 12,074 | 2.3×10⁻⁵ |
+| **Combined** | **39,398** | **27,038** | **13,176** | **1.7×10⁻⁵** |
 
 ---
 
@@ -74,26 +100,6 @@ generative LLM — and how well does each align with the NTSB's official causal 
 | Aircraft | 2,800 (46.2%) |
 | Environmental issues | 383 (6.3%) |
 | Organizational issues | 5 (0.1%) |
-
----
-
-## Pipeline
-
-```
-NTSB CSV  (narr_accf + finding_description)
-  │
-  ├── Model 1: Rule-based NLP  ─────────────────────────┐
-  │     └── spaCy Dependency Parsing                     │
-  │                                                      ├──► Knowledge Graph (Neo4j)
-  ├── Model 2: DistilBERT Classifier                     │
-  │     └── Narrative category prediction                │
-  │                                                      │
-  └── Model 4: Mistral-7B LLM Extractor  ───────────────┘
-        └── Prompt-based cause-effect triple extraction
-
-  finding_description  ──► Finding Evaluator
-        └── Ground-truth alignment for all extraction models
-```
 
 ---
 
@@ -160,12 +166,16 @@ appear anywhere in the extracted cause/effect text across all evaluated accident
 
 ### Model 2 — DistilBERT Transformer Classifier
 
+DistilBERT is fine-tuned on the training split to classify each narrative into one of
+three NTSB finding categories. The held-out test set is shared with the unified
+ground-truth comparison so all models are evaluated on identical narratives.
+
 | Metric | Value |
 |---|---|
-| Overall test accuracy | **66.3%** |
-| Weighted avg F1 | 0.663 |
-| Best val accuracy | 67.8% (epoch 7 of 10) |
-| Early stopping triggered | Epoch 10 (patience = 3 from epoch 7) |
+| Overall test accuracy | **67.2%** |
+| Weighted avg F1 | 0.675 |
+| Best val accuracy | 70.3% (epoch 3 of 6) |
+| Early stopping triggered | Epoch 6 (patience = 3 from epoch 3) |
 | Majority-class baseline | ~47% |
 | Training data | 4,237 narratives |
 | Test data | 909 narratives |
@@ -175,35 +185,36 @@ appear anywhere in the extracted cause/effect text across all evaluated accident
 
 | Class | Precision | Recall | F1 | Support |
 |---|---|---|---|---|
-| Personnel issues | 0.639 | **0.726** | 0.680 | 431 |
-| Aircraft | **0.718** | 0.612 | 0.661 | 420 |
-| Environmental issues | 0.541 | 0.569 | 0.555 | 58 |
-| Not determined | 0.000 | 0.000 | 0.000 | 0 |
+| Personnel issues | 0.674 | 0.680 | 0.677 | 431 |
+| Aircraft | **0.725** | 0.664 | **0.693** | 420 |
+| Environmental issues | 0.438 | **0.672** | 0.531 | 58 |
+| **Weighted avg** | **0.682** | **0.672** | **0.675** | 909 |
 
 **Key observations:**
 
-- 66.3% against a 47% majority-class baseline = +19 points above chance; the model is
-  learning real signal, but label ambiguity between Personnel and Aircraft is the ceiling.
+- **67.2%** against a 47% majority-class baseline = +20 points above chance. Dropping
+  "Not determined" cleaned up the label space and produced a slight accuracy improvement
+  over the prior 4-class run (66.3%).
 - **Aircraft (high precision, lower recall):** The model is conservative — it predicts
   Aircraft confidently when mechanical vocabulary dominates, but pulls back on ambiguous
-  narratives (e.g., "pilot failed to detect the mechanical failure") and misclassifies
-  them as Personnel.
+  narratives ("pilot failed to detect the mechanical failure") and misclassifies them as
+  Personnel. Precision 0.725 > recall 0.664.
 - **Personnel (lower precision, high recall):** The model over-predicts Personnel,
   absorbing the ambiguous Aircraft cases. Human-action words ("pilot", "crew", "decision")
-  appear in both categories, biasing the model toward the more common one.
-- **Environmental (F1=0.555):** Only 58 test samples despite 5.27× class weighting.
-  Weather narratives contain pilot-response language that bleeds into the Personnel signal.
-  The weighting is necessary but insufficient given the class imbalance.
-- **Training curves:** Loss dropped monotonically (1.14 → 0.163 over 10 epochs) while
-  validation accuracy oscillated between 60–68%, confirming the model hit its task
-  complexity ceiling rather than continuing to improve.
-- **Ground truth link:** DistilBERT's labels come directly from `finding_description`'s
-  top-level category, making its test accuracy a direct measure of alignment with NTSB
-  causal categorization.
+  appear in both categories, biasing the model toward the more common class.
+- **Environmental (recall=0.672, precision=0.438):** The high class weight (5.27×)
+  successfully improved recall, but precision is low — the model correctly identifies most
+  actual environmental accidents but also mislabels some Personnel/Aircraft narratives as
+  Environmental. Only 58 test samples make this class inherently noisy.
+- **Category alignment on test set: 67.2%** — this is the true held-out performance.
+  The full-dataset figure (74.5%) is inflated because it includes training narratives
+  the classifier has already seen.
+- Early stopping at epoch 6 (best at epoch 3) indicates faster convergence on the cleaner
+  3-class problem compared to the 4-class run (which trained all 10 epochs).
 
 ---
 
-### Model 4 — Mistral-7B-Instruct LLM Extractor
+### Model 3 — Mistral-7B-Instruct LLM Extractor
 
 | Metric | Value |
 |---|---|
@@ -249,16 +260,54 @@ appear anywhere in the extracted cause/effect text across all evaluated accident
 - **Response caching** made the full-dataset run practical: 2,775 of 6,059 narratives
   were already cached from earlier runs, reducing GPU time by ~46%.
 
+#### LLM Few-Shot Variant (test set only)
+
+The few-shot variant runs on the same 909 held-out test narratives but uses 3 demonstrations
+(one per NTSB category, drawn from the training set) plus a required-vocabulary block
+listing approved relation phrases and NTSB category terminology in the prompt.
+
+| Metric | Zero-shot (test set) | Few-shot (test set) |
+|---|---|---|
+| Narratives covered | 900 / 909 (99.0%) | 859 / 909 (94.5%) |
+| Total triples | 3,312 | 3,451 |
+| Avg triples / covered narrative | 3.68 | 4.02 |
+| Parse errors | ~1% | **5.4%** |
+| Category alignment | 48.7% | 48.0% |
+| Finding keyword recall | 17.0% | **17.4%** |
+| Cause-confirmed coverage | 15.0% | 14.4% |
+
+**Key observations:**
+
+- **Parse error rate jumped 6×** (0.86% → 5.4%) because the larger prompt with examples
+  leaves less token budget for the narrative, causing more truncation and malformed JSON
+  responses. The 929 uncached test narratives required ~74 minutes of GPU inference.
+- **Coverage decreased** from 99.0% to 94.5% — consistent with the parse error increase
+  and tighter token budget leaving some narratives partially truncated.
+- **Keyword recall improved marginally** (+0.4 pp to 17.4%) — the terminology guidance
+  nudged the LLM toward more NTSB-native vocabulary in its cause/effect spans. Environmental
+  alignment also improved (31.0% → 33.3%), the category most helped by explicit vocabulary
+  cues.
+- **Category alignment was flat** (48.7% → 48.0%) — the terminology block helps with
+  span vocabulary but the keyword-heuristic classifier is the bottleneck, not the LLM.
+- **Overall assessment:** Few-shot + terminology prompting is a wash at the current scale.
+  The vocabulary alignment benefit is real but small; the parse error increase is a
+  significant drawback. A larger token budget (`max_length > 1536`) or a smarter example
+  selection strategy would be needed to make few-shot consistently better.
+
 ---
 
-### Model 3 — Knowledge Graph
+## Knowledge Graph (Output Artifact)
 
-| Metric | Rule-based | Dep-parse | LLM | Combined |
+The knowledge graph is not a fourth model — it is a queryable output artifact assembled
+from the triples produced by Models 1 and 3. Each triple becomes a directed edge; nodes
+are normalized entity strings.
+
+| Source | Nodes | Edges | WCC | Density |
 |---|---|---|---|---|
-| Nodes | 8,346 | 9,835 | 30,509 | 39,398 |
-| Edges | 4,737 | 5,694 | 21,358 | 27,038 |
-| Weakly connected components | 3,611 | 4,147 | 12,074 | 13,176 |
-| Density | 6.8×10⁻⁵ | 5.9×10⁻⁵ | 2.3×10⁻⁵ | 1.7×10⁻⁵ |
+| Rule-based | 8,346 | 4,737 | 3,611 | 6.8×10⁻⁵ |
+| Dep-parse | 9,835 | 5,694 | 4,147 | 5.9×10⁻⁵ |
+| LLM | 30,509 | 21,358 | 12,074 | 2.3×10⁻⁵ |
+| **Combined** | **39,398** | **27,038** | **13,176** | **1.7×10⁻⁵** |
 
 **Top causes (combined):** `wind gust` (107), `loss of engine power` (82), `hard landing` (74),
 `fuel exhaustion` (39), `spatial disorientation` (22)
@@ -269,51 +318,48 @@ appear anywhere in the extracted cause/effect text across all evaluated accident
 **Key observations:**
 
 - The LLM contributes 30,509 nodes — 3.6× more than rule-based alone — reflecting its
-  richer and more varied extraction vocabulary. This also means more fragmentation:
-  "fuel exhaustion", "fuel depletion", and "fuel starvation" remain as separate nodes
-  without entity linking.
-- 13,176 weakly connected components on 39,398 nodes means average component size is 3
-  nodes. Most accidents form isolated causal chains with no cross-accident connectivity —
-  entity disambiguation is needed before the graph becomes traversable at scale.
+  richer extraction vocabulary. The flip side is more fragmentation: "fuel exhaustion",
+  "fuel depletion", and "fuel starvation" remain as separate nodes without entity linking.
+- 13,176 weakly connected components on 39,398 nodes means average component size is ~3
+  nodes. Most accidents form isolated causal chains — entity disambiguation is needed before
+  the graph becomes traversable at scale.
 - `loss of engine power` appears as both a top cause (82) and top effect (275), making it
-  the central hub concept in aviation accident causation — it is simultaneously the outcome
-  of mechanical failures and the trigger for aerodynamic stalls and crashes.
-- `accident` still appears as a top cause node, a residual noise artifact from phrases like
-  *"the cause of the accident..."* — the current noise filter blocks "the accident" but not
-  bare "accident".
+  the central hub concept in aviation accident causation — simultaneously the outcome of
+  mechanical failures and the trigger for aerodynamic stalls and crashes.
 - Node overlap between rule-based and dep-parse graphs is 84.9%, confirming they extract
   the same vocabulary through different mechanisms and combining them adds limited
-  incremental value.
+  incremental value over using LLM triples alone.
 
 ---
 
 ## Ground Truth Alignment Summary
 
-All three extraction models were evaluated against the NTSB `finding_description` as
-ground truth. DistilBERT's evaluation is direct (its labels are the top-level finding
-categories); the extraction models are evaluated via the three alignment metrics.
+All models are evaluated against the NTSB `finding_description` ground truth.
+Two evaluation contexts are reported:
 
-| Model | Ground truth metric | Score |
-|---|---|---|
-| DistilBERT | Test accuracy (vs finding category) | **66.3%** |
-| Rule-based | Cause-confirmed coverage | 43.3% |
-| Dep-parse | Cause-confirmed coverage | 43.9% |
-| **LLM** | **Cause-confirmed coverage** | **99.2%** |
-| Rule-based | Category alignment | 50.0% |
-| Dep-parse | Category alignment | 50.0% |
-| LLM | Category alignment | 48.6% |
-| Rule-based | Finding keyword recall | 14.5% |
-| Dep-parse | Finding keyword recall | 14.6% |
-| LLM | Finding keyword recall | **16.7%** |
+**Unified test set (909 held-out narratives)** — the fairest comparison. All models run on
+exactly the same narratives. DistilBERT's category alignment here (67.2%) is its true
+held-out accuracy. The full-dataset number (74.5%) is inflated because it includes
+training narratives the classifier has already seen.
 
-**Category alignment by NTSB finding type:**
+| Model | Narratives | Cause-confirmed coverage | Category alignment | KW recall |
+|---|---|---|---|---|
+| Rule-based NLP | 402 covered | 6.3% | 50.5% | 15.2% |
+| spaCy Dep-parse | 409 covered | 6.5% | 49.4% | 15.1% |
+| LLM (zero-shot) | 900 covered | 15.0% | 48.7% | 17.0% |
+| LLM (few-shot) | 859 covered | 14.4% | 48.0% | **17.4%** |
+| **DistilBERT** | **909 (all)** | **15.2%** | **67.2%** | N/A |
 
-| NTSB Category | Rule-based | Dep-parse | LLM |
+**Full-dataset results (6,059 narratives, different coverage denominators per model):**
+
+| Model | Cause-confirmed coverage | Category alignment | KW recall |
 |---|---|---|---|
-| Aircraft | 66.0% | 66.2% | 62.9% |
-| Personnel issues | 36.6% | 36.3% | 37.4% |
-| Environmental issues | 16.9% | 17.2% | **26.5%** |
-| Organizational issues | 0% | 0% | 0% |
+| Rule-based NLP | 43.3% | 50.0% | 14.5% |
+| spaCy Dep-parse | 43.9% | 50.0% | 14.6% |
+| LLM (zero-shot) | **99.2%** | 48.6% | 16.7% |
+| DistilBERT | **99.9%** | 74.5%* | N/A |
+
+*\* Inflated — includes training narratives. Use 67.2% from test set for true held-out performance.*
 
 ---
 
@@ -379,8 +425,9 @@ Only 0.86% parse failures remained after retry.
 
 2. **Category-guided LLM prompting** — use DistilBERT's classification as a prefix to
    the LLM prompt ("This is a Personnel issues accident — find the specific pilot
-   decision or action..."). Should improve both category alignment (~50%) and finding
-   keyword recall (~16%) by focusing extraction on the right causal domain.
+   decision or action..."). The current few-shot vocabulary guidance gave +0.4 pp keyword
+   recall but no category alignment gain; injecting DistilBERT's predicted label as a
+   hard constraint is a stronger signal.
 
 3. **Human evaluation** — automated metrics cannot measure extraction *precision*.
    A sample of ~50–100 triples per method, manually rated for correctness and
@@ -404,8 +451,8 @@ Only 0.86% parse failures remained after retry.
 ### Longer term
 
 7. **Aviation domain fine-tuning** — pretraining DistilBERT on FAA Advisory Circulars
-   or ASRS reports before fine-tuning on NTSB categories should push the accuracy
-   ceiling above the current 66.3%.
+   or ASRS reports before fine-tuning on NTSB categories should push the 67.2% accuracy
+   ceiling higher. The current model's Environmental F1 (0.531) has the most room to gain.
 
 8. **Graph Neural Networks** — once entity linking reduces fragmentation, GNNs
    (e.g., R-GCN) could learn richer accident-pathway representations for downstream

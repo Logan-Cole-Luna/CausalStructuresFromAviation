@@ -778,6 +778,7 @@ def plot_llm_cache_growth(
 def plot_finding_alignment(
     alignment_results: list,   # list of dicts from finding_evaluator.evaluate_finding_alignment
     plots_dir: Path,
+    suffix: str = '',
 ):
     """
     3-panel figure summarising NTSB finding-alignment metrics across models:
@@ -789,54 +790,63 @@ def plot_finding_alignment(
     if not alignment_results:
         return
 
-    labels  = [r['label'] for r in alignment_results]
-    colors  = ['#2196F3', '#4CAF50', '#9C27B0', '#FF9800'][:len(labels)]
+    labels = [r['label'] for r in alignment_results]
+    colors = ['#2196F3', '#4CAF50', '#9C27B0', '#FF9800'][:len(labels)]
 
-    cat_aln  = [r['category_alignment_score']  * 100 for r in alignment_results]
-    cc_cov   = [r['cause_confirmed_coverage']   * 100 for r in alignment_results]
-    kw_rec   = [r['finding_keyword_recall']     * 100 for r in alignment_results]
+    # None means N/A for that model (e.g. keyword_recall for a classifier)
+    cat_aln = [r['category_alignment_score'] * 100 for r in alignment_results]
+    cc_cov  = [r['cause_confirmed_coverage'] * 100 for r in alignment_results]
+    kw_rec  = [r['finding_keyword_recall'] * 100 if r['finding_keyword_recall'] is not None else None
+               for r in alignment_results]
 
     fig, axes = plt.subplots(1, 3, figsize=(17, 6))
 
-    def _bar(ax, vals, title, ylabel, fmt='{:.1f}%'):
-        bars = ax.bar(labels, vals, color=colors, alpha=0.85, edgecolor='white')
-        for bar, val in zip(bars, vals):
-            ax.text(bar.get_x() + bar.get_width() / 2, val + 0.5,
-                    fmt.format(val), ha='center', va='bottom',
-                    fontweight='bold', fontsize=10)
+    def _bar_with_na(ax, vals, model_labels, model_colors, title, ylabel):
+        """Bar chart that skips None values and labels them 'N/A'."""
+        x = np.arange(len(model_labels))
+        w = 0.65
+        for i, (val, lbl, col) in enumerate(zip(vals, model_labels, model_colors)):
+            if val is None:
+                ax.bar(i, 0, w, color='#e0e0e0', alpha=0.5, edgecolor='white')
+                ax.text(i, 3, 'N/A', ha='center', va='bottom', fontsize=10,
+                        color='#999', fontweight='bold')
+            else:
+                ax.bar(i, val, w, color=col, alpha=0.85, edgecolor='white')
+                ax.text(i, val + 0.5, f'{val:.1f}%', ha='center', va='bottom',
+                        fontweight='bold', fontsize=10)
+        ax.set_xticks(x)
+        ax.set_xticklabels(model_labels, rotation=10, ha='right')
         ax.set_ylabel(ylabel)
         ax.set_title(title)
         ax.set_ylim(0, 115)
         ax.grid(True, axis='y', alpha=0.3)
-        ax.tick_params(axis='x', rotation=10)
 
-    _bar(axes[0], cat_aln,
-         'Category Alignment Score\n(extracted cat == official finding cat)',
-         'Accuracy (%)')
-    _bar(axes[1], cc_cov,
-         'Cause-Confirmed Coverage\n(C-findings only as denominator)',
-         '% of C-finding accidents covered')
-    _bar(axes[2], kw_rec,
-         'Finding Keyword Recall\n(% finding tokens in extracted text)',
-         'Avg recall (%)')
+    _bar_with_na(axes[0], cat_aln, labels, colors,
+                 'Category Alignment\n(predicted cat == NTSB finding cat)',
+                 'Accuracy (%)')
+    _bar_with_na(axes[1], cc_cov, labels, colors,
+                 'Cause-Confirmed Coverage\n(C-findings only as denominator)',
+                 '% of C-finding accidents covered')
+    _bar_with_na(axes[2], kw_rec, labels, colors,
+                 'Finding Keyword Recall\n(% finding tokens in extracted text)',
+                 'Avg recall (%)')
 
-    n_strs = [
-        f'n={r["category_alignment_n"]}' for r in alignment_results
-    ]
-    for ax, n in zip(axes, [
+    # Sub-labels: sample sizes
+    for ax, n_items in zip(axes, [
         [f'n={r["category_alignment_n"]}' for r in alignment_results],
         [f'{r["cause_confirmed_n"]}/{r["cause_confirmed_denom"]}' for r in alignment_results],
-        [f'n={r["keyword_recall_n"]}' for r in alignment_results],
+        [f'n={r["keyword_recall_n"]}' if r['finding_keyword_recall'] is not None else 'N/A'
+         for r in alignment_results],
     ]):
-        for i, (bar, label) in enumerate(zip(ax.patches, n)):
-            ax.text(bar.get_x() + bar.get_width() / 2,
-                    ax.get_ylim()[0] + 2,
-                    label, ha='center', va='bottom', fontsize=7, color='grey')
+        for i, label in enumerate(n_items):
+            ax.text(i, ax.get_ylim()[0] + 2, label,
+                    ha='center', va='bottom', fontsize=7, color='grey')
 
-    plt.suptitle('NTSB Finding-Alignment Evaluation — Ground Truth Comparison',
+    title_note = ' (Unified Test Set)' if suffix else ''
+    plt.suptitle(f'NTSB Finding-Alignment Evaluation — Ground Truth Comparison{title_note}',
                  fontsize=13, fontweight='bold')
     plt.tight_layout()
-    _save(fig, plots_dir, 'eval_finding_alignment.png')
+    _save(fig, plots_dir, f'eval_finding_alignment{suffix}.png')
 
     # ------------------------------------------------------------------
     # Per-category alignment breakdown
@@ -867,9 +877,9 @@ def plot_finding_alignment(
     ax2.set_xticklabels(short_cats, fontsize=11)
     ax2.set_ylabel('Category alignment accuracy (%)')
     ax2.set_ylim(0, 115)
-    ax2.set_title('Category Alignment Score — Breakdown by NTSB Finding Category',
+    ax2.set_title(f'Category Alignment Score — Breakdown by NTSB Finding Category{title_note}',
                   fontsize=12, fontweight='bold')
     ax2.legend(fontsize=9)
     ax2.grid(True, axis='y', alpha=0.3)
     plt.tight_layout()
-    _save(fig2, plots_dir, 'eval_finding_alignment_by_category.png')
+    _save(fig2, plots_dir, f'eval_finding_alignment_by_category{suffix}.png')

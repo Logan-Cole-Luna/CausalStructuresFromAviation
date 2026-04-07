@@ -53,29 +53,81 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 _SYSTEM = (
-    "You are an aviation safety analyst. "
-    "Your task is to extract explicit causal relationships from accident narratives. "
+    "You are an aviation safety analyst extracting causal relationships from NTSB accident narratives. "
+    "Use the standard NTSB causal vocabulary whenever possible so your output aligns with "
+    "established aviation safety terminology and classification. "
     "Return only a valid JSON array — no markdown, no explanation, no extra text."
 )
 
-_USER_TMPL = """\
-Extract all causal relationships from the following aviation accident narrative.
+# ---------------------------------------------------------------------------
+# Terminology blocks injected into prompts
+# ---------------------------------------------------------------------------
 
-For each relationship output an object with exactly these keys:
-  "cause"    — the factor, condition, or event that caused something
-  "relation" — the causal verb/phrase (e.g. "resulted in", "caused", "led to")
-  "effect"   — what was caused or resulted
+# Approved relation phrases: derived from the rule-based extraction vocabulary,
+# listed in descending frequency order from the NTSB corpus.
+_APPROVED_RELATIONS = (
+    "resulted in, led to, caused, contributed to, triggered, produced, "
+    "due to, because of, caused by, attributed to, as a result of, "
+    "resulting from, stemmed from, precluded, prevented, did not prevent"
+)
 
-Return a JSON array: [{{"cause": "...", "relation": "...", "effect": "..."}}]
-If no causal relationships are present, return: []
+# NTSB causal category terminology: mirrors _CATEGORY_KEYWORDS in finding_evaluator.py.
+# Guides the LLM to use vocabulary that matches the official finding taxonomy.
+_CATEGORY_VOCAB = """\
+NTSB causal category vocabulary — use these terms in cause/effect spans:
+  Personnel issues : pilot, crew, captain, officer, student, instructor, decision,
+      judgment, attention, situational awareness, fatigue, training, procedure,
+      checklist, error, workload, distraction, scan, monitor, experience,
+      planning, action, omission, communication, coordination
+  Aircraft         : engine, fuel, power, propeller, rotor, blade, gear, brake,
+      flap, control, aileron, elevator, rudder, hydraulic, electrical, battery,
+      circuit, mechanical, structural, airframe, component, system, failure,
+      malfunction, corrosion, wear, carburetor, manifold, exhaust, oil,
+      ignition, magneto, cylinder, piston, crankshaft, bearing
+  Environmental    : weather, wind, gust, turbulence, icing, ice, fog,
+      visibility, cloud, ceiling, precipitation, rain, snow, density altitude,
+      terrain, obstacle, bird, wildlife, night, dark
+  Organizational   : maintenance, management, oversight, regulation, policy,
+      inspection, supervision, dispatch, scheduling"""
 
-Narrative:
-{narrative}"""
+_TERMINOLOGY_BLOCK = f"""\
+REQUIRED — use one of these approved relation phrases whenever it accurately fits:
+  {_APPROVED_RELATIONS}
+Only use a different phrase if none of the above captures the relationship.
+
+{_CATEGORY_VOCAB}\
+"""
+
+def _make_user_tmpl(examples_placeholder: bool = False) -> str:
+    """Build the user prompt template string with terminology embedded.
+
+    Using a function avoids the double-brace escaping problem that arises when
+    pre-formatting a template that also contains JSON example syntax.
+    """
+    header = (
+        "Extract all causal relationships from the following aviation accident narrative.\n\n"
+        "For each relationship output an object with exactly these keys:\n"
+        '  "cause"    — the specific factor, condition, or event that caused something\n'
+        '  "relation" — the causal verb/phrase connecting cause to effect\n'
+        '  "effect"   — what was caused or resulted\n\n'
+        + _TERMINOLOGY_BLOCK + "\n\n"
+        # Double-brace the JSON example so .format(narrative=...) treats them as literals
+        'Return a JSON array: [{{"cause": "...", "relation": "...", "effect": "..."}}]\n'
+        "If no causal relationships are present, return: []"
+    )
+    if examples_placeholder:
+        return header + "\n\n{examples}\nNow extract triples from this narrative:\n{narrative}"
+    return header + "\n\nNarrative:\n{narrative}"
+
+
+_USER_TMPL        = _make_user_tmpl(examples_placeholder=False)
+_USER_FEWSHOT_TMPL = _make_user_tmpl(examples_placeholder=True)
 
 # Simpler fallback prompt used on retry after a JSON parse failure
 _USER_FALLBACK_TMPL = """\
 Read this aviation accident text and output ONLY a valid JSON array.
 Each item must have exactly three string keys: "cause", "relation", "effect".
+Use these relation phrases: resulted in, caused, led to, due to, contributed to.
 Example: [{{"cause": "fuel exhaustion", "relation": "caused", "effect": "loss of engine power"}}]
 If none found, output: []
 
@@ -115,6 +167,79 @@ def _save_cache(cache: dict, path: Path):
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(cache, f, ensure_ascii=False)
     tmp.replace(path)
+
+
+def build_few_shot_examples(
+    train_ev_ids: List[str],
+    df: pd.DataFrame,
+    cache: dict,
+    findings_df: Optional['pd.DataFrame'] = None,
+    n_per_category: int = 3,
+    max_narrative_chars: int = 400,
+) -> str:
+    """
+    Build a few-shot example block from training narratives.
+
+    Selects up to n_per_category examples per NTSB top-level category
+    from the training split. For each example, shows a narrative snippet
+    alongside the triples already cached for that narrative.
+
+    Returns a formatted string ready to inject into the prompt.
+    If findings_df is provided, examples are stratified by category;
+    otherwise a random sample from the cache is used.
+    """
+    import random
+
+    train_set = set(str(e) for e in train_ev_ids)
+    id_col = 'ev_id' if 'ev_id' in df.columns else df.columns[0]
+    text_col = 'narr_clean' if 'narr_clean' in df.columns else df.columns[1]
+
+    # Build lookup: ev_id -> (narrative, category)
+    df_train = df[df[id_col].astype(str).isin(train_set)].copy()
+    df_train[id_col] = df_train[id_col].astype(str)
+
+    if findings_df is not None and 'category' in findings_df.columns:
+        cat_col = 'category'
+        merged = df_train.merge(
+            findings_df[['ev_id', cat_col]].drop_duplicates('ev_id'),
+            left_on=id_col, right_on='ev_id', how='left',
+        )
+        categories = ['Personnel issues', 'Aircraft', 'Environmental issues']
+        selected_ids = []
+        for cat in categories:
+            pool = merged[merged[cat_col] == cat][id_col].tolist()
+            # Prefer narratives that are already in the cache with parseable output
+            pool_cached = [eid for eid in pool if eid in cache and _parse_triples(cache[eid], eid)]
+            sample_pool = pool_cached if pool_cached else pool
+            random.seed(42)
+            selected_ids.extend(random.sample(sample_pool, min(n_per_category, len(sample_pool))))
+    else:
+        # Fallback: random sample from cached training narratives
+        pool = [eid for eid in df_train[id_col].tolist() if eid in cache]
+        random.seed(42)
+        selected_ids = random.sample(pool, min(n_per_category * 3, len(pool)))
+
+    # Build formatted example block
+    lines = ["Reference examples from similar accident reports:"]
+    for i, eid in enumerate(selected_ids, 1):
+        row = df_train[df_train[id_col] == eid]
+        if row.empty:
+            continue
+        narrative = str(row[text_col].iloc[0])[:max_narrative_chars]
+        triples = _parse_triples(cache.get(eid, ''), eid)
+        if not triples:
+            continue
+        # Use first 2 triples to keep prompt compact
+        triple_json = json.dumps(
+            [{'cause': t['cause'], 'relation': t['relation'], 'effect': t['effect']}
+             for t in triples[:2]],
+            ensure_ascii=False,
+        )
+        lines.append(f"\nExample {i}:")
+        lines.append(f"Narrative: \"{narrative}...\"")
+        lines.append(f"Output: {triple_json}")
+
+    return '\n'.join(lines)
 
 
 def _parse_triples(raw: str, ev_id: str) -> List[dict]:
@@ -252,11 +377,23 @@ class LLMCausalExtractor:
     # Internal
     # ------------------------------------------------------------------
 
-    def _build_prompt(self, narrative: str, fallback: bool = False) -> str:
+    def _build_prompt(
+        self,
+        narrative: str,
+        fallback: bool = False,
+        few_shot_block: str = '',
+    ) -> str:
         """Format prompt using the model's chat template if available."""
-        user_content = (
-            _USER_FALLBACK_TMPL if fallback else _USER_TMPL
-        ).format(narrative=narrative[:1500])
+        if fallback:
+            user_content = _USER_FALLBACK_TMPL.format(narrative=narrative[:1500])
+        elif few_shot_block:
+            user_content = _USER_FEWSHOT_TMPL.format(
+                examples=few_shot_block,
+                narrative=narrative[:1200],  # slightly shorter to leave room for examples
+            )
+        else:
+            user_content = _USER_TMPL.format(narrative=narrative[:1500])
+
         messages = [
             {"role": "system", "content": _SYSTEM},
             {"role": "user",   "content": user_content},
@@ -281,7 +418,7 @@ class LLMCausalExtractor:
             return_tensors="pt",
             padding=True,
             truncation=True,
-            max_length=1024,
+            max_length=3000,
         )
         # device_map="auto" places model layers on CUDA, but inputs are always
         # created on CPU by the tokenizer — move them to the first CUDA device.
@@ -322,6 +459,8 @@ class LLMCausalExtractor:
         seed: int = 42,
         max_retries: int = 1,
         cache_path: Optional[Path] = DEFAULT_CACHE_PATH,
+        restrict_ev_ids: Optional[List[str]] = None,
+        few_shot_block: str = '',
     ) -> List[dict]:
         """
         Run causal extraction on a sample of the dataset.
@@ -337,6 +476,11 @@ class LLMCausalExtractor:
         sample_n : Number of rows to process (None = all rows).
         batch_size : Number of prompts sent to the GPU at once.
         cache_path : Path to the JSON response cache.  Pass None to disable.
+        restrict_ev_ids : If given, only process narratives whose ev_id is in
+            this list (e.g. the held-out test split for unified evaluation).
+        few_shot_block : Pre-built example string from build_few_shot_examples().
+            When non-empty, injects examples into every prompt and uses a
+            separate cache to avoid contaminating the zero-shot cache.
 
         Returns
         -------
@@ -345,6 +489,12 @@ class LLMCausalExtractor:
         subset = df.dropna(subset=[text_col]).copy()
         if sample_n is not None and sample_n < len(subset):
             subset = subset.sample(n=sample_n, random_state=seed).reset_index(drop=True)
+
+        # Filter to specific ev_ids if requested (e.g. test split)
+        if restrict_ev_ids is not None:
+            restrict_set = set(str(e) for e in restrict_ev_ids)
+            subset = subset[subset[id_col].astype(str).isin(restrict_set)]
+            subset = subset.reset_index(drop=True)
 
         texts  = subset[text_col].astype(str).tolist()
         ev_ids = subset[id_col].astype(str).tolist() if id_col in subset.columns else \
@@ -359,11 +509,12 @@ class LLMCausalExtractor:
         cached_hits    = sum(1 for eid in ev_ids if eid in cache)
         uncached_idx   = [i for i, eid in enumerate(ev_ids) if eid not in cache]
 
+        mode_str = "few-shot" if few_shot_block else "zero-shot"
         if cached_hits:
-            print(f"[LLM] Cache: {cached_hits}/{len(ev_ids)} narratives already cached "
+            print(f"[LLM] Cache ({mode_str}): {cached_hits}/{len(ev_ids)} narratives cached "
                   f"→ {len(uncached_idx)} need inference")
         else:
-            print(f"[LLM] Cache empty — running inference on all {len(ev_ids)} narratives")
+            print(f"[LLM] Cache ({mode_str}) empty — running inference on all {len(ev_ids)} narratives")
 
         # ------------------------------------------------------------------
         # Inference on uncached narratives only
@@ -379,14 +530,14 @@ class LLMCausalExtractor:
                 batch_texts  = unc_texts[start : start + batch_size]
                 batch_ev_ids = unc_ev_ids[start : start + batch_size]
 
-                prompts   = [self._build_prompt(t) for t in batch_texts]
+                prompts = [self._build_prompt(t, few_shot_block=few_shot_block)
+                           for t in batch_texts]
                 responses = self._generate_batch(prompts)
 
                 for text, ev_id, raw in zip(batch_texts, batch_ev_ids, responses):
                     # Try parsing; retry with fallback prompt on failure
                     if not _parse_triples(raw, ev_id) and max_retries > 0:
                         retry_raw = self._generate_batch([self._build_prompt(text, fallback=True)])[0]
-                        # Store the retry response if it parses, else keep original
                         raw = retry_raw if _parse_triples(retry_raw, ev_id) else raw
 
                     cache[ev_id] = raw
@@ -413,7 +564,7 @@ class LLMCausalExtractor:
         total   = len(subset)
         ev_with = len({t["ev_id"] for t in all_triples})
         print(f"[LLM] Processed {total} narratives  |  "
-              f"with ≥1 triple: {ev_with} ({ev_with/max(1,total):.1%})  |  "
+              f"with >=1 triple: {ev_with} ({ev_with/max(1,total):.1%})  |  "
               f"total triples: {len(all_triples)}  |  "
               f"parse errors: {parse_errors}")
 

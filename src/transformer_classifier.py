@@ -40,7 +40,6 @@ LABEL_COLS = [
     'Personnel issues',
     'Aircraft',
     'Environmental issues',
-    'Not determined',
 ]
 
 
@@ -197,13 +196,17 @@ class NTSBClassifier:
         df: pd.DataFrame,
         text_col: str = 'narr_clean',
         label_col: str = 'top_category',
+        id_col: str = 'ev_id',
         test_size: float = 0.15,
         val_size: float = 0.15,
         max_samples: Optional[int] = None,
     ) -> Tuple['NarrativeDataset', 'NarrativeDataset', 'NarrativeDataset', dict]:
         """
-        Filter to LABEL_COLS categories, optionally subsample, perform
-        stratified train/val/test split, and return (train_ds, val_ds, test_ds, label_map).
+        Filter to LABEL_COLS categories, optionally subsample, perform stratified
+        train/val/test split, and return (train_ds, val_ds, test_ds, label_map).
+
+        Stores self.test_ev_ids and self.train_ev_ids after splitting so callers
+        can use the exact held-out set for unified evaluation.
         """
         # Filter to known categories
         df_filtered = df[df[label_col].isin(LABEL_COLS)].dropna(subset=[text_col, label_col]).copy()
@@ -215,12 +218,14 @@ class NTSBClassifier:
         self.label_map = {label: idx for idx, label in enumerate(sorted(LABEL_COLS))}
         self.inv_label_map = {v: k for k, v in self.label_map.items()}
 
-        texts = df_filtered[text_col].astype(str).tolist()
+        texts  = df_filtered[text_col].astype(str).tolist()
         labels = df_filtered[label_col].map(self.label_map).tolist()
+        ev_ids = df_filtered[id_col].astype(str).tolist() if id_col in df_filtered.columns else [''] * len(texts)
 
         # Stratified split: first carve out test, then val from remainder
-        train_texts, test_texts, train_labels, test_labels = train_test_split(
-            texts, labels,
+        indices = list(range(len(texts)))
+        train_idx, test_idx = train_test_split(
+            indices,
             test_size=test_size,
             random_state=42,
             stratify=labels,
@@ -228,26 +233,34 @@ class NTSBClassifier:
 
         # val_size is relative to the original dataset size
         val_relative = val_size / (1.0 - test_size)
-        train_texts, val_texts, train_labels, val_labels = train_test_split(
-            train_texts, train_labels,
+        train_labels_for_strat = [labels[i] for i in train_idx]
+        train_idx, val_idx = train_test_split(
+            train_idx,
             test_size=val_relative,
             random_state=42,
-            stratify=train_labels,
+            stratify=train_labels_for_strat,
         )
 
-        train_ds = NarrativeDataset(train_texts, train_labels, self.tokenizer)
-        val_ds   = NarrativeDataset(val_texts,   val_labels,   self.tokenizer)
-        test_ds  = NarrativeDataset(test_texts,  test_labels,  self.tokenizer)
+        def _subset(lst, idx): return [lst[i] for i in idx]
+
+        train_ds = NarrativeDataset(_subset(texts, train_idx), _subset(labels, train_idx), self.tokenizer)
+        val_ds   = NarrativeDataset(_subset(texts, val_idx),   _subset(labels, val_idx),   self.tokenizer)
+        test_ds  = NarrativeDataset(_subset(texts, test_idx),  _subset(labels, test_idx),  self.tokenizer)
+
+        # Store ev_ids for each split so callers can filter other models to the same set.
+        self.train_ev_ids = _subset(ev_ids, train_idx)
+        self.val_ev_ids   = _subset(ev_ids, val_idx)
+        self.test_ev_ids  = _subset(ev_ids, test_idx)
 
         # Compute inverse-frequency class weights from the training split.
-        # Only classes present in train_labels are passed to compute_class_weight
-        # (absent classes, e.g. 'Not determined' after data cleaning, get weight 1.0).
-        present_classes = sorted(set(train_labels))
+        # Only classes present in train_labels are passed to compute_class_weight.
+        train_labels_list = _subset(labels, train_idx)
+        present_classes = sorted(set(train_labels_list))
         if SKLEARN_AVAILABLE and len(present_classes) > 1:
             weights = compute_class_weight(
                 class_weight='balanced',
                 classes=np.array(present_classes),
-                y=np.array(train_labels),
+                y=np.array(train_labels_list),
             )
             weight_tensor = torch.ones(len(self.label_map), dtype=torch.float32)
             for cls, w in zip(present_classes, weights):

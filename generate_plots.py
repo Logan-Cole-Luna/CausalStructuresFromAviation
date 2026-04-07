@@ -82,7 +82,10 @@ except ImportError:
     print('[warn] networkx not available — KG visualizations will be skipped.')
 
 try:
-    from src.finding_evaluator import load_findings, evaluate_finding_alignment, print_finding_report
+    from src.finding_evaluator import (
+        load_findings, evaluate_finding_alignment,
+        evaluate_classifier_alignment, print_finding_report,
+    )
     FINDING_EVAL_AVAILABLE = True
 except ImportError as exc:
     FINDING_EVAL_AVAILABLE = False
@@ -140,13 +143,14 @@ def main():
     # Load extraction artifacts
     # -----------------------------------------------------------------------
     section('Loading Artifacts')
-    rule_triples = _load_json(training_dir    / 'rule_triples.json')
-    dep_triples  = _load_json(training_dir    / 'dep_triples.json')
-    llm_triples  = _load_json(extractions_dir / 'llm_triples.json')
-    train_history = _load_json(training_dir   / 'train_history.json')
-    eval_report   = _load_json(eval_dir       / 'evaluation_report.json')
-    cache_path    = Path(cfg.get('llm_extractor', 'cache_path',
-                                 fallback='outputs/extractions/llm_response_cache.json'))
+    rule_triples    = _load_json(training_dir    / 'rule_triples.json')
+    dep_triples     = _load_json(training_dir    / 'dep_triples.json')
+    llm_triples     = _load_json(extractions_dir / 'llm_triples.json')
+    fewshot_triples = _load_json(extractions_dir / 'llm_triples_fewshot.json')
+    train_history   = _load_json(training_dir    / 'train_history.json')
+    eval_report     = _load_json(eval_dir        / 'evaluation_report.json')
+    cache_path      = Path(cfg.get('llm_extractor', 'cache_path',
+                                   fallback='outputs/extractions/llm_response_cache.json'))
     llm_cache = _load_json(cache_path) if cache_path.exists() else {}
 
     # Load DistilBERT label map
@@ -154,11 +158,12 @@ def main():
     label_map = _load_json(label_map_path) if label_map_path.exists() else {}
     inv_map   = {v: k for k, v in label_map.items()} if label_map else {}
 
-    print(f'  Rule triples loaded:   {len(rule_triples):,}')
-    print(f'  Dep triples loaded:    {len(dep_triples):,}')
-    print(f'  LLM triples loaded:    {len(llm_triples):,}')
-    print(f'  LLM cache entries:     {len(llm_cache):,}')
-    print(f'  Train history epochs:  {len(train_history.get("train_loss", []))}')
+    print(f'  Rule triples loaded:        {len(rule_triples):,}')
+    print(f'  Dep triples loaded:         {len(dep_triples):,}')
+    print(f'  LLM triples loaded:         {len(llm_triples):,}')
+    print(f'  LLM few-shot triples:       {len(fewshot_triples):,}')
+    print(f'  LLM cache entries:          {len(llm_cache):,}')
+    print(f'  Train history epochs:       {len(train_history.get("train_loss", []))}')
 
     # -----------------------------------------------------------------------
     # Parse full LLM cache → extended triple set
@@ -307,17 +312,39 @@ def main():
                         fallback='data/clean/cleaned_narritives_and_findings.csv')
 
     if FINDING_EVAL_AVAILABLE and Path(data_path).exists():
-        from src.finding_evaluator import load_findings, evaluate_finding_alignment, print_finding_report
         findings_df = load_findings(data_path)
         print(f'  Findings loaded: {len(findings_df):,} rows, '
               f'{findings_df["ev_id"].nunique():,} unique accidents')
         print(f'  Cause-coded (C): {findings_df["is_cause"].sum():,}')
 
+        # Load test_split ev_ids if available (produced by train.py / eval.py after a
+        # training run).  When present we run a UNIFIED evaluation — all models evaluated
+        # on the same held-out narratives so results are directly comparable.
+        test_split = _load_json(training_dir / 'test_split.json')
+        test_ev_ids = (
+            set(test_split.get('test_ev_ids', []))
+            if isinstance(test_split, dict) else set()
+        )
+        unified_mode = bool(test_ev_ids)
+        if unified_mode:
+            print(f'\n  Unified test-set mode: {len(test_ev_ids)} held-out narratives')
+        else:
+            print('\n  Full-dataset mode (no test_ev_ids in test_split.json)')
+
+        def _filter_triples(triples, ev_ids_set):
+            """Filter to test ev_ids when in unified mode, else return all."""
+            if not ev_ids_set:
+                return triples
+            return [t for t in triples if str(t.get('ev_id', '')) in ev_ids_set]
+
         alignment_results = []
+
+        # --- Full-dataset evaluation (always run) ---
+        section('Finding-Alignment Evaluation -- Full Dataset')
         for label, triples in [
-            ('Rule-based',   rule_triples),
-            ('Dep-parse',    dep_triples),
-            ('LLM (full)',   full_llm_triples),
+            ('Rule-based', rule_triples),
+            ('Dep-parse',  dep_triples),
+            ('LLM',        full_llm_triples),
         ]:
             if not triples:
                 continue
@@ -331,21 +358,91 @@ def main():
             print(f'    Finding keyword recall:   {res["finding_keyword_recall"]:.1%}  '
                   f'(n={res["keyword_recall_n"]})')
 
+        pred_path = eval_dir / 'distilbert_predictions.json'
+        if pred_path.exists():
+            distilbert_preds = _load_json(pred_path)
+            if distilbert_preds:
+                db_res = evaluate_classifier_alignment(
+                    distilbert_preds, findings_df, label='DistilBERT (full)'
+                )
+                alignment_results.append(db_res)
+                print(f'\n  [DistilBERT (full)]')
+                print(f'    Category alignment:       {db_res["category_alignment_score"]:.1%}  '
+                      f'(n={db_res["category_alignment_n"]})')
+                print(f'    Cause-confirmed coverage: {db_res["cause_confirmed_coverage"]:.1%}  '
+                      f'({db_res["cause_confirmed_n"]}/{db_res["cause_confirmed_denom"]})')
+
         if alignment_results:
             print_finding_report(alignment_results)
             plot_finding_alignment(alignment_results, plots_dir)
 
-            # Persist to evaluation report
-            existing = _load_json(eval_dir / 'evaluation_report.json')
-            if isinstance(existing, dict):
-                existing['finding_alignment'] = {
-                    r['label']: {
-                        k: v for k, v in r.items() if k != 'label'
-                    } for r in alignment_results
-                }
-                _save_json(existing, eval_dir / 'evaluation_report.json')
+        # --- Unified test-set evaluation (only when test_ev_ids are available) ---
+        if unified_mode:
+            section('Finding-Alignment Evaluation -- Unified Test Set')
+            unified_results = []
+
+            # LLM few-shot triples are already restricted to the test set
+            for label, triples in [
+                ('Rule-based',     rule_triples),
+                ('Dep-parse',      dep_triples),
+                ('LLM (zero-shot)', full_llm_triples),
+                ('LLM (few-shot)', fewshot_triples),
+            ]:
+                if not triples:
+                    continue
+                filtered = _filter_triples(triples, test_ev_ids)
+                res = evaluate_finding_alignment(filtered, findings_df, label=label)
+                unified_results.append(res)
+                print(f'\n  [{label}]  (test set: {len(filtered)} triples from '
+                      f'{res["ev_ids_extracted"]} narratives)')
+                print(f'    Category alignment:       {res["category_alignment_score"]:.1%}')
+                print(f'    Cause-confirmed coverage: {res["cause_confirmed_coverage"]:.1%}  '
+                      f'({res["cause_confirmed_n"]}/{res["cause_confirmed_denom"]})')
+                print(f'    Finding keyword recall:   {res["finding_keyword_recall"]:.1%}')
+
+            # Prefer test-set predictions; fall back to filtering full predictions
+            test_pred_path = eval_dir / 'distilbert_test_predictions.json'
+            if test_pred_path.exists():
+                test_preds = _load_json(test_pred_path)
+            elif pred_path.exists():
+                all_preds = _load_json(pred_path)
+                test_preds = {eid: cat for eid, cat in all_preds.items()
+                              if eid in test_ev_ids}
+            else:
+                test_preds = {}
+
+            if test_preds:
+                db_test_res = evaluate_classifier_alignment(
+                    test_preds, findings_df, label='DistilBERT'
+                )
+                unified_results.append(db_test_res)
+                print(f'\n  [DistilBERT]  (test set: {len(test_preds)} predictions)')
+                print(f'    Category alignment:       {db_test_res["category_alignment_score"]:.1%}')
+                print(f'    Cause-confirmed coverage: {db_test_res["cause_confirmed_coverage"]:.1%}  '
+                      f'({db_test_res["cause_confirmed_n"]}/{db_test_res["cause_confirmed_denom"]})')
+
+            if unified_results:
+                print_finding_report(unified_results)
+                from src.plotting import plot_finding_alignment as _pfa
+                _pfa(unified_results, plots_dir, suffix='_unified')
+
+                existing = _load_json(eval_dir / 'evaluation_report.json')
+                if isinstance(existing, dict):
+                    existing['finding_alignment_unified'] = {
+                        r['label']: {k: v for k, v in r.items() if k != 'label'}
+                        for r in unified_results
+                    }
+
+        # Persist full-dataset alignment into evaluation_report.json
+        existing = _load_json(eval_dir / 'evaluation_report.json')
+        if isinstance(existing, dict):
+            existing['finding_alignment'] = {
+                r['label']: {k: v for k, v in r.items() if k != 'label'}
+                for r in alignment_results
+            }
+            _save_json(existing, eval_dir / 'evaluation_report.json')
     else:
-        print('  finding_evaluator not available or data_path missing — skipping.')
+        print('  finding_evaluator not available or data_path missing -- skipping.')
 
     # -----------------------------------------------------------------------
     # Done
