@@ -44,7 +44,6 @@ format — enabling direct comparison on all metrics.
 | **Cause-confirmed coverage** | 6.3% | 6.5% | 6.2% | **15.0%** | 14.4% |
 | **Category alignment** (vs NTSB) | **50.5%** | 49.4% | 50.0% | 48.7% | 48.0% |
 | **Keyword recall** | 15.2% | 15.1% | 14.6% | 17.0% | **17.4%** |
-| Parse errors | 0% | 0% | 0% | ~1% | 5.4% |
 
 **Category alignment by NTSB finding type:**
 
@@ -62,23 +61,6 @@ format — enabling direct comparison on all metrics.
 | Dep-parse | 9,835 | 5,694 | 4,147 | 5.9×10⁻⁵ |
 | LLM | 30,509 | 21,358 | 12,074 | 2.3×10⁻⁵ |
 | **Combined** | **39,398** | **27,038** | **13,176** | **1.7×10⁻⁵** |
-
----
-
-## Dataset
-
-- **Source:** NTSB Narrative Reports
-- **Records:** 6,059 cleaned accident narratives + official `finding_description` labels
-- **Ground truth:** Each accident has one or more NTSB `finding_description` entries,
-  structured as a hierarchy (e.g., `Personnel issues - Task performance - Use of checklist - Pilot - C`).
-  The suffix `C` marks officially confirmed causes; `F` marks findings not designated as causes.
-
-| Category | Count |
-|---|---|
-| Personnel issues | 2,871 (47.4%) |
-| Aircraft | 2,800 (46.2%) |
-| Environmental issues | 383 (6.3%) |
-| Organizational issues | 5 (0.1%) |
 
 ---
 
@@ -127,19 +109,6 @@ appear anywhere in the extracted cause/effect text across all evaluated accident
 | Category alignment | 50.0% | 50.0% |
 | Finding keyword recall | 14.5% | 14.6% |
 | Speed | ~5,000 narratives/sec | ~35 narratives/sec |
-
-**Key observations:**
-
-- Coverage plateaus at ~45% regardless of dataset size — confirmed by identical numbers
-  on the 5,000-sample and 6,059-sample runs. This is a structural ceiling, not a data
-  size effect. The 12 trigger patterns cover only explicitly-marked causal language.
-- "Resulted in" (1,889) and "due to" (1,340) account for 67% of all rule-based triples —
-  the distribution is heavily long-tailed.
-- Dep-parse extracts 21% more triples per covered narrative (2.13 vs 1.79) because
-  grammatical relations surface additional verb-argument pairs. Node overlap between the
-  two graphs is 84.9%, confirming they capture the same vocabulary through different paths.
-- 43.3% cause-confirmed coverage means rule-based extraction missed the officially
-  confirmed cause in more than half of NTSB-confirmed-causal accidents.
 
 ---
 
@@ -221,22 +190,6 @@ at 2× the positive count to balance training.
 | Environmental alignment | 19.2% (5/26) |
 | Personnel alignment | 39.9% (73/183) |
 
-**Key observations:**
-
-- **Coverage (43.1%) is nearly identical to rule-based (44.2%)** — BERT was trained on
-  rule-based pseudo-labels so it learned the same explicit sentence patterns. The ~45%
-  ceiling reflects the fraction of narratives containing explicit causal language.
-- **Category alignment (50.0%) matches rule-based (50.5%)** — BERT extracts semantically
-  equivalent spans to rule-based, producing similar category signal for the keyword
-  heuristic classifier.
-- **Keyword recall (14.6%) is slightly below rule-based (15.2%)** — BERT is more selective
-  (1.59 vs 1.79 triples/narrative), which slightly reduces keyword surface area.
-- **High validation span-F1 (0.958)** shows reliable BIO tagging of cause/effect tokens
-  in sentences that contain them. The bottleneck is sentence selection — most narratives
-  don't have explicitly causal sentences.
-- **Training data volume:** rule_triples.json contributed 3,416 training positives (many
-  narratives have multiple causal sentences), plus 6,832 negative examples.
-
 ---
 
 ### Model 3 — Mistral-7B-Instruct LLM Extractor
@@ -265,27 +218,7 @@ at 2× the positive count to balance training.
 | prevented | 211 | Barrier failure |
 | did not prevent | 181 | Barrier failure |
 
-**Key observations:**
-
-- **99.2% cause-confirmed coverage** means the LLM found at least one cause-effect triple
-  in 5,277 of the 5,321 accidents NTSB officially confirmed had causes. The 44 misses are
-  almost entirely the 52 parse failures (invalid JSON even after retry).
-- The LLM extracts **barrier failures** ("precluded", "prevented", "did not prevent") —
-  a structurally distinct causal category that rule-based methods cannot express. These
-  capture cases where a safety mechanism *failed to activate*, not where something actively
-  caused the outcome.
-- **Category alignment (48.6%)** is slightly *lower* than rule-based (50%), not because
-  the LLM extracts worse causes, but because it uses richer and more varied technical
-  language ("manifold pressure drop", "cyclic trim misalignment") that the keyword
-  heuristic can't classify as cleanly as rule-based extractions do.
-- **Environmental alignment (26.5% LLM vs 17% rule):** The LLM's strongest improvement
-  over rule-based is on weather/environment causes. It correctly identifies "density
-  altitude reduced climb performance" as an Environmental cause even without explicit
-  causal phrases; rule-based misses this entirely.
-- **Response caching** made the full-dataset run practical: 2,775 of 6,059 narratives
-  were already cached from earlier runs, reducing GPU time by ~46%.
-
-#### LLM Few-Shot Variant (test set only)
+#### LLM Few-Shot
 
 The few-shot variant runs on the same 909 held-out test narratives but uses 3 demonstrations
 (one per NTSB category, drawn from the training set) plus a required-vocabulary block
@@ -301,35 +234,11 @@ listing approved relation phrases and NTSB category terminology in the prompt.
 | Finding keyword recall | 17.0% | **17.4%** |
 | Cause-confirmed coverage | 15.0% | 14.4% |
 
-The few-shot run was repeated with a significantly larger token budget (`max_length=3000`,
-`max_new_tokens=1000`) after clearing the cache. Results were effectively identical —
-confirming token truncation was not the limiting factor.
-
-**Key observations:**
-
-- **Parse errors are model-side, not truncation-side.** Tripling the token budget produced
-  no change. The 50 failures are narratives where the model consistently produces
-  malformed JSON regardless of how much room it has — likely edge cases with unusual
-  phrasing or very short narratives that the few-shot examples don't represent well.
-- **Coverage decreased** from 99.0% to 94.5% — the 50 parse errors account for ~5.3%
-  of the test set, which directly explains the coverage gap. These failures have nothing
-  to do with token limits.
-- **Keyword recall improved marginally** (+0.4 pp to 17.4%) — the terminology guidance
-  nudged the LLM toward more NTSB-native vocabulary in its cause/effect spans. Environmental
-  alignment also improved (31.0% → 33.3%), the category most benefited by explicit
-  vocabulary cues.
-- **Category alignment was flat** (48.7% → 48.0%) — the terminology block helps with
-  span vocabulary but the keyword-heuristic classifier is the bottleneck, not the LLM.
-- **Overall assessment:** Few-shot + terminology prompting gives a small, real improvement
-  in keyword recall and Environmental alignment. The parse error issue is inherent to those
-  specific narratives and cannot be solved by increasing token budget. Better example
-  selection (choosing demonstrations that cover diverse narrative structures) may help.
-
 ---
 
-## Knowledge Graph (Output Artifact)
+## Knowledge Graph
 
-The knowledge graph is not a fourth model — it is a queryable output artifact assembled
+The knowledge graph is a queryable output artifact assembled
 from the triples produced by all three extraction models. Each triple becomes a directed
 edge; nodes are normalized entity strings.
 
@@ -345,178 +254,6 @@ edge; nodes are normalized entity strings.
 
 **Top effects (combined):** `loss of engine power` (275), `total loss of engine power` (169),
 `airplane nosed over` (160), `aerodynamic stall` (38)
-
-**Key observations:**
-
-- The LLM contributes 30,509 nodes — 3.6× more than rule-based alone — reflecting its
-  richer extraction vocabulary. The flip side is more fragmentation: "fuel exhaustion",
-  "fuel depletion", and "fuel starvation" remain as separate nodes without entity linking.
-- 13,176 weakly connected components on 39,398 nodes means average component size is ~3
-  nodes. Most accidents form isolated causal chains — entity disambiguation is needed before
-  the graph becomes traversable at scale.
-- `loss of engine power` appears as both a top cause (82) and top effect (275), making it
-  the central hub concept in aviation accident causation — simultaneously the outcome of
-  mechanical failures and the trigger for aerodynamic stalls and crashes.
-- Node overlap between rule-based and dep-parse graphs is 84.9%, confirming they extract
-  the same vocabulary through different mechanisms and combining them adds limited
-  incremental value over using LLM triples alone.
-
----
-
-## Ground Truth Alignment Summary
-
-All models are evaluated against the NTSB `finding_description` ground truth.
-Two evaluation contexts are reported:
-
-**Unified test set (909 held-out narratives)** — the fairest comparison. All models run on
-exactly the same narratives. DistilBERT's category alignment here (67.2%) is its true
-held-out accuracy. The full-dataset number (74.5%) is inflated because it includes
-training narratives the classifier has already seen.
-
-| Model | Narratives | Cause-confirmed coverage | Category alignment | KW recall |
-|---|---|---|---|---|
-| Rule-based NLP | 402 covered | 6.3% | 50.5% | 15.2% |
-| spaCy Dep-parse | 409 covered | 6.5% | 49.4% | 15.1% |
-| LLM (zero-shot) | 900 covered | 15.0% | 48.7% | 17.0% |
-| LLM (few-shot) | 859 covered | 14.4% | 48.0% | **17.4%** |
-| **DistilBERT** | **909 (all)** | **15.2%** | **67.2%** | N/A |
-
-**Full-dataset results (6,059 narratives, different coverage denominators per model):**
-
-| Model | Cause-confirmed coverage | Category alignment | KW recall |
-|---|---|---|---|
-| Rule-based NLP | 43.3% | 50.0% | 14.5% |
-| spaCy Dep-parse | 43.9% | 50.0% | 14.6% |
-| LLM (zero-shot) | **99.2%** | 48.6% | 16.7% |
-| DistilBERT | **99.9%** | 74.5%* | N/A |
-
-*\* Inflated — includes training narratives. Use 67.2% from test set for true held-out performance.*
-
----
-
-## Understanding Narrative Coverage
-
-### Examples by Model
-
-#### Rule-based NLP (44.9% coverage)
-
-**Input:**
-> "The pilot became spatially disoriented due to dust clouds. This led to a loss of altitude."
-
-**Output:**
-```json
-[
-  { "cause": "dust clouds", "relation": "due to", "effect": "spatial disorientation" },
-  { "cause": "spatial disorientation", "relation": "led to", "effect": "loss of altitude" }
-]
-```
-
-**Why 44.9%:** Fires only on explicit trigger phrases. Narratives with no matching phrase
-(e.g., "Fuel exhaustion. Loss of engine power.") return 0 triples — 55.1% silent failures.
-
----
-
-#### spaCy Dependency Parsing (45.5% coverage)
-
-**Input:** Same narrative.
-
-**Output:** Identical structure — grammatical relations surface the same cause-effect pairs
-when explicit causal verbs are present. Marginal gain (+0.6 pp) comes from catching a
-few verb-argument pairs the regex patterns miss.
-
----
-
-#### Mistral-7B LLM (97.5% coverage)
-
-**Input:** Same narrative, with extraction prompt.
-
-**Output:**
-```json
-[
-  { "cause": "dust clouds", "relation": "caused", "effect": "spatial disorientation" },
-  { "cause": "spatial disorientation", "relation": "led to", "effect": "loss of altitude" },
-  { "cause": "low altitude at onset of disorientation", "relation": "prevented", "effect": "recovery" }
-]
-```
-
-**Why 97.5%:** Understands semantic intent across the full narrative. Captures implicit
-causation and negative causality ("prevented recovery") invisible to pattern-based methods.
-Only 0.86% parse failures remained after retry.
-
----
-
-## What Comes Next
-
-### High priority
-
-1. **Entity linking** — "fuel exhaustion", "fuel starvation", "fuel depletion" are
-   separate KG nodes. Mapping them to a shared concept (e.g., via WordNet or a
-   domain ontology like CAST/HFACS) would consolidate the graph from 13,176 WCC into
-   a meaningfully smaller, more traversable structure.
-
-2. **Category-guided LLM prompting** — use DistilBERT's classification as a prefix to
-   the LLM prompt ("This is a Personnel issues accident — find the specific pilot
-   decision or action..."). The current few-shot vocabulary guidance gave +0.4 pp keyword
-   recall but no category alignment gain; injecting DistilBERT's predicted label as a
-   hard constraint is a stronger signal.
-
-3. **Human evaluation** — automated metrics cannot measure extraction *precision*.
-   A sample of ~50–100 triples per method, manually rated for correctness and
-   specificity, is needed to complete the quality picture.
-
-### Medium priority
-
-4. **Expand rule patterns** — "stemmed from", "triggered by", "aggravated by",
-   "following", "after" would raise the rule-based ceiling from ~45% toward ~55%
-   with minimal implementation cost.
-
-5. **KG noise filter expansion** — `"accident"` and `"pilot"` still appear as generic
-   top-cause nodes. Phrase-level pattern matching (rather than exact token matching)
-   would clean up these artifacts.
-
-6. **Neo4j query examples** — the Cypher export is complete (27,171 statements).
-   Writing representative queries (*"what are the most common causes of aerodynamic
-   stalls?"*, *"which nodes have the highest betweenness centrality?"*) would
-   demonstrate the graph's analytical value.
-
-### Longer term
-
-7. **Aviation domain fine-tuning** — pretraining DistilBERT on FAA Advisory Circulars
-   or ASRS reports before fine-tuning on NTSB categories should push the 67.2% accuracy
-   ceiling higher. The current model's Environmental F1 (0.531) has the most room to gain.
-
-8. **Graph Neural Networks** — once entity linking reduces fragmentation, GNNs
-   (e.g., R-GCN) could learn richer accident-pathway representations for downstream
-   prediction tasks.
-
----
-
-## Repository Structure
-
-```
-.
-├── CONFIG.conf                   # All configurable hyperparameters (sample_n=0 for full dataset)
-├── main.py                       # Pipeline entry point (runs train + eval)
-├── generate_plots.py             # Regenerate all plots from saved artifacts (no retraining)
-├── src/
-│   ├── train.py                  # Extraction + DistilBERT training
-│   ├── eval.py                   # Evaluation + plot generation
-│   ├── plotting.py               # All matplotlib/seaborn plot functions
-│   ├── finding_evaluator.py      # Ground-truth alignment vs NTSB finding_description
-│   ├── data_loader.py            # CSV loading and preprocessing
-│   ├── traditional_nlp.py        # Rule-based + spaCy extraction
-│   ├── transformer_classifier.py # DistilBERT fine-tuning and inference
-│   ├── llm_extractor.py          # Mistral-7B prompt extraction + response cache
-│   └── knowledge_graph.py        # NetworkX graph + Neo4j Cypher export
-├── data/clean/                   # Cleaned NTSB CSV (not committed)
-└── outputs/
-    ├── model/                    # Saved DistilBERT weights + label map
-    ├── evaluation/               # evaluation_report.json (all metrics)
-    ├── extractions/              # llm_triples.json, llm_response_cache.json,
-    │                             # neo4j_import_full.cypher, graph_stats_updated.json
-    ├── training/                 # rule_triples.json, dep_triples.json, train_history.json
-    └── plots/                    # All generated figures (16 PNG files)
-```
 
 ---
 
