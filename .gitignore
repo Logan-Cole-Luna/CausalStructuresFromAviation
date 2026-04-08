@@ -1,4 +1,5 @@
 outputs/model/model.safetensors
+outputs/model_bert_extractor/model.safetensors
 
 .DS_Store
 
