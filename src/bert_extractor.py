@@ -31,7 +31,7 @@ try:
 except ImportError:
     TORCH_AVAILABLE = False
 
-from src.traditional_nlp import CAUSAL_FORWARD, CAUSAL_BACKWARD, _split_sentences
+from src.rule_based import CAUSAL_FORWARD, CAUSAL_BACKWARD, _split_sentences
 
 # ---------------------------------------------------------------------------
 # BIO label constants
@@ -395,7 +395,7 @@ class BERTCausalExtractor:
     ) -> dict:
         """
         Fine-tune DistilBERT for BIO token classification.
-        Returns training history dict.
+        Returns training history dict including bias-variance analysis.
         """
         num_workers = 0  # safest default for Windows
         loader_kw = {'num_workers': num_workers, 'pin_memory': self.is_cuda}
@@ -414,7 +414,7 @@ class BERTCausalExtractor:
 
         # Class weights: up-weight CAUSE/EFFECT tokens vs O
         # Rough heuristic: O tokens dominate (~90%), so weight them lower
-        cw = torch.ones(NUM_LABELS, device=self.device)
+        cw = torch.ones(NUM_LABELS, device=self.device, dtype=torch.float32)
         cw[O] = 0.2        # O is the overwhelming majority class
         loss_fn = torch.nn.CrossEntropyLoss(weight=cw, ignore_index=-100)
 
@@ -427,17 +427,22 @@ class BERTCausalExtractor:
         best_weights    = None
         epoch_losses    = []
         epoch_val_f1s   = []
+        epoch_train_f1s = []
+        bias_variance_logs = []
 
         for epoch in range(1, epochs + 1):
             # --- Train ---
             self.model.train()
             total_loss = 0.0
+            train_tp = train_fp = train_fn = 0
             for batch in train_loader:
                 batch = self._to_device(batch)
                 optimizer.zero_grad(set_to_none=True)
                 with self._autocast():
                     out  = self.model(**{k: v for k, v in batch.items() if k != 'labels'})
-                    loss = loss_fn(out.logits.view(-1, NUM_LABELS), batch['labels'].view(-1))
+                    # Ensure logits are float32 for loss computation
+                    logits = out.logits.float() if out.logits.dtype != torch.float32 else out.logits
+                    loss = loss_fn(logits.view(-1, NUM_LABELS), batch['labels'].view(-1))
                 if scaler and scaler.is_enabled():
                     scaler.scale(loss).backward()
                     scaler.unscale_(optimizer)
@@ -451,16 +456,40 @@ class BERTCausalExtractor:
                 scheduler.step()
                 total_loss += loss.item()
 
-            avg_loss = total_loss / max(1, len(train_loader))
+                # Track training metrics
+                preds  = out.logits.argmax(dim=-1).view(-1).cpu().detach().tolist()
+                golds  = batch['labels'].view(-1).cpu().tolist()
+                for p, g in zip(preds, golds):
+                    if g == -100:
+                        continue
+                    pred_pos = p in (B_CAUSE, I_CAUSE, B_EFFECT, I_EFFECT)
+                    gold_pos = g in (B_CAUSE, I_CAUSE, B_EFFECT, I_EFFECT)
+                    if pred_pos and gold_pos:
+                        train_tp += 1
+                    elif pred_pos and not gold_pos:
+                        train_fp += 1
+                    elif not pred_pos and gold_pos:
+                        train_fn += 1
+
+            avg_train_loss = total_loss / max(1, len(train_loader))
+            train_prec = train_tp / max(1, train_tp + train_fp)
+            train_rec = train_tp / max(1, train_tp + train_fn)
+            train_f1 = 2 * train_prec * train_rec / max(1e-9, train_prec + train_rec)
 
             # --- Validate: span-level F1 on cause+effect tokens ---
             self.model.eval()
             tp = fp = fn = 0
+            val_loss = 0.0
             with torch.no_grad():
                 for batch in val_loader:
                     batch = self._to_device(batch)
                     with self._autocast():
                         out = self.model(**{k: v for k, v in batch.items() if k != 'labels'})
+                    # Ensure logits are float32 for loss computation
+                    logits = out.logits.float() if out.logits.dtype != torch.float32 else out.logits
+                    val_batch_loss = loss_fn(logits.view(-1, NUM_LABELS), batch['labels'].view(-1))
+                    val_loss += val_batch_loss.item()
+
                     preds  = out.logits.argmax(dim=-1).view(-1).cpu().tolist()
                     golds  = batch['labels'].view(-1).cpu().tolist()
                     for p, g in zip(preds, golds):
@@ -475,13 +504,22 @@ class BERTCausalExtractor:
                         elif not pred_pos and gold_pos:
                             fn += 1
 
+            avg_val_loss = val_loss / max(1, len(val_loader))
             prec = tp / max(1, tp + fp)
             rec  = tp / max(1, tp + fn)
             f1   = 2 * prec * rec / max(1e-9, prec + rec)
-            epoch_losses.append(round(avg_loss, 4))
+            epoch_losses.append(round(avg_val_loss, 4))
             epoch_val_f1s.append(round(f1, 4))
-            print(f"[BERTExtractor] Epoch {epoch}/{epochs} — loss: {avg_loss:.4f}  "
-                  f"val span-F1: {f1:.4f}  (prec={prec:.3f} rec={rec:.3f})")
+            epoch_train_f1s.append(round(train_f1, 4))
+
+            # Log bias-variance analysis
+            bv_log = self._log_bias_variance(avg_train_loss, avg_val_loss, train_f1, f1, epoch)
+            bias_variance_logs.append(bv_log)
+
+            print(f"[BERTExtractor] Epoch {epoch}/{epochs} — "
+                  f"train loss: {avg_train_loss:.4f} val loss: {avg_val_loss:.4f}  "
+                  f"train F1: {train_f1:.4f} val F1: {f1:.4f}  "
+                  f"(regime: {bv_log['regime']})")
 
             if f1 > best_val_f1:
                 best_val_f1 = f1
@@ -501,8 +539,41 @@ class BERTCausalExtractor:
 
         return {
             'train_loss':   epoch_losses,
+            'train_f1':     epoch_train_f1s,
             'val_f1':       epoch_val_f1s,
             'best_val_f1':  best_val_f1,
+            'bias_variance_logs': bias_variance_logs,
+        }
+
+    def _log_bias_variance(
+        self,
+        train_loss: float,
+        val_loss: float,
+        train_f1: float,
+        val_f1: float,
+        epoch: int,
+    ) -> dict:
+        """Analyze bias-variance tradeoff for an epoch."""
+        loss_gap = val_loss - train_loss
+        f1_gap = val_f1 - train_f1
+
+        # Classify regime
+        if loss_gap > 0.1 and f1_gap < -0.05:
+            regime = 'high_variance'  # Overfitting
+        elif loss_gap < -0.1 or f1_gap > 0.05:
+            regime = 'high_bias'      # Underfitting
+        else:
+            regime = 'balanced'
+
+        return {
+            'epoch': epoch,
+            'train_loss': round(train_loss, 6),
+            'val_loss': round(val_loss, 6),
+            'loss_gap': round(loss_gap, 6),
+            'train_f1': round(train_f1, 4),
+            'val_f1': round(val_f1, 4),
+            'f1_gap': round(f1_gap, 4),
+            'regime': regime,
         }
 
     # ------------------------------------------------------------------

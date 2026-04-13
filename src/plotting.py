@@ -380,41 +380,47 @@ def plot_cross_model_comparison(
     llm_triples: list,
     sample_n: int,
     bert_triples: list,
+    t5_triples: list,
     plots_dir: Path,
 ):
     """Coverage, density, and total-yield bars across all extraction methods."""
     ev_with_rule  = len({t['ev_id'] for t in rule_triples})
     ev_with_dep   = len({t['ev_id'] for t in dep_triples})
     ev_with_bert  = len({t['ev_id'] for t in bert_triples}) if bert_triples else 0
+    ev_with_t5    = len({t['ev_id'] for t in t5_triples}) if t5_triples else 0
     ev_with_llm   = len({t['ev_id'] for t in llm_triples})  if llm_triples  else 0
 
     rule_avg  = len(rule_triples)  / max(1, ev_with_rule)
     dep_avg   = len(dep_triples)   / max(1, ev_with_dep)
     bert_avg  = len(bert_triples)  / max(1, ev_with_bert)  if bert_triples else 0
+    t5_avg    = len(t5_triples)    / max(1, ev_with_t5)    if t5_triples else 0
     llm_avg   = len(llm_triples)   / max(1, ev_with_llm)   if llm_triples  else 0
 
     methods = [
         f'Rule-based\n(n={sample_n})',
         f'spaCy dep\n(n={sample_n})',
         f'BERT Extractor\n(test set)',
+        f'T5 Seq2Seq\n(test set)',
         f'LLM Mistral-7B\n(n={sample_n})',
     ]
     coverage_pct  = [
         ev_with_rule  / sample_n * 100,
         ev_with_dep   / sample_n * 100,
         ev_with_bert  / max(1, sample_n) * 100,
+        ev_with_t5    / max(1, sample_n) * 100,
         ev_with_llm   / sample_n * 100,
     ]
-    avg_density   = [rule_avg, dep_avg, bert_avg, llm_avg]
+    avg_density   = [rule_avg, dep_avg, bert_avg, t5_avg, llm_avg]
     total_triples = [
         len(rule_triples),
         len(dep_triples),
         len(bert_triples) if bert_triples else 0,
+        len(t5_triples) if t5_triples else 0,
         len(llm_triples)  if llm_triples  else 0,
     ]
-    colors = ['#2196F3', '#4CAF50', '#FF9800', '#9C27B0']
+    colors = ['#2196F3', '#4CAF50', '#FF9800', '#FFC107', '#9C27B0']
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+    fig, axes = plt.subplots(1, 3, figsize=(20, 6))
 
     for ax, vals, ylabel, title, fmt in [
         (axes[0], coverage_pct,  'Narratives with ≥1 triple (%)', 'Extraction Coverage',    '{:.1f}%'),

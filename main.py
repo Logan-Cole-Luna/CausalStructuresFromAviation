@@ -1,66 +1,66 @@
 """
-main.py — Full NTSB pipeline: training then evaluation.
+main.py — Full NTSB pipeline: hyperparameter tuning, training, then evaluation.
 
 Usage:
-    python main.py                     # uses sample_n from CONFIG.conf [global]
-    python main.py --sample 2000       # override sample size for all models
-    python main.py --sample 500 --no-llm
-    python main.py --eval-only         # skip training, re-plot from existing artifacts
-    python main.py --train-only        # training only, no plots
+    python main.py              # Full pipeline (15 Optuna trials per model + evaluation)
 
-All models use the same --sample count for fair comparison.
+This runs the complete causal extraction pipeline:
+  1. Hyperparameter tuning (Optuna Bayesian search) on validation set
+  2. Final model training on full training set
+  3. Evaluation on held-out test set (1,192 narratives)
+  4. Comparison across all 6 extraction approaches
+
+All artifacts saved to outputs/ directory.
 """
-import argparse
-import configparser
 import sys
 
 
-def _load_cfg(path: str) -> configparser.ConfigParser:
-    cfg = configparser.ConfigParser(inline_comment_prefixes=('#',))
-    cfg.read(path)
-    return cfg
-
-
 def main():
-    parser = argparse.ArgumentParser(
-        description='NTSB Causal Chain Extraction — Full Pipeline'
-    )
-    parser.add_argument('--sample',        type=int, default=None,
-                        help='Narratives per model (overrides CONFIG.conf [global] sample_n)')
-    parser.add_argument('--config',        type=str, default='CONFIG.conf')
-    parser.add_argument('--no-llm',        action='store_true', help='Skip LLM extraction')
-    parser.add_argument('--no-distilbert', action='store_true', help='Skip DistilBERT training')
-    parser.add_argument('--train-only',    action='store_true', help='Run training only')
-    parser.add_argument('--eval-only',     action='store_true', help='Run evaluation only')
-    args = parser.parse_args()
+    print("=" * 80)
+    print("  NTSB Causal Chain Extraction — Full Pipeline")
+    print("  (Hyperparameter Tuning → Training → Evaluation)")
+    print("=" * 80)
 
-    if args.train_only and args.eval_only:
-        print('Error: --train-only and --eval-only are mutually exclusive.')
-        sys.exit(1)
+    # ---- Step 1: Hyperparameter Tuning & Training ----
+    print("\n[1/2] TRAINING: Hyperparameter tuning + final model training...")
+    print("      Models: BERT (distilbert-base-uncased) + T5 (t5-base)")
+    print("      Trials: 15 Optuna trials per model on validation set")
+    print()
 
-    cfg      = _load_cfg(args.config)
-    sample_n = args.sample if args.sample is not None else \
-               int(cfg.get('global', 'sample_n', fallback=2000))
-
-    # ---- Training ----
-    if not args.eval_only:
-        from src.train import main as run_train
-        train_argv = ['train.py', '--sample', str(sample_n), '--config', args.config]
-        if args.no_llm:
-            train_argv.append('--no-llm')
-        if args.no_distilbert:
-            train_argv.append('--no-distilbert')
-        sys.argv = train_argv
+    from src.train import main as run_train
+    sys.argv = ['train.py']  # No arguments - uses defaults (15 trials each)
+    try:
         run_train()
+    except SystemExit:
+        pass  # train.py calls sys.exit() - catch it to continue
 
-    # ---- Evaluation ----
-    if not args.train_only:
-        from src.eval import main as run_eval
-        eval_argv = ['eval.py', '--sample', str(sample_n), '--config', args.config]
-        if args.no_llm:
-            eval_argv.append('--no-llm')
-        sys.argv = eval_argv
+    # ---- Step 2: Evaluation ----
+    print("\n" + "=" * 80)
+    print("[2/2] EVALUATION: Testing trained models on held-out test set...")
+    print("      Test set: 1,192 narratives (20% of 6,059 total)")
+    print("      Models evaluated: Rule-based, Dep-parse, BERT, T5, LLM (2 variants)")
+    print()
+
+    from src.eval import main as run_eval
+    sys.argv = ['eval.py']  # No arguments - evaluates on test set
+    try:
         run_eval()
+    except SystemExit:
+        pass  # eval.py calls sys.exit() - catch it
+
+    # ---- Summary ----
+    print("\n" + "=" * 80)
+    print("  PIPELINE COMPLETE")
+    print("=" * 80)
+    print("\nOutput artifacts:")
+    print("  - Tuned models:        outputs/model_{bert,t5}_extractor_tuned/")
+    print("  - Extracted triples:   outputs/extractions/{bert,t5}_triples.json")
+    print("  - Evaluation report:   outputs/evaluation/evaluation_report.json")
+    print("  - Visualizations:      outputs/plots/eval_*.png")
+    print("\nNext steps:")
+    print("  - View results: cat outputs/evaluation/evaluation_report.json")
+    print("  - Open plots: outputs/plots/eval_cross_model_comparison.png")
+    print()
 
 
 if __name__ == '__main__':

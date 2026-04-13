@@ -20,6 +20,8 @@ import pandas as pd
 from src.data_loader import load_data, preprocess_data
 from src.knowledge_graph import build_graph, graph_stats, to_neo4j_cypher, visualize_subgraph
 from src.bert_extractor import BERTCausalExtractor
+from src.t5_extractor import T5CausalExtractor
+from src.cross_validation import create_cv_split, save_cv_split, load_cv_split, print_cv_split
 from src.plotting import (
     plot_traditional_nlp,
     plot_llm_analysis,
@@ -168,37 +170,27 @@ def eval_bert_extractor(
         print('  torch not installed -- skipping BERT extractor.')
         return []
 
-    # Resolve train/test ev_id split from test_split.json
-    test_split = _load_json(training_dir / 'test_split.json')
-    if not isinstance(test_split, dict) or 'test_ev_ids' not in test_split:
-        # Fall back: rebuild split using the same parameters as the classifier did
-        from sklearn.model_selection import train_test_split as _tts
-        t = cfg['transformer'] if 'transformer' in cfg else {}
-        test_size  = float(t.get('test_size', 0.15))
-        val_size   = float(t.get('val_size',  0.15))
-        sample_df  = df.sample(n=min(sample_n, len(df)), random_state=42).reset_index(drop=True)
-        all_ids    = sample_df['ev_id'].astype(str).tolist()
-        idx        = list(range(len(all_ids)))
-        train_idx, test_idx = _tts(idx, test_size=test_size, random_state=42)
-        val_rel    = val_size / (1.0 - test_size)
-        train_idx, _ = _tts(train_idx, test_size=val_rel, random_state=42)
-        test_ev_ids  = [all_ids[i] for i in test_idx]
-        train_ev_ids = [all_ids[i] for i in train_idx]
-        # Persist so future calls and other models reuse the same split
-        _save_json({'test_ev_ids': test_ev_ids, 'train_ev_ids': train_ev_ids},
-                   training_dir / 'test_split.json')
-        print(f'  Rebuilt split: train={len(train_ev_ids)}  test={len(test_ev_ids)}')
-    else:
-        test_ev_ids  = test_split['test_ev_ids']
-        train_ev_ids = test_split.get('train_ev_ids', [])
+    # Load CV split (should already be created in main())
+    cv_split = _load_json(training_dir / 'cv_split.json')
+    if not isinstance(cv_split, dict) or 'test_ev_ids' not in cv_split:
+        print('  cv_split.json not found -- please ensure CV split is created first.')
+        return []
+
+    test_ev_ids  = cv_split['test_ev_ids']
+    train_ev_ids = cv_split.get('train_ev_ids', [])
 
     print(f'  Test narratives: {len(test_ev_ids)}  '
           f'Training pool for BERT: {len(train_ev_ids)}')
 
     # Load or train BERT extractor
+    # Try tuned model first, fall back to default
+    bert_dir_tuned = output_dir / 'model_bert_extractor_tuned'
     extractor = BERTCausalExtractor(model_name='distilbert-base-uncased')
 
-    if bert_dir.exists() and (bert_dir / 'extractor_meta.json').exists():
+    if bert_dir_tuned.exists() and (bert_dir_tuned / 'extractor_meta.json').exists():
+        print(f'  Loading tuned BERT model from {bert_dir_tuned}...')
+        extractor.load(str(bert_dir_tuned))
+    elif bert_dir.exists() and (bert_dir / 'extractor_meta.json').exists():
         extractor.load(str(bert_dir))
     else:
         print('  No saved model found -- training BERT extractor...')
@@ -211,13 +203,17 @@ def eval_bert_extractor(
         epochs     = int(bert_cfg.get('epochs',     5))
         batch_size = int(bert_cfg.get('batch_size', 16))
         lr         = float(bert_cfg.get('lr',       2e-5))
-        extractor.train(
+        history = extractor.train(
             train_ds, val_ds,
             epochs=epochs,
             batch_size=batch_size,
             lr=lr,
             save_path=str(bert_dir),
         )
+        # Log bias-variance analysis
+        if 'bias_variance_logs' in history:
+            from src.hyperparameter_tuning import print_bias_variance_analysis
+            print_bias_variance_analysis(history['bias_variance_logs'])
 
     # Run extraction on test-set narratives only
     print(f'\n  Running BERT extraction on {len(test_ev_ids)} test narratives...')
@@ -246,11 +242,115 @@ def eval_bert_extractor(
         print(f"    '{rel}': {cnt}")
     print(f'  Saved {len(bert_triples)} triples -> {triples_path}')
 
-    return bert_triples, test_ev_ids
+    return bert_triples
 
 
 # ---------------------------------------------------------------------------
-# Model 4 -- LLM evaluation
+# Model 4 -- T5 Causal Extractor evaluation
+# ---------------------------------------------------------------------------
+
+def eval_t5_extractor(
+    training_dir: Path,
+    output_dir: Path,
+    df: pd.DataFrame,
+    sample_n: int,
+    cfg,
+) -> list:
+    """
+    Train (or load) T5CausalExtractor on training-split rule-based triples,
+    then run extraction on the test-split narratives.
+
+    Returns a list of extracted triples.
+    """
+    section('MODEL 4: T5 Seq2Seq Causal Extractor (Evaluation)')
+
+    t5_dir   = output_dir / 'model_t5_extractor'
+    triples_path = output_dir / 'extractions' / 't5_triples.json'
+    rule_triples = _load_json(training_dir / 'rule_triples.json')
+
+    if not rule_triples:
+        print('  rule_triples.json not found -- run train.py first.')
+        return []
+
+    try:
+        import torch
+    except ImportError:
+        print('  torch not installed -- skipping T5 extractor.')
+        return []
+
+    # Load CV split
+    cv_split = _load_json(training_dir / 'cv_split.json')
+    if not isinstance(cv_split, dict) or 'test_ev_ids' not in cv_split:
+        print('  cv_split.json not found -- please run BERT evaluator first.')
+        return []
+
+    test_ev_ids = cv_split['test_ev_ids']
+    train_ev_ids = cv_split.get('train_ev_ids', [])
+
+    print(f'  Test narratives: {len(test_ev_ids)}  '
+          f'Training pool for T5: {len(train_ev_ids)}')
+
+    # Load or train T5 extractor
+    # Try tuned model first, fall back to default
+    t5_dir_tuned = output_dir / 'model_t5_extractor_tuned'
+    extractor = T5CausalExtractor(model_name='t5-base')
+
+    if t5_dir_tuned.exists() and (t5_dir_tuned / 'extractor_meta.json').exists():
+        print(f'  Loading tuned T5 model from {t5_dir_tuned}...')
+        extractor.load(str(t5_dir_tuned))
+    elif t5_dir.exists() and (t5_dir / 'extractor_meta.json').exists():
+        extractor.load(str(t5_dir))
+    else:
+        print('  No saved model found -- training T5 extractor...')
+        train_ds, val_ds = extractor.prepare_data(
+            df=df,
+            rule_triples=rule_triples,
+            train_ev_ids=train_ev_ids,
+        )
+        t5_cfg = cfg['t5_extractor'] if 't5_extractor' in cfg else {}
+        epochs     = int(t5_cfg.get('epochs',     5))
+        batch_size = int(t5_cfg.get('batch_size', 16))
+        lr         = float(t5_cfg.get('lr',       1e-4))
+        history = extractor.train(
+            train_ds, val_ds,
+            epochs=epochs,
+            batch_size=batch_size,
+            lr=lr,
+            save_path=str(t5_dir),
+        )
+
+    # Run extraction on test-set narratives only
+    print(f'\n  Running T5 extraction on {len(test_ev_ids)} test narratives...')
+    test_df = df[df['ev_id'].astype(str).isin(set(str(e) for e in test_ev_ids))]
+    t5_triples = extractor.extract(
+        df=test_df,
+        text_col='narr_clean',
+        id_col='ev_id',
+    )
+
+    # Persist
+    triples_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(triples_path, 'w', encoding='utf-8') as f:
+        json.dump(t5_triples, f, indent=2, ensure_ascii=False)
+
+    # Report same metrics as other extraction models
+    ev_with = len({t['ev_id'] for t in t5_triples})
+    pattern_counts = Counter(t['relation'] for t in t5_triples)
+    n_test = len(test_ev_ids)
+
+    print(f'\n  Coverage:          {ev_with}/{n_test} ({ev_with/max(1,n_test):.1%})')
+    print(f'  Total triples:     {len(t5_triples)}')
+    print(f'  Avg per narrative: {len(t5_triples)/max(1, ev_with):.2f}')
+    print(f'  Top relation phrases:')
+    for rel, cnt in sorted(pattern_counts.items(), key=lambda x: -x[1])[:10]:
+        print(f"    '{rel}': {cnt}")
+    print(f'  Saved {len(t5_triples)} triples -> {triples_path}')
+
+    return t5_triples
+
+
+# ---------------------------------------------------------------------------
+# Model 5 -- LLM evaluation
 # ---------------------------------------------------------------------------
 
 def eval_llm(extractions_dir: Path, sample_n: int, plots_dir: Path,
@@ -529,18 +629,28 @@ def main():
         except Exception as e:
             print(f'  [warn] Could not load findings: {e}')
 
-    # Load test_split.json early if it exists; BERT will (re)create it if not
-    test_split_path = training_dir / 'test_split.json'
-    test_ev_ids: list = []
-    if test_split_path.exists():
-        split = _load_json(test_split_path)
-        test_ev_ids = split.get('test_ev_ids', []) if isinstance(split, dict) else []
-    test_ev_set = set(str(e) for e in test_ev_ids)
+    # Create or load cross-validation split (60/20/20)
+    cv_split_path = training_dir / 'cv_split.json'
+    cv_split = load_cv_split(cv_split_path)
 
-    # Model 2: BERT Causal Extractor (runs first so test_split.json always exists)
-    bert_triples, test_ev_ids = eval_bert_extractor(training_dir, output_dir, df, sample_n, cfg)
+    if not cv_split:
+        section('Creating Cross-Validation Split (60/20/20)')
+        cv_split = create_cv_split(df, id_col='ev_id', train_frac=0.6, val_frac=0.2, test_frac=0.2)
+        save_cv_split(cv_split, cv_split_path)
+        print_cv_split(cv_split)
+    else:
+        section('Loading Existing Cross-Validation Split')
+        print_cv_split(cv_split)
+
+    test_ev_ids = cv_split.get('test_ev_ids', [])
     test_ev_set = set(str(e) for e in test_ev_ids)
     n_test = len(test_ev_ids)
+
+    # Model 2: BERT Causal Extractor (runs first so cv_split always exists)
+    bert_triples = eval_bert_extractor(training_dir, output_dir, df, sample_n, cfg)
+
+    # Model 3: T5 Seq2Seq Causal Extractor
+    t5_triples = eval_t5_extractor(training_dir, output_dir, df, sample_n, cfg)
 
     # Model 1 — filter to test set for metrics; keep all for KG
     trad_results = eval_traditional_nlp(training_dir, sample_n, plots_dir, test_ev_set)
@@ -571,6 +681,7 @@ def main():
             ('Rule-based',      rule_test),
             ('Dep-parse',       dep_test),
             ('BERT Extractor',  bert_triples),
+            ('T5 Extractor',    t5_triples),
             ('LLM (zero-shot)', llm_test),
             ('LLM (few-shot)',  fewshot_triples),
         ]:
@@ -604,7 +715,7 @@ def main():
 
     # Cross-model comparison — ALL on test set
     plot_cross_model_comparison(
-        rule_test, dep_test, llm_test, n_test, bert_triples, plots_dir,
+        rule_test, dep_test, llm_test, n_test, bert_triples, t5_triples, plots_dir,
     )
 
     # Top relation phrases — three-panel figure
