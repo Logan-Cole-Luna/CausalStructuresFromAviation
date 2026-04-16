@@ -16,32 +16,14 @@ from typing import Tuple, Dict, Any
 import numpy as np
 import pandas as pd
 
-try:
-    import optuna
-    from optuna.pruners import MedianPruner
-    from optuna.samplers import TPESampler
-    OPTUNA_AVAILABLE = True
-except ImportError:
-    OPTUNA_AVAILABLE = False
-
-import sys 
-
-# Allow running as either `python -m src.eval` or `python src/eval.py`.
-if __package__ in (None, ''):
-    repo_root = Path(__file__).resolve().parents[1]
-    if str(repo_root) not in sys.path:
-        sys.path.insert(0, str(repo_root))
+import optuna
+from optuna.pruners import MedianPruner
+from optuna.samplers import TPESampler
 
 from src.data_loader import load_data, preprocess_data
 from src.bert_extractor import BERTCausalExtractor
 from src.t5_extractor import T5CausalExtractor
 from src.cross_validation import load_cv_split
-
-try:
-    from src.finding_evaluator import load_findings, evaluate_detection_metrics
-    FINDING_REWARD_AVAILABLE = True
-except ImportError:
-    FINDING_REWARD_AVAILABLE = False
 
 
 def section(title: str):
@@ -63,39 +45,6 @@ def _save_json(obj, path: Path):
         json.dump(obj, f, indent=2, default=str)
 
 
-def _compute_style_reward(
-    extractor,
-    df: pd.DataFrame,
-    findings_df: pd.DataFrame,
-    val_ev_ids: list,
-    text_col: str = 'narr_clean',
-    id_col: str = 'ev_id',
-) -> Dict[str, float]:
-    """
-    Compute soft ground-truth reward on validation narratives.
-
-    Reward combines:
-      - detection F1 against finding_description-grounded labels
-      - average finding token coverage (soft overlap)
-    """
-    val_set = set(str(e) for e in val_ev_ids)
-    val_df = df[df[id_col].astype(str).isin(val_set)]
-    triples = extractor.extract(df=val_df, text_col=text_col, id_col=id_col)
-    det = evaluate_detection_metrics(
-        triples=triples,
-        findings_df=findings_df,
-        candidate_ev_ids=val_ev_ids,
-        label='val',
-    )
-    reward = 0.5 * float(det['f1']) + 0.5 * float(det['avg_finding_token_coverage'])
-    return {
-        'style_reward': reward,
-        'detection_f1': float(det['f1']),
-        'token_coverage': float(det['avg_finding_token_coverage']),
-        'triples_n': float(len(triples)),
-    }
-
-
 # ============================================================================
 # BERT Hyperparameter Tuning
 # ============================================================================
@@ -107,7 +56,6 @@ def objective_bert(
     train_ev_ids: list,
     val_ev_ids: list,
     output_dir: Path,
-    findings_df: pd.DataFrame | None = None,
 ) -> float:
     """Objective function for BERT hyperparameter optimization."""
     # Suggest hyperparameters
@@ -138,29 +86,13 @@ def objective_bert(
             patience=2,
         )
 
-        best_val_f1 = float(history.get('best_val_f1', 0.0))
-
-        if FINDING_REWARD_AVAILABLE and findings_df is not None and val_ev_ids:
-            style = _compute_style_reward(extractor, df, findings_df, val_ev_ids)
-            composite = 0.5 * best_val_f1 + 0.25 * style['detection_f1'] + 0.25 * style['token_coverage']
-            print(
-                "    Result: val F1={:.4f}, det F1={:.4f}, token_cov={:.4f}, "
-                "style_reward={:.4f}, composite={:.4f}".format(
-                    best_val_f1,
-                    style['detection_f1'],
-                    style['token_coverage'],
-                    style['style_reward'],
-                    composite,
-                )
-            )
-        else:
-            composite = best_val_f1
-            print(f"    Result: Best val F1 = {best_val_f1:.4f}")
+        best_val_f1 = history.get('best_val_f1', 0.0)
+        print(f"    Result: Best val F1 = {best_val_f1:.4f}")
 
         # Report intermediate value for pruning
-        trial.report(composite, step=epochs)
+        trial.report(best_val_f1, step=epochs)
 
-        return composite
+        return best_val_f1
 
     except Exception as e:
         print(f"    Error during trial: {e}")
@@ -173,8 +105,6 @@ def tune_and_train_bert(
     cv_split: Dict[str, list],
     output_dir: Path,
     n_trials: int = 10,
-    best_params_override: Dict[str, Any] | None = None,
-    findings_df: pd.DataFrame | None = None,
 ) -> Tuple[BERTCausalExtractor, Dict[str, Any]]:
     """
     Run hyperparameter tuning for BERT, then train final model.
@@ -191,49 +121,29 @@ def tune_and_train_bert(
     print(f"  Train set: {len(train_ev_ids)} narratives")
     print(f"  Val set: {len(val_ev_ids)} narratives")
     print(f"  Test set: {len(test_ev_ids)} narratives")
-    if best_params_override:
-        print("\n  Reusing saved hyperparameters (skipping Optuna retuning).\n")
-        best_params = {
-            'lr': float(best_params_override['lr']),
-            'batch_size': int(best_params_override['batch_size']),
-            'epochs': int(best_params_override['epochs']),
-        }
-    else:
-        print(f"\n  Running {n_trials} trials with Optuna...\n")
+    print(f"\n  Running {n_trials} trials with Optuna...\n")
 
-    if not best_params_override:
-        if not OPTUNA_AVAILABLE:
-            print("  [WARN] Optuna not available — skipping hyperparameter tuning.")
-            print("  Using default hyperparameters: lr=2e-5, batch_size=16, epochs=5")
-            best_params = {
-                'lr': 2e-5,
-                'batch_size': 16,
-                'epochs': 5,
-            }
-        else:
-            sampler = TPESampler(seed=42)
-            pruner = MedianPruner()
+    sampler = TPESampler(seed=42)
+    pruner = MedianPruner()
 
-            study = optuna.create_study(
-                sampler=sampler,
-                pruner=pruner,
-                direction='maximize',
-            )
+    study = optuna.create_study(
+        sampler=sampler,
+        pruner=pruner,
+        direction='maximize',
+    )
 
-            study.optimize(
-                lambda trial: objective_bert(
-                    trial, df, rule_triples, train_ev_ids, val_ev_ids, output_dir, findings_df=findings_df
-                ),
-                n_trials=n_trials,
-                show_progress_bar=False,
-            )
+    study.optimize(
+        lambda trial: objective_bert(trial, df, rule_triples, train_ev_ids, val_ev_ids, output_dir),
+        n_trials=n_trials,
+        show_progress_bar=False,
+    )
 
-            best_params = study.best_params
-            best_value = study.best_value
+    best_params = study.best_params
+    best_value = study.best_value
 
-            print(f"\n  Best trial: {study.best_trial.number}")
-            print(f"  Best params: {best_params}")
-            print(f"  Best val F1: {best_value:.4f}")
+    print(f"\n  Best trial: {study.best_trial.number}")
+    print(f"  Best params: {best_params}")
+    print(f"  Best val F1: {best_value:.4f}")
 
     # Train final model with best params
     section('BERT: Training Final Model (Full Training Set)')
@@ -285,7 +195,6 @@ def objective_t5(
     train_ev_ids: list,
     val_ev_ids: list,
     output_dir: Path,
-    findings_df: pd.DataFrame | None = None,
 ) -> float:
     """Objective function for T5 hyperparameter optimization."""
     lr = trial.suggest_float('lr', 5e-6, 5e-5, log=True)
@@ -315,31 +224,15 @@ def objective_t5(
             patience=2,
         )
 
-        best_val_loss = float(history.get('best_val_loss', float('inf')))
+        best_val_loss = history.get('best_val_loss', float('inf'))
         # Convert loss to metric (lower loss = higher score)
-        base_metric = 1.0 / (1.0 + best_val_loss)
-
-        if FINDING_REWARD_AVAILABLE and findings_df is not None and val_ev_ids:
-            style = _compute_style_reward(extractor, df, findings_df, val_ev_ids)
-            composite = 0.5 * base_metric + 0.25 * style['detection_f1'] + 0.25 * style['token_coverage']
-            print(
-                "    Result: base={:.4f}, det F1={:.4f}, token_cov={:.4f}, "
-                "style_reward={:.4f}, composite={:.4f}".format(
-                    base_metric,
-                    style['detection_f1'],
-                    style['token_coverage'],
-                    style['style_reward'],
-                    composite,
-                )
-            )
-        else:
-            composite = base_metric
-            print(f"    Result: Best val loss = {best_val_loss:.4f} (metric={base_metric:.4f})")
+        metric = 1.0 / (1.0 + best_val_loss)
+        print(f"    Result: Best val loss = {best_val_loss:.4f} (metric={metric:.4f})")
 
         # Report intermediate value for pruning
-        trial.report(composite, step=epochs)
+        trial.report(metric, step=epochs)
 
-        return composite
+        return metric
 
     except Exception as e:
         print(f"    Error during trial: {e}")
@@ -352,8 +245,6 @@ def tune_and_train_t5(
     cv_split: Dict[str, list],
     output_dir: Path,
     n_trials: int = 10,
-    best_params_override: Dict[str, Any] | None = None,
-    findings_df: pd.DataFrame | None = None,
 ) -> Tuple[T5CausalExtractor, Dict[str, Any]]:
     """
     Run hyperparameter tuning for T5, then train final model.
@@ -370,49 +261,29 @@ def tune_and_train_t5(
     print(f"  Train set: {len(train_ev_ids)} narratives")
     print(f"  Val set: {len(val_ev_ids)} narratives")
     print(f"  Test set: {len(test_ev_ids)} narratives")
-    if best_params_override:
-        print("\n  Reusing saved hyperparameters (skipping Optuna retuning).\n")
-        best_params = {
-            'lr': float(best_params_override['lr']),
-            'batch_size': int(best_params_override['batch_size']),
-            'epochs': int(best_params_override['epochs']),
-        }
-    else:
-        print(f"\n  Running {n_trials} trials with Optuna...\n")
+    print(f"\n  Running {n_trials} trials with Optuna...\n")
 
-    if not best_params_override:
-        if not OPTUNA_AVAILABLE:
-            print("  [WARN] Optuna not available — skipping hyperparameter tuning.")
-            print("  Using default hyperparameters: lr=1e-4, batch_size=16, epochs=5")
-            best_params = {
-                'lr': 1e-4,
-                'batch_size': 16,
-                'epochs': 5,
-            }
-        else:
-            sampler = TPESampler(seed=42)
-            pruner = MedianPruner()
+    sampler = TPESampler(seed=42)
+    pruner = MedianPruner()
 
-            study = optuna.create_study(
-                sampler=sampler,
-                pruner=pruner,
-                direction='maximize',
-            )
+    study = optuna.create_study(
+        sampler=sampler,
+        pruner=pruner,
+        direction='maximize',
+    )
 
-            study.optimize(
-                lambda trial: objective_t5(
-                    trial, df, rule_triples, train_ev_ids, val_ev_ids, output_dir, findings_df=findings_df
-                ),
-                n_trials=n_trials,
-                show_progress_bar=False,
-            )
+    study.optimize(
+        lambda trial: objective_t5(trial, df, rule_triples, train_ev_ids, val_ev_ids, output_dir),
+        n_trials=n_trials,
+        show_progress_bar=False,
+    )
 
-            best_params = study.best_params
-            best_value = study.best_value
+    best_params = study.best_params
+    best_value = study.best_value
 
-            print(f"\n  Best trial: {study.best_trial.number}")
-            print(f"  Best params: {best_params}")
-            print(f"  Best metric: {best_value:.4f}")
+    print(f"\n  Best trial: {study.best_trial.number}")
+    print(f"  Best params: {best_params}")
+    print(f"  Best metric: {best_value:.4f}")
 
     # Train final model with best params
     section('T5: Training Final Model (Full Training Set)')
@@ -459,26 +330,15 @@ def main():
     parser.add_argument('--config', type=str, default='CONFIG.conf', help='Config file path')
     parser.add_argument('--skip-bert', action='store_true', help='Skip BERT tuning')
     parser.add_argument('--skip-t5', action='store_true', help='Skip T5 tuning')
-    parser.add_argument('--force-retune', action='store_true',
-                        help='Ignore saved best hyperparameters and rerun Optuna')
     args = parser.parse_args()
 
     section('Hyperparameter Tuning: BERT & T5 Causal Extractors')
 
     # Load data
     print('\nLoading data...')
-    data_path = 'data/clean/cleaned_narritives_and_findings.csv'
-    df = load_data(data_path)
+    df = load_data('data/clean/cleaned_narritives_and_findings.csv')
     df = preprocess_data(df)
     print(f'  Records: {len(df)}')
-
-    findings_df = None
-    if FINDING_REWARD_AVAILABLE:
-        try:
-            findings_df = load_findings(data_path)
-            print('  Loaded finding_description ground truth for style reward.')
-        except Exception as e:
-            print(f'  [WARN] Could not load findings for style reward: {e}')
 
     # Load CV split
     training_dir = Path('outputs/training')
@@ -494,35 +354,19 @@ def main():
         return
 
     output_dir = Path('outputs')
-    saved_tuning = _load_json(output_dir / 'tuning_results.json') or {}
-    saved_bert_params = None
-    saved_t5_params = None
-    if not args.force_retune and isinstance(saved_tuning, dict):
-        saved_bert_params = ((saved_tuning.get('bert') or {}).get('best_params')
-                             if isinstance(saved_tuning.get('bert'), dict) else None)
-        saved_t5_params = ((saved_tuning.get('t5') or {}).get('best_params')
-                           if isinstance(saved_tuning.get('t5'), dict) else None)
-        if saved_bert_params or saved_t5_params:
-            print('\nFound saved tuning results in outputs/tuning_results.json; reusing best params by default.')
-            print('Use --force-retune to run Optuna again.')
-
     tuning_results = {}
 
     # BERT Hyperparameter Tuning
     if not args.skip_bert:
         bert_extractor, bert_results = tune_and_train_bert(
-            df, rule_triples, cv_split, output_dir, n_trials=args.bert_trials,
-            best_params_override=saved_bert_params,
-            findings_df=findings_df,
+            df, rule_triples, cv_split, output_dir, n_trials=args.bert_trials
         )
         tuning_results['bert'] = bert_results
 
     # T5 Hyperparameter Tuning
     if not args.skip_t5:
         t5_extractor, t5_results = tune_and_train_t5(
-            df, rule_triples, cv_split, output_dir, n_trials=args.t5_trials,
-            best_params_override=saved_t5_params,
-            findings_df=findings_df,
+            df, rule_triples, cv_split, output_dir, n_trials=args.t5_trials
         )
         tuning_results['t5'] = t5_results
 

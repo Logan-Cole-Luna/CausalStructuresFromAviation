@@ -33,18 +33,11 @@ This module computes three extraction-quality metrics against this ground truth:
 from __future__ import annotations
 
 import re
-from difflib import SequenceMatcher
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 import pandas as pd
-
-try:
-    from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc_auc_score
-    SKLEARN_METRICS_AVAILABLE = True
-except ImportError:
-    SKLEARN_METRICS_AVAILABLE = False
 
 
 # ---------------------------------------------------------------------------
@@ -89,32 +82,6 @@ _SKIP_TOKENS = frozenset({
     'use', 'effect', 'type', 'condition', 'related',
 })
 
-# Soft matching configuration for finding_description overlap.
-_FUZZY_MATCH_THRESHOLD = 0.86
-_MIN_DETECTION_COVERAGE = 0.10
-_COMPOSITE_F1_WEIGHT = 0.5
-_COMPOSITE_COVERAGE_WEIGHT = 0.5
-
-# Lightweight domain synonyms/variants to improve semantic overlap recall.
-_TOKEN_SYNONYMS: Dict[str, List[str]] = {
-    'pilot': ['aviator', 'captain'],
-    'engine': ['powerplant', 'motor'],
-    'propeller': ['prop'],
-    'airplane': ['aircraft', 'plane'],
-    'aircraft': ['airplane', 'plane'],
-    'weather': ['meteorological', 'wx'],
-    'visibility': ['vis'],
-    'fatigue': ['tiredness', 'exhaustion'],
-    'failure': ['malfunction', 'breakdown'],
-    'malfunction': ['failure', 'fault'],
-    'maintenance': ['service', 'inspection'],
-    'checklist': ['check list'],
-    'decision': ['judgment', 'judgement'],
-    'judgment': ['decision', 'judgement'],
-    'stall': ['stalled', 'aerodynamicstall'],
-    'icing': ['ice'],
-}
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -133,95 +100,6 @@ def _tokenize_finding(finding: str) -> List[str]:
                 if len(word) >= 4 and word not in _SKIP_TOKENS:
                     tokens.append(word)
     return tokens
-
-
-def _normalize_token(tok: str) -> str:
-    """Lowercase + alpha cleanup + lightweight stemming for soft matching."""
-    tok = re.sub(r'[^a-z]', '', tok.lower())
-    if len(tok) <= 3:
-        return tok
-
-    # Lightweight stemming rules keep implementation dependency-free.
-    for suf in ('ization', 'ations', 'ation', 'ments', 'ment', 'ingly', 'edly', 'ness', 'ingly'):
-        if tok.endswith(suf) and len(tok) > len(suf) + 3:
-            tok = tok[:-len(suf)]
-            break
-    for suf in ('ing', 'ed', 'ies', 'es', 's'):
-        if tok.endswith(suf) and len(tok) > len(suf) + 2:
-            if suf == 'ies':
-                tok = tok[:-3] + 'y'
-            else:
-                tok = tok[:-len(suf)]
-            break
-    return tok
-
-
-def _tokenize_text_soft(text: str) -> List[str]:
-    """Tokenize arbitrary text into normalized tokens for soft overlap scoring."""
-    raw = re.findall(r'[a-zA-Z]+', text.lower())
-    norm = [_normalize_token(t) for t in raw]
-    return [t for t in norm if len(t) >= 3 and t not in _SKIP_TOKENS]
-
-
-def _expand_synonyms(tok: str) -> List[str]:
-    """Return normalized token + synonym variants for soft match lookup."""
-    variants = {_normalize_token(tok)}
-    for s in _TOKEN_SYNONYMS.get(tok, []):
-        variants.add(_normalize_token(s))
-    # Also allow reverse synonym mapping.
-    for base, syns in _TOKEN_SYNONYMS.items():
-        if tok in syns:
-            variants.add(_normalize_token(base))
-            for s in syns:
-                variants.add(_normalize_token(s))
-    return [v for v in variants if v]
-
-
-def _soft_overlap_stats(gt_tokens: List[str], pred_text: str) -> Tuple[int, float]:
-    """
-    Compute soft overlap of finding tokens against extracted text.
-
-    Matching strategy (in order):
-      1) exact normalized token match
-      2) synonym variant match
-      3) fuzzy match with SequenceMatcher
-    """
-    if not gt_tokens:
-        return 0, 0.0
-
-    pred_tokens = _tokenize_text_soft(pred_text)
-    pred_token_set = set(pred_tokens)
-    if not pred_tokens:
-        return 0, 0.0
-
-    matched = 0
-    for tok in gt_tokens:
-        n_tok = _normalize_token(tok)
-        if not n_tok:
-            continue
-
-        if n_tok in pred_token_set:
-            matched += 1
-            continue
-
-        variants = _expand_synonyms(n_tok)
-        if any(v in pred_token_set for v in variants):
-            matched += 1
-            continue
-
-        # Fuzzy fallback for minor lexical variation (e.g., singular/plural/typo).
-        best = 0.0
-        for p in pred_token_set:
-            if abs(len(p) - len(n_tok)) > 4:
-                continue
-            best = max(best, SequenceMatcher(None, n_tok, p).ratio())
-            if best >= _FUZZY_MATCH_THRESHOLD:
-                break
-        if best >= _FUZZY_MATCH_THRESHOLD:
-            matched += 1
-
-    coverage = matched / max(1, len(gt_tokens))
-    return matched, coverage
 
 
 def _classify_text(text: str) -> str:
@@ -363,8 +241,9 @@ def evaluate_finding_alignment(
         if not all_tokens:
             continue
 
-        _, coverage = _soft_overlap_stats(all_tokens, text)
-        recall_scores.append(coverage)
+        text_lower = text.lower()
+        matched = sum(1 for tok in all_tokens if tok in text_lower)
+        recall_scores.append(matched / len(all_tokens))
 
     avg_keyword_recall = (
         sum(recall_scores) / len(recall_scores) if recall_scores else 0.0
@@ -494,134 +373,3 @@ def print_finding_report(results: List[Dict]) -> None:
             else:
                 row_str += '                     n/a'
         print(row_str)
-
-
-def evaluate_detection_metrics(
-    triples: List[dict],
-    findings_df: pd.DataFrame,
-    candidate_ev_ids: List[str],
-    label: str = 'model',
-) -> Dict:
-    """
-    Evaluate extraction as binary cause-detection at the narrative level,
-    grounded in finding_description content.
-
-    y_true: narrative has >=1 official C-coded finding
-    y_pred: model extracted text with meaningful soft overlap to finding tokens
-    y_score: fraction of finding tokens covered by extracted text
-    """
-    candidate_set = set(str(e) for e in candidate_ev_ids)
-
-    cause_ev_ids = set(
-        str(row['ev_id'])
-        for _, row in findings_df.iterrows()
-        if row['is_cause']
-    )
-
-    findings_text_by_ev: Dict[str, str] = defaultdict(str)
-    findings_tokens_by_ev: Dict[str, set] = defaultdict(set)
-    for _, row in findings_df.iterrows():
-        eid = str(row['ev_id'])
-        if eid not in candidate_set:
-            continue
-        ftxt = str(row.get('finding_description', '')).strip()
-        if not ftxt:
-            continue
-        findings_text_by_ev[eid] += ' ' + ftxt
-        findings_tokens_by_ev[eid].update(_tokenize_finding(ftxt))
-
-    pred_text_by_ev: Dict[str, str] = defaultdict(str)
-    for t in triples:
-        eid = str(t.get('ev_id', ''))
-        if eid in candidate_set:
-            pred_text_by_ev[eid] += ' ' + str(t.get('cause', '')) + ' ' + str(t.get('effect', ''))
-
-    y_true: List[int] = []
-    y_pred: List[int] = []
-    y_score: List[float] = []
-    matched_token_counts: List[int] = []
-    for eid in sorted(candidate_set):
-        truth = 1 if eid in cause_ev_ids else 0
-
-        gt_tokens = list(findings_tokens_by_ev.get(eid, set()))
-        pred_text = pred_text_by_ev.get(eid, '')
-        match_n, coverage = _soft_overlap_stats(gt_tokens, pred_text)
-
-        # Require non-trivial overlap to count as a positive extraction.
-        pred = 1 if (coverage >= _MIN_DETECTION_COVERAGE or match_n >= 2) else 0
-        y_true.append(truth)
-        y_pred.append(pred)
-        y_score.append(float(coverage))
-        matched_token_counts.append(match_n)
-
-    if SKLEARN_METRICS_AVAILABLE:
-        acc = float(accuracy_score(y_true, y_pred))
-        prec, rec, f1, _ = precision_recall_fscore_support(
-            y_true,
-            y_pred,
-            average='binary',
-            zero_division=0,
-        )
-        auc = None
-        if len(set(y_true)) > 1:
-            try:
-                auc = float(roc_auc_score(y_true, y_score))
-            except Exception:
-                auc = None
-    else:
-        tp = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 1 and yp == 1)
-        tn = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 0 and yp == 0)
-        fp = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 0 and yp == 1)
-        fn = sum(1 for yt, yp in zip(y_true, y_pred) if yt == 1 and yp == 0)
-        acc = (tp + tn) / max(1, tp + tn + fp + fn)
-        prec = tp / max(1, tp + fp)
-        rec = tp / max(1, tp + fn)
-        f1 = 2 * prec * rec / max(1e-9, prec + rec)
-        auc = None
-
-    positives = int(sum(y_true))
-    negatives = int(len(y_true) - positives)
-    avg_token_coverage = float(sum(y_score) / max(1, len(y_score)))
-    composite = (_COMPOSITE_F1_WEIGHT * float(f1)) + (_COMPOSITE_COVERAGE_WEIGHT * avg_token_coverage)
-
-    return {
-        'label': label,
-        'n_eval': len(y_true),
-        'n_true_positive_class': positives,
-        'n_true_negative_class': negatives,
-        'accuracy': round(acc, 4),
-        'precision': round(float(prec), 4),
-        'recall': round(float(rec), 4),
-        'f1': round(float(f1), 4),
-        'auc_roc': round(float(auc), 4) if auc is not None else None,
-        'avg_finding_token_coverage': round(avg_token_coverage, 4),
-        'composite_score': round(composite, 4),
-        'n_with_any_finding_token_match': int(sum(1 for x in matched_token_counts if x > 0)),
-    }
-
-
-def print_detection_report(results: List[Dict]) -> None:
-    """Pretty-print binary cause-detection metrics for multiple models."""
-    if not results:
-        return
-
-    w = 26
-    print(f'\n  {"Metric":<{w}}  ' +
-          '  '.join(f'{r["label"]:>18}' for r in results))
-    print('  ' + '-' * (w + 22 * len(results)))
-
-    rows = [
-        ('n evaluated',             lambda r: f'{r["n_eval"]:>18,}'),
-        ('accuracy',                lambda r: f'{r["accuracy"]:>17.1%}'),
-        ('precision',               lambda r: f'{r["precision"]:>17.1%}'),
-        ('recall',                  lambda r: f'{r["recall"]:>17.1%}'),
-        ('f1',                      lambda r: f'{r["f1"]:>17.1%}'),
-        ('auc_roc',                 lambda r: f'{"N/A":>18}' if r["auc_roc"] is None else f'{r["auc_roc"]:>17.4f}'),
-        ('avg finding-token cover', lambda r: f'{r["avg_finding_token_coverage"]:>17.1%}'),
-        ('composite score',         lambda r: f'{r["composite_score"]:>17.1%}'),
-        ('n with token match',      lambda r: f'{r["n_with_any_finding_token_match"]:>18,}'),
-        ('true class balance (+/-)', lambda r: f'{r["n_true_positive_class"]}/{r["n_true_negative_class"]:>12,}'),
-    ]
-
-    for label, fmt in rows:
-        print(f'  {label:<{w}}  ' + '  '.join(fmt(r) for r in results))

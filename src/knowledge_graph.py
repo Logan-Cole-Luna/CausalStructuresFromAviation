@@ -8,24 +8,10 @@ import re
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-try:
-    import networkx as nx
-    NETWORKX_AVAILABLE = True
-except ImportError:
-    NETWORKX_AVAILABLE = False
-
-try:
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    PLOTTING_AVAILABLE = True
-except ImportError:
-    PLOTTING_AVAILABLE = False
-
-
-def _check_networkx():
-    if not NETWORKX_AVAILABLE:
-        raise ImportError("networkx is required. Install it with: pip install networkx")
+import networkx as nx
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 
 # Leading articles/determiners stripped during normalization
@@ -75,7 +61,6 @@ def build_graph(triples: List[dict], noise_filter: bool = True, normalize: bool 
 
     Returns a networkx.DiGraph.
     """
-    _check_networkx()
     G = nx.DiGraph()
 
     # Use a separate counter dict for parallel edge weights
@@ -120,8 +105,6 @@ def graph_stats(G) -> dict:
       top_causes (top 10 by out_degree), top_effects (top 10 by in_degree),
       top_nodes_by_betweenness (top 5 by betweenness centrality).
     """
-    _check_networkx()
-
     if len(G) == 0:
         return {
             'num_nodes': 0,
@@ -225,12 +208,6 @@ def visualize_subgraph(G, top_n: int = 30, save_path: Optional[str] = None):
     """
     Plot a subgraph of the top_n highest-degree nodes using spring layout.
     """
-    _check_networkx()
-
-    if not PLOTTING_AVAILABLE:
-        print("[KG] matplotlib not available — skipping visualization.")
-        return
-
     if len(G) == 0:
         print("[KG] Graph is empty — skipping visualization.")
         return

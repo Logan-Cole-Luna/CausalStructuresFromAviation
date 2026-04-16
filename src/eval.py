@@ -9,17 +9,10 @@ Reads artifacts saved by train.py. Run standalone after training:
 import argparse
 import configparser
 import json
-import sys
 import warnings
 warnings.filterwarnings('ignore')
 from collections import Counter
 from pathlib import Path
-
-# Allow running as either `python -m src.eval` or `python src/eval.py`.
-if __package__ in (None, ''):
-    repo_root = Path(__file__).resolve().parents[1]
-    if str(repo_root) not in sys.path:
-        sys.path.insert(0, str(repo_root))
 
 import numpy as np
 import pandas as pd
@@ -36,23 +29,12 @@ from src.plotting import (
     plot_cross_model_comparison_all_six,
     plot_top_relation_phrases,
     plot_finding_alignment,
-    plot_detection_metrics,
     plot_training_loss_curves,
     plot_training_metrics,
     plot_bias_variance_tradeoff,
 )
 
-try:
-    from src.finding_evaluator import (
-        load_findings,
-        evaluate_finding_alignment,
-        evaluate_detection_metrics,
-        print_finding_report,
-        print_detection_report,
-    )
-    FINDING_EVAL_AVAILABLE = True
-except ImportError:
-    FINDING_EVAL_AVAILABLE = False
+from src.finding_evaluator import load_findings, evaluate_finding_alignment, print_finding_report
 
 
 # ---------------------------------------------------------------------------
@@ -641,7 +623,7 @@ def main():
 
     # Load findings for ground-truth evaluation
     findings_df = None
-    if FINDING_EVAL_AVAILABLE and Path(data_path).exists():
+    if Path(data_path).exists():
         try:
             findings_df = load_findings(data_path)
         except Exception as e:
@@ -692,7 +674,6 @@ def main():
     # Ground-truth finding alignment — ALL models on the same test set
     # -----------------------------------------------------------------------
     alignment_results = []
-    detection_results = []
     if findings_df is not None:
         section('Finding-Alignment Evaluation (Ground Truth) -- Test Set')
         print(f'  Evaluating all models on {n_test} held-out test narratives\n')
@@ -724,33 +705,6 @@ def main():
         if alignment_results:
             print_finding_report(alignment_results)
 
-        section('Binary Cause-Detection Metrics (Ground Truth) -- Test Set')
-        for label, triples in [
-            ('Rule-based',      rule_test),
-            ('Dep-parse',       dep_test),
-            ('BERT Extractor',  bert_triples),
-            ('T5 Extractor',    t5_triples),
-            ('LLM (zero-shot)', llm_test),
-            ('LLM (few-shot)',  fewshot_triples),
-        ]:
-            if not triples:
-                continue
-            det = evaluate_detection_metrics(
-                triples=triples,
-                findings_df=findings_df,
-                candidate_ev_ids=test_ev_ids,
-                label=label,
-            )
-            detection_results.append(det)
-            auc_text = f"{det['auc_roc']:.4f}" if det['auc_roc'] is not None else 'N/A'
-            print(f"  [{label}] accuracy={det['accuracy']:.1%}  precision={det['precision']:.1%}  "
-                f"recall={det['recall']:.1%}  f1={det['f1']:.1%}  auc_roc={auc_text}  "
-                f"finding-token-coverage={det['avg_finding_token_coverage']:.1%}  "
-                f"composite={det['composite_score']:.1%}")
-
-        if detection_results:
-            print_detection_report(detection_results)
-
     # Knowledge Graph (output artifact — uses full-dataset triples for richness)
     kg_results = eval_knowledge_graph(
         trad_results.get('all_rule_triples', []),
@@ -776,8 +730,6 @@ def main():
     # Finding alignment - ground truth comparison
     if alignment_results:
         plot_finding_alignment(alignment_results, plots_dir)
-    if detection_results:
-        plot_detection_metrics(detection_results, plots_dir)
 
     # Training curves (load from tuning results if available)
     tuning_results_path = output_dir / 'tuning_results.json'
@@ -793,8 +745,6 @@ def main():
     # Save evaluation report
     alignment_map = {r['label']: {k: v for k, v in r.items() if k != 'label'}
                      for r in alignment_results}
-    detection_map = {r['label']: {k: v for k, v in r.items() if k != 'label'}
-                     for r in detection_results}
     report = {
         'test_set_n':   n_test,
         'sample_n':     sample_n,
@@ -815,7 +765,6 @@ def main():
             'narratives_with_triple': len({t['ev_id'] for t in fewshot_triples}),
         },
         'finding_alignment': alignment_map,
-        'detection_metrics': detection_map,
         'knowledge_graph': {k: v for k, v in kg_results.items() if k != '_stats'},
     }
     report_path = eval_dir / 'evaluation_report.json'

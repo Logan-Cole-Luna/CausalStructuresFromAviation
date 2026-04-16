@@ -17,50 +17,17 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-try:
-    from sklearn.metrics import roc_auc_score
-    SKLEARN_METRICS_AVAILABLE = True
-except ImportError:
-    SKLEARN_METRICS_AVAILABLE = False
-
-try:
-    import torch
-    from torch.utils.data import Dataset, DataLoader
-    from transformers import (
-        T5ForConditionalGeneration,
-        T5TokenizerFast,
-        get_linear_schedule_with_warmup,
-    )
-    from torch.optim import AdamW
-    TORCH_AVAILABLE = True
-except ImportError:
-    TORCH_AVAILABLE = False
+import torch
+from torch.utils.data import Dataset, DataLoader
+from transformers import (
+    T5ForConditionalGeneration,
+    T5TokenizerFast,
+    get_linear_schedule_with_warmup,
+)
+from torch.optim import AdamW
 
 from src.rule_based import CAUSAL_FORWARD, CAUSAL_BACKWARD, _split_sentences
-
-# Pattern list ordered longest-first for greedy matching
-_ALL_PATTERNS = sorted(CAUSAL_FORWARD + CAUSAL_BACKWARD, key=len, reverse=True)
-_PATTERN_RE = {
-    p: re.compile(r'\b' + re.escape(p) + r'\b', re.IGNORECASE)
-    for p in _ALL_PATTERNS
-}
-
-
-# ---------------------------------------------------------------------------
-# Extraction helpers
-# ---------------------------------------------------------------------------
-
-def _infer_relation(sentence: str, cause: str, effect: str) -> Tuple[str, str]:
-    """
-    Find the first causal connective phrase in sentence.
-    Returns (relation_phrase, direction).
-    Direction is 'forward' for CAUSE→EFFECT patterns, 'backward' for EFFECT←CAUSE.
-    """
-    for pat in _ALL_PATTERNS:
-        if _PATTERN_RE[pat].search(sentence):
-            direction = 'forward' if pat in CAUSAL_FORWARD else 'backward'
-            return pat, direction
-    return 'caused', 'forward'
+from src.extractor_utils import _ALL_PATTERNS, _PATTERN_RE, infer_relation
 
 
 def _parse_t5_output(output_text: str) -> Tuple[Optional[str], Optional[str]]:
@@ -105,8 +72,6 @@ class T5ExtractionDataset(Dataset):
     """Dataset of (input_ids, attention_mask, decoder_input_ids, labels) for T5."""
 
     def __init__(self, examples: List[dict]):
-        if not TORCH_AVAILABLE:
-            raise ImportError("torch is required for T5ExtractionDataset")
         self.examples = examples
 
     def __len__(self) -> int:
@@ -150,9 +115,6 @@ class T5CausalExtractor:
         max_target_length: int = 64,
         use_amp: bool = True,
     ):
-        if not TORCH_AVAILABLE:
-            raise ImportError("torch and transformers are required for T5CausalExtractor.")
-
         self.model_name = model_name
         self.max_length = max_length
         self.max_target_length = max_target_length
@@ -176,13 +138,6 @@ class T5CausalExtractor:
         self.tokenizer = T5TokenizerFast.from_pretrained(model_name)
         self.model = T5ForConditionalGeneration.from_pretrained(model_name)
         self.model.to(self.device)
-
-        # Binary causal-detection proxy for per-epoch metrics:
-        # positive targets start with "cause:", negatives with "no causal relation".
-        pos_ids = self.tokenizer("cause:", add_special_tokens=False)['input_ids']
-        neg_ids = self.tokenizer("no causal relation", add_special_tokens=False)['input_ids']
-        self.pos_first_token_id = pos_ids[0] if pos_ids else None
-        self.neg_first_token_id = neg_ids[0] if neg_ids else None
 
         print(f"[T5Extractor] Device: {self.device}  AMP: {self.use_amp}  dtype: {self.amp_dtype}")
 
@@ -360,27 +315,13 @@ class T5CausalExtractor:
         best_val_loss   = float('inf')
         no_improve      = 0
         best_weights    = None
-        epoch_train_losses = []
+        epoch_losses    = []
         epoch_val_losses = []
-        epoch_train_accuracies = []
-        epoch_val_accuracies = []
-        epoch_train_precisions = []
-        epoch_val_precisions = []
-        epoch_train_recalls = []
-        epoch_val_recalls = []
-        epoch_train_f1s = []
-        epoch_val_f1s = []
-        epoch_train_aucs = []
-        epoch_val_aucs = []
-        bias_variance_logs = []
 
         for epoch in range(1, epochs + 1):
             # --- Train ---
             self.model.train()
             total_loss = 0.0
-            train_tp = train_fp = train_fn = train_tn = 0
-            train_scores = []
-            train_targets = []
             for batch in train_loader:
                 batch = self._to_device(batch)
                 optimizer.zero_grad(set_to_none=True)
@@ -391,7 +332,6 @@ class T5CausalExtractor:
                         labels=batch['labels'],
                     )
                     loss = outputs.loss
-                    first_step_logits = outputs.logits[:, 0, :].float()
                 if scaler and scaler.is_enabled():
                     scaler.scale(loss).backward()
                     scaler.unscale_(optimizer)
@@ -405,48 +345,11 @@ class T5CausalExtractor:
                 scheduler.step()
                 total_loss += loss.item()
 
-                if self.pos_first_token_id is not None and self.neg_first_token_id is not None:
-                    first_probs = torch.softmax(first_step_logits, dim=-1)
-                    p_pos = first_probs[:, self.pos_first_token_id]
-                    p_neg = first_probs[:, self.neg_first_token_id]
-
-                    gold_first = batch['labels'][:, 0]
-                    gold_pos = (gold_first == self.pos_first_token_id)
-                    pred_pos = p_pos >= p_neg
-
-                    train_targets.extend(gold_pos.long().detach().cpu().tolist())
-                    train_scores.extend(p_pos.detach().cpu().tolist())
-
-                    g_list = gold_pos.detach().cpu().tolist()
-                    p_list = pred_pos.long().detach().cpu().tolist()
-                    for g, p in zip(g_list, p_list):
-                        if p == 1 and g == 1:
-                            train_tp += 1
-                        elif p == 1 and g == 0:
-                            train_fp += 1
-                        elif p == 0 and g == 1:
-                            train_fn += 1
-                        else:
-                            train_tn += 1
-
             avg_train_loss = total_loss / max(1, len(train_loader))
-            train_precision = train_tp / max(1, train_tp + train_fp)
-            train_recall = train_tp / max(1, train_tp + train_fn)
-            train_f1 = 2 * train_precision * train_recall / max(1e-9, train_precision + train_recall)
-            train_accuracy = (train_tp + train_tn) / max(1, train_tp + train_tn + train_fp + train_fn)
-            train_auc = None
-            if SKLEARN_METRICS_AVAILABLE and len(set(train_targets)) > 1:
-                try:
-                    train_auc = float(roc_auc_score(train_targets, train_scores))
-                except Exception:
-                    train_auc = None
 
             # --- Validate ---
             self.model.eval()
             val_loss = 0.0
-            val_tp = val_fp = val_fn = val_tn = 0
-            val_scores = []
-            val_targets = []
             with torch.no_grad():
                 for batch in val_loader:
                     batch = self._to_device(batch)
@@ -458,78 +361,12 @@ class T5CausalExtractor:
                         )
                         val_loss += outputs.loss.item()
 
-                        if self.pos_first_token_id is not None and self.neg_first_token_id is not None:
-                            first_step_logits = outputs.logits[:, 0, :].float()
-                            first_probs = torch.softmax(first_step_logits, dim=-1)
-                            p_pos = first_probs[:, self.pos_first_token_id]
-                            p_neg = first_probs[:, self.neg_first_token_id]
-
-                            gold_first = batch['labels'][:, 0]
-                            gold_pos = (gold_first == self.pos_first_token_id)
-                            pred_pos = p_pos >= p_neg
-
-                            val_targets.extend(gold_pos.long().cpu().tolist())
-                            val_scores.extend(p_pos.cpu().tolist())
-
-                            g_list = gold_pos.cpu().tolist()
-                            p_list = pred_pos.long().cpu().tolist()
-                            for g, p in zip(g_list, p_list):
-                                if p == 1 and g == 1:
-                                    val_tp += 1
-                                elif p == 1 and g == 0:
-                                    val_fp += 1
-                                elif p == 0 and g == 1:
-                                    val_fn += 1
-                                else:
-                                    val_tn += 1
-
             avg_val_loss = val_loss / max(1, len(val_loader))
-            val_precision = val_tp / max(1, val_tp + val_fp)
-            val_recall = val_tp / max(1, val_tp + val_fn)
-            val_f1 = 2 * val_precision * val_recall / max(1e-9, val_precision + val_recall)
-            val_accuracy = (val_tp + val_tn) / max(1, val_tp + val_tn + val_fp + val_fn)
-            val_auc = None
-            if SKLEARN_METRICS_AVAILABLE and len(set(val_targets)) > 1:
-                try:
-                    val_auc = float(roc_auc_score(val_targets, val_scores))
-                except Exception:
-                    val_auc = None
-
-            epoch_train_losses.append(round(avg_train_loss, 4))
+            epoch_losses.append(round(avg_train_loss, 4))
             epoch_val_losses.append(round(avg_val_loss, 4))
-            epoch_train_accuracies.append(round(train_accuracy, 4))
-            epoch_val_accuracies.append(round(val_accuracy, 4))
-            epoch_train_precisions.append(round(train_precision, 4))
-            epoch_val_precisions.append(round(val_precision, 4))
-            epoch_train_recalls.append(round(train_recall, 4))
-            epoch_val_recalls.append(round(val_recall, 4))
-            epoch_train_f1s.append(round(train_f1, 4))
-            epoch_val_f1s.append(round(val_f1, 4))
-            epoch_train_aucs.append(round(train_auc, 4) if train_auc is not None else None)
-            epoch_val_aucs.append(round(val_auc, 4) if val_auc is not None else None)
-
-            bv_log = self._log_bias_variance(
-                train_loss=avg_train_loss,
-                val_loss=avg_val_loss,
-                train_precision=train_precision,
-                val_precision=val_precision,
-                train_recall=train_recall,
-                val_recall=val_recall,
-                train_f1=train_f1,
-                val_f1=val_f1,
-                train_auc=train_auc,
-                val_auc=val_auc,
-                epoch=epoch,
-            )
-            bias_variance_logs.append(bv_log)
 
             print(f"[T5Extractor] Epoch {epoch}/{epochs} — "
-                  f"train loss: {avg_train_loss:.4f}  val loss: {avg_val_loss:.4f}  "
-                  f"train P/R/F1/AUC: {train_precision:.4f}/{train_recall:.4f}/{train_f1:.4f}/"
-                  f"{(train_auc if train_auc is not None else float('nan')):.4f}  "
-                  f"val P/R/F1/AUC: {val_precision:.4f}/{val_recall:.4f}/{val_f1:.4f}/"
-                  f"{(val_auc if val_auc is not None else float('nan')):.4f}  "
-                  f"(regime: {bv_log['regime']})")
+                  f"train loss: {avg_train_loss:.4f}  val loss: {avg_val_loss:.4f}")
 
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
@@ -548,65 +385,9 @@ class T5CausalExtractor:
             print(f"[T5Extractor] Restored best weights (val loss={best_val_loss:.4f})")
 
         return {
-            'train_loss':   epoch_train_losses,
+            'train_loss':   epoch_losses,
             'val_loss':     epoch_val_losses,
-            'train_accuracy': epoch_train_accuracies,
-            'val_accuracy':   epoch_val_accuracies,
-            'train_precision': epoch_train_precisions,
-            'val_precision':   epoch_val_precisions,
-            'train_recall': epoch_train_recalls,
-            'val_recall':   epoch_val_recalls,
-            'train_f1':     epoch_train_f1s,
-            'val_f1':       epoch_val_f1s,
-            'train_auc_roc': epoch_train_aucs,
-            'val_auc_roc':   epoch_val_aucs,
             'best_val_loss': best_val_loss,
-            'bias_variance_logs': bias_variance_logs,
-        }
-
-    def _log_bias_variance(
-        self,
-        train_loss: float,
-        val_loss: float,
-        train_precision: float,
-        val_precision: float,
-        train_recall: float,
-        val_recall: float,
-        train_f1: float,
-        val_f1: float,
-        train_auc: Optional[float],
-        val_auc: Optional[float],
-        epoch: int,
-    ) -> dict:
-        """Analyze bias-variance tradeoff for an epoch."""
-        loss_gap = val_loss - train_loss
-        f1_gap = val_f1 - train_f1
-
-        if loss_gap > 0.1 and f1_gap < -0.05:
-            regime = 'high_variance'
-        elif loss_gap < -0.1 or f1_gap > 0.05:
-            regime = 'high_bias'
-        else:
-            regime = 'balanced'
-
-        return {
-            'epoch': epoch,
-            'train_loss': round(train_loss, 6),
-            'val_loss': round(val_loss, 6),
-            'loss_gap': round(loss_gap, 6),
-            'train_precision': round(train_precision, 4),
-            'val_precision': round(val_precision, 4),
-            'precision_gap': round(val_precision - train_precision, 4),
-            'train_recall': round(train_recall, 4),
-            'val_recall': round(val_recall, 4),
-            'recall_gap': round(val_recall - train_recall, 4),
-            'train_f1': round(train_f1, 4),
-            'val_f1': round(val_f1, 4),
-            'f1_gap': round(f1_gap, 4),
-            'train_auc_roc': round(train_auc, 4) if train_auc is not None else None,
-            'val_auc_roc': round(val_auc, 4) if val_auc is not None else None,
-            'auc_gap': round((val_auc - train_auc), 4) if (train_auc is not None and val_auc is not None) else None,
-            'regime': regime,
         }
 
     # ------------------------------------------------------------------
@@ -689,7 +470,7 @@ class T5CausalExtractor:
                     if len(cause.split()) < 2 or len(effect.split()) < 2:
                         continue  # single-word spans are noise
 
-                    relation, direction = _infer_relation(sent, cause, effect)
+                    relation, direction = infer_relation(sent, cause, effect)
                     all_triples.append({
                         'ev_id':     ev_id,
                         'cause':     cause,

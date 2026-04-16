@@ -9,13 +9,9 @@ from typing import Dict, Any, Callable, Optional, Tuple
 
 import numpy as np
 
-try:
-    import optuna
-    from optuna.pruners import MedianPruner
-    from optuna.samplers import TPESampler
-    OPTUNA_AVAILABLE = True
-except ImportError:
-    OPTUNA_AVAILABLE = False
+import optuna
+from optuna.pruners import MedianPruner
+from optuna.samplers import TPESampler
 
 
 class HyperparameterTuner:
@@ -38,9 +34,6 @@ class HyperparameterTuner:
             n_jobs: Number of parallel jobs (1 = sequential)
             timeout: Max seconds for study (None = unlimited)
         """
-        if not OPTUNA_AVAILABLE:
-            raise ImportError("optuna is required for HyperparameterTuner")
-
         self.param_space = param_space
         self.n_trials = n_trials
         self.n_jobs = n_jobs

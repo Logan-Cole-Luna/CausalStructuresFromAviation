@@ -18,26 +18,17 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-try:
-    from sklearn.metrics import roc_auc_score
-    SKLEARN_METRICS_AVAILABLE = True
-except ImportError:
-    SKLEARN_METRICS_AVAILABLE = False
-
-try:
-    import torch
-    from torch.utils.data import Dataset, DataLoader
-    from transformers import (
-        DistilBertForTokenClassification,
-        DistilBertTokenizerFast,
-        get_linear_schedule_with_warmup,
-    )
-    from torch.optim import AdamW
-    TORCH_AVAILABLE = True
-except ImportError:
-    TORCH_AVAILABLE = False
+import torch
+from torch.utils.data import Dataset, DataLoader
+from transformers import (
+    DistilBertForTokenClassification,
+    DistilBertTokenizerFast,
+    get_linear_schedule_with_warmup,
+)
+from torch.optim import AdamW
 
 from src.rule_based import CAUSAL_FORWARD, CAUSAL_BACKWARD, _split_sentences
+from src.extractor_utils import _ALL_PATTERNS, _PATTERN_RE, infer_relation, log_bias_variance
 
 # ---------------------------------------------------------------------------
 # BIO label constants
@@ -45,13 +36,6 @@ from src.rule_based import CAUSAL_FORWARD, CAUSAL_BACKWARD, _split_sentences
 O, B_CAUSE, I_CAUSE, B_EFFECT, I_EFFECT = 0, 1, 2, 3, 4
 LABEL_NAMES = ['O', 'B-CAUSE', 'I-CAUSE', 'B-EFFECT', 'I-EFFECT']
 NUM_LABELS = 5
-
-# Pattern list ordered longest-first for greedy matching
-_ALL_PATTERNS = sorted(CAUSAL_FORWARD + CAUSAL_BACKWARD, key=len, reverse=True)
-_PATTERN_RE = {
-    p: re.compile(r'\b' + re.escape(p) + r'\b', re.IGNORECASE)
-    for p in _ALL_PATTERNS
-}
 
 
 # ---------------------------------------------------------------------------
@@ -162,19 +146,6 @@ def _decode_bio(
     return cause, effect
 
 
-def _infer_relation(sentence: str, cause: str, effect: str) -> Tuple[str, str]:
-    """
-    Find the first causal connective phrase in sentence.
-    Returns (relation_phrase, direction).
-    Direction is 'forward' for CAUSE→EFFECT patterns, 'backward' for EFFECT←CAUSE.
-    """
-    for pat in _ALL_PATTERNS:
-        if _PATTERN_RE[pat].search(sentence):
-            direction = 'forward' if pat in CAUSAL_FORWARD else 'backward'
-            return pat, direction
-    return 'caused', 'forward'
-
-
 # ---------------------------------------------------------------------------
 # PyTorch Dataset
 # ---------------------------------------------------------------------------
@@ -186,8 +157,6 @@ class CausalBIODataset:
     """
 
     def __init__(self, examples: List[dict]):
-        if not TORCH_AVAILABLE:
-            raise ImportError("torch is required for CausalBIODataset")
         self.examples = examples
 
     def __len__(self) -> int:
@@ -230,9 +199,6 @@ class BERTCausalExtractor:
         max_length: int = 128,
         use_amp: bool = True,
     ):
-        if not TORCH_AVAILABLE:
-            raise ImportError("torch and transformers are required for BERTCausalExtractor.")
-
         self.model_name = model_name
         self.max_length = max_length
 
@@ -431,16 +397,9 @@ class BERTCausalExtractor:
         best_val_f1     = 0.0
         no_improve      = 0
         best_weights    = None
-        epoch_train_losses = []
-        epoch_val_losses = []
-        epoch_train_precisions = []
-        epoch_val_precisions = []
-        epoch_train_recalls = []
-        epoch_val_recalls = []
+        epoch_losses    = []
+        epoch_val_f1s   = []
         epoch_train_f1s = []
-        epoch_val_f1s = []
-        epoch_train_aucs = []
-        epoch_val_aucs = []
         bias_variance_logs = []
 
         for epoch in range(1, epochs + 1):
@@ -448,8 +407,6 @@ class BERTCausalExtractor:
             self.model.train()
             total_loss = 0.0
             train_tp = train_fp = train_fn = 0
-            train_scores = []
-            train_targets = []
             for batch in train_loader:
                 batch = self._to_device(batch)
                 optimizer.zero_grad(set_to_none=True)
@@ -472,12 +429,8 @@ class BERTCausalExtractor:
                 total_loss += loss.item()
 
                 # Track training metrics
-                probs = torch.softmax(out.logits.float(), dim=-1)
-                pos_prob = probs[..., B_CAUSE] + probs[..., I_CAUSE] + probs[..., B_EFFECT] + probs[..., I_EFFECT]
-
                 preds  = out.logits.argmax(dim=-1).view(-1).cpu().detach().tolist()
                 golds  = batch['labels'].view(-1).cpu().tolist()
-                pos_scores = pos_prob.view(-1).detach().cpu().tolist()
                 for p, g in zip(preds, golds):
                     if g == -100:
                         continue
@@ -489,29 +442,16 @@ class BERTCausalExtractor:
                         train_fp += 1
                     elif not pred_pos and gold_pos:
                         train_fn += 1
-                for score, g in zip(pos_scores, golds):
-                    if g == -100:
-                        continue
-                    train_scores.append(float(score))
-                    train_targets.append(1 if g in (B_CAUSE, I_CAUSE, B_EFFECT, I_EFFECT) else 0)
 
             avg_train_loss = total_loss / max(1, len(train_loader))
             train_prec = train_tp / max(1, train_tp + train_fp)
             train_rec = train_tp / max(1, train_tp + train_fn)
             train_f1 = 2 * train_prec * train_rec / max(1e-9, train_prec + train_rec)
-            train_auc = None
-            if SKLEARN_METRICS_AVAILABLE and len(set(train_targets)) > 1:
-                try:
-                    train_auc = float(roc_auc_score(train_targets, train_scores))
-                except Exception:
-                    train_auc = None
 
             # --- Validate: span-level F1 on cause+effect tokens ---
             self.model.eval()
             tp = fp = fn = 0
             val_loss = 0.0
-            val_scores = []
-            val_targets = []
             with torch.no_grad():
                 for batch in val_loader:
                     batch = self._to_device(batch)
@@ -522,12 +462,8 @@ class BERTCausalExtractor:
                     val_batch_loss = loss_fn(logits.view(-1, NUM_LABELS), batch['labels'].view(-1))
                     val_loss += val_batch_loss.item()
 
-                    probs = torch.softmax(out.logits.float(), dim=-1)
-                    pos_prob = probs[..., B_CAUSE] + probs[..., I_CAUSE] + probs[..., B_EFFECT] + probs[..., I_EFFECT]
-
                     preds  = out.logits.argmax(dim=-1).view(-1).cpu().tolist()
                     golds  = batch['labels'].view(-1).cpu().tolist()
-                    pos_scores = pos_prob.view(-1).cpu().tolist()
                     for p, g in zip(preds, golds):
                         if g == -100:
                             continue
@@ -539,56 +475,22 @@ class BERTCausalExtractor:
                             fp += 1
                         elif not pred_pos and gold_pos:
                             fn += 1
-                    for score, g in zip(pos_scores, golds):
-                        if g == -100:
-                            continue
-                        val_scores.append(float(score))
-                        val_targets.append(1 if g in (B_CAUSE, I_CAUSE, B_EFFECT, I_EFFECT) else 0)
 
             avg_val_loss = val_loss / max(1, len(val_loader))
             prec = tp / max(1, tp + fp)
             rec  = tp / max(1, tp + fn)
             f1   = 2 * prec * rec / max(1e-9, prec + rec)
-            val_auc = None
-            if SKLEARN_METRICS_AVAILABLE and len(set(val_targets)) > 1:
-                try:
-                    val_auc = float(roc_auc_score(val_targets, val_scores))
-                except Exception:
-                    val_auc = None
-
-            epoch_train_losses.append(round(avg_train_loss, 4))
-            epoch_val_losses.append(round(avg_val_loss, 4))
-            epoch_train_precisions.append(round(train_prec, 4))
-            epoch_val_precisions.append(round(prec, 4))
-            epoch_train_recalls.append(round(train_rec, 4))
-            epoch_val_recalls.append(round(rec, 4))
+            epoch_losses.append(round(avg_val_loss, 4))
             epoch_val_f1s.append(round(f1, 4))
             epoch_train_f1s.append(round(train_f1, 4))
-            epoch_train_aucs.append(round(train_auc, 4) if train_auc is not None else None)
-            epoch_val_aucs.append(round(val_auc, 4) if val_auc is not None else None)
 
             # Log bias-variance analysis
-            bv_log = self._log_bias_variance(
-                train_loss=avg_train_loss,
-                val_loss=avg_val_loss,
-                train_precision=train_prec,
-                val_precision=prec,
-                train_recall=train_rec,
-                val_recall=rec,
-                train_f1=train_f1,
-                val_f1=f1,
-                train_auc=train_auc,
-                val_auc=val_auc,
-                epoch=epoch,
-            )
+            bv_log = log_bias_variance(avg_train_loss, avg_val_loss, train_f1, f1, epoch)
             bias_variance_logs.append(bv_log)
 
             print(f"[BERTExtractor] Epoch {epoch}/{epochs} — "
                   f"train loss: {avg_train_loss:.4f} val loss: {avg_val_loss:.4f}  "
-                  f"train P/R/F1/AUC: {train_prec:.4f}/{train_rec:.4f}/{train_f1:.4f}/"
-                  f"{(train_auc if train_auc is not None else float('nan')):.4f}  "
-                  f"val P/R/F1/AUC: {prec:.4f}/{rec:.4f}/{f1:.4f}/"
-                  f"{(val_auc if val_auc is not None else float('nan')):.4f}  "
+                  f"train F1: {train_f1:.4f} val F1: {f1:.4f}  "
                   f"(regime: {bv_log['regime']})")
 
             if f1 > best_val_f1:
@@ -608,64 +510,11 @@ class BERTCausalExtractor:
             print(f"[BERTExtractor] Restored best weights (val F1={best_val_f1:.4f})")
 
         return {
-            'train_loss':   epoch_train_losses,
-            'val_loss':     epoch_val_losses,
-            'train_precision': epoch_train_precisions,
-            'val_precision':   epoch_val_precisions,
-            'train_recall': epoch_train_recalls,
-            'val_recall':   epoch_val_recalls,
+            'train_loss':   epoch_losses,
             'train_f1':     epoch_train_f1s,
             'val_f1':       epoch_val_f1s,
-            'train_auc_roc': epoch_train_aucs,
-            'val_auc_roc':   epoch_val_aucs,
             'best_val_f1':  best_val_f1,
             'bias_variance_logs': bias_variance_logs,
-        }
-
-    def _log_bias_variance(
-        self,
-        train_loss: float,
-        val_loss: float,
-        train_precision: float,
-        val_precision: float,
-        train_recall: float,
-        val_recall: float,
-        train_f1: float,
-        val_f1: float,
-        train_auc: Optional[float],
-        val_auc: Optional[float],
-        epoch: int,
-    ) -> dict:
-        """Analyze bias-variance tradeoff for an epoch."""
-        loss_gap = val_loss - train_loss
-        f1_gap = val_f1 - train_f1
-
-        # Classify regime
-        if loss_gap > 0.1 and f1_gap < -0.05:
-            regime = 'high_variance'  # Overfitting
-        elif loss_gap < -0.1 or f1_gap > 0.05:
-            regime = 'high_bias'      # Underfitting
-        else:
-            regime = 'balanced'
-
-        return {
-            'epoch': epoch,
-            'train_loss': round(train_loss, 6),
-            'val_loss': round(val_loss, 6),
-            'loss_gap': round(loss_gap, 6),
-            'train_precision': round(train_precision, 4),
-            'val_precision': round(val_precision, 4),
-            'precision_gap': round(val_precision - train_precision, 4),
-            'train_recall': round(train_recall, 4),
-            'val_recall': round(val_recall, 4),
-            'recall_gap': round(val_recall - train_recall, 4),
-            'train_f1': round(train_f1, 4),
-            'val_f1': round(val_f1, 4),
-            'f1_gap': round(f1_gap, 4),
-            'train_auc_roc': round(train_auc, 4) if train_auc is not None else None,
-            'val_auc_roc': round(val_auc, 4) if val_auc is not None else None,
-            'auc_gap': round((val_auc - train_auc), 4) if (train_auc is not None and val_auc is not None) else None,
-            'regime': regime,
         }
 
     # ------------------------------------------------------------------
@@ -754,7 +603,7 @@ class BERTCausalExtractor:
                     if len(cause.split()) < 2 or len(effect.split()) < 2:
                         continue  # single-word spans are noise
 
-                    relation, direction = _infer_relation(sent, cause, effect)
+                    relation, direction = infer_relation(sent, cause, effect)
                     all_triples.append({
                         'ev_id':     ev_id,
                         'cause':     cause,

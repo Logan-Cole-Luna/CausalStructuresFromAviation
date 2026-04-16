@@ -16,36 +16,16 @@ Model choice rationale
 
 import json
 import re
-import warnings
 from pathlib import Path
 from typing import List, Optional
 
 import pandas as pd
 from tqdm import tqdm
 
-try:
-    import torch
-    TORCH_AVAILABLE = True
-except ImportError:
-    TORCH_AVAILABLE = False
-
-try:
-    from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-    TRANSFORMERS_AVAILABLE = True
-except ImportError:
-    TRANSFORMERS_AVAILABLE = False
-
-try:
-    import bitsandbytes  # noqa: F401
-    BNB_AVAILABLE = True
-except ImportError:
-    BNB_AVAILABLE = False
-
-try:
-    import accelerate  # noqa: F401
-    ACCELERATE_AVAILABLE = True
-except ImportError:
-    ACCELERATE_AVAILABLE = False
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+import bitsandbytes  # noqa: F401
+import accelerate  # noqa: F401
 
 
 # ---------------------------------------------------------------------------
@@ -140,13 +120,7 @@ JSON:"""
 # Helpers
 # ---------------------------------------------------------------------------
 
-_JUNK_NODES = {
-    "the accident", "this accident", "the incident", "this incident",
-    "the crash", "an accident", "an incident",
-}
-
-# Regex to pull the first JSON array out of model output
-_JSON_RE = re.compile(r'\[.*\]', re.DOTALL)
+from src.extractor_utils import _JUNK_NODES, _JSON_RE
 
 # Default cache location (relative to project root)
 DEFAULT_CACHE_PATH = Path("outputs/extractions/llm_response_cache.json")
@@ -309,12 +283,6 @@ class LLMCausalExtractor:
         max_new_tokens: int = 300,
         temperature: float = 0.0,
     ):
-        if not TORCH_AVAILABLE or not TRANSFORMERS_AVAILABLE:
-            raise ImportError(
-                "torch and transformers are required for LLMCausalExtractor. "
-                "Install them with: pip install torch transformers"
-            )
-
         self.model_name     = model_name
         self.max_new_tokens = max_new_tokens
         self.temperature    = temperature
@@ -322,13 +290,7 @@ class LLMCausalExtractor:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         # ---- quantization config ----
-        use_4bit = load_in_4bit and BNB_AVAILABLE and self.device.type == "cuda"
-        if load_in_4bit and not BNB_AVAILABLE:
-            warnings.warn(
-                "[LLM] bitsandbytes not installed — falling back to float16. "
-                "Install with: pip install bitsandbytes",
-                stacklevel=2,
-            )
+        use_4bit = load_in_4bit and self.device.type == "cuda"
 
         torch_dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
 
@@ -353,15 +315,8 @@ class LLMCausalExtractor:
         load_kwargs: dict = {"dtype": torch_dtype}
         if bnb_config is not None:
             load_kwargs["quantization_config"] = bnb_config
-        # device_map="auto" requires accelerate; fall back to manual .to(device)
-        if ACCELERATE_AVAILABLE and self.device.type == "cuda":
+        if self.device.type == "cuda":
             load_kwargs["device_map"] = "auto"
-        if not ACCELERATE_AVAILABLE and self.device.type == "cuda":
-            warnings.warn(
-                "[LLM] accelerate not installed — model will be loaded to CPU then moved to CUDA. "
-                "Install with: pip install accelerate",
-                stacklevel=2,
-            )
 
         self.model = AutoModelForCausalLM.from_pretrained(model_name, **load_kwargs)
         if "device_map" not in load_kwargs:
