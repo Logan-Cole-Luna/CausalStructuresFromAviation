@@ -35,6 +35,6 @@
   "sinusoidal_pos_embds": false,
   "tie_weights_": true,
   "tie_word_embeddings": true,
-  "transformers_version": "5.5.4",
+  "transformers_version": "5.5.0",
   "vocab_size": 30522
 }
